@@ -3,1064 +3,1040 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>武汉生活成本指南 · 给8岁小朋友</title>
+<title>武汉妈妈和孩子生活成本指南</title>
 <style>
-:root {
-  --green: #0f6e56;
-  --green-light: #e7f5ef;
-  --green-mid: #2d9e7a;
-  --amber: #d97706;
-  --amber-light: #fef3c7;
-  --red: #dc2626;
-  --red-light: #fee2e2;
-  --blue: #2563eb;
-  --blue-light: #dbeafe;
-  --purple: #7c3aed;
-  --purple-light: #ede9fe;
-  --orange: #ea580c;
-  --orange-light: #ffedd5;
-  --text: #1a2e22;
-  --muted: #5a7068;
-  --border: #d0e0d8;
-  --bg: #f4f9f6;
-  --white: #ffffff;
-  --radius: 16px;
-  --shadow: 0 2px 16px rgba(15,110,86,.08);
+:root{
+  --ink:#17201c;
+  --muted:#607169;
+  --soft:#f5f7f2;
+  --paper:#fffdf8;
+  --line:#dfe7dd;
+  --green:#12624f;
+  --green-2:#2f8d70;
+  --mint:#e5f4ed;
+  --blue:#245c91;
+  --blue-soft:#e7f0fa;
+  --amber:#9b5a10;
+  --amber-soft:#fff1d7;
+  --rose:#a33a5f;
+  --rose-soft:#fde8ef;
+  --purple:#664da3;
+  --purple-soft:#efeafd;
+  --red:#a13b2b;
+  --red-soft:#ffe9e3;
+  --shadow:0 18px 50px rgba(30,52,42,.12);
+  --radius:8px;
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  color:var(--ink);
+  background:
+    linear-gradient(180deg,#eef6f0 0,#fffdf8 360px),
+    var(--paper);
+  line-height:1.65;
+  letter-spacing:0;
 }
-
-/* ── Layout ── */
-.page { max-width: 760px; margin: 0 auto; padding: 0 16px 60px; }
-
-/* ── Hero ── */
-.hero {
-  background: linear-gradient(135deg, #0f6e56 0%, #1a9970 60%, #22c38e 100%);
-  color: white;
-  text-align: center;
-  padding: 48px 20px 40px;
-  margin-bottom: 32px;
+a{color:inherit}
+img{display:block;max-width:100%}
+.wrap{width:min(1120px,calc(100% - 32px));margin:0 auto}
+.hero{
+  display:grid;
+  grid-template-columns:1.08fr .92fr;
+  gap:24px;
+  align-items:stretch;
+  padding:28px 0 22px;
 }
-.hero-emoji { font-size: 64px; display: block; margin-bottom: 12px; }
-.hero h1 { font-size: 28px; font-weight: 800; line-height: 1.2; margin-bottom: 8px; }
-.hero p { font-size: 15px; opacity: .85; max-width: 480px; margin: 0 auto; }
-.hero-tag {
-  display: inline-block;
-  margin-top: 16px;
-  background: rgba(255,255,255,.2);
-  border: 1px solid rgba(255,255,255,.4);
-  border-radius: 20px;
-  padding: 6px 16px;
-  font-size: 13px;
-  font-weight: 600;
+.hero-copy{
+  min-height:470px;
+  padding:34px;
+  border:1px solid rgba(18,98,79,.24);
+  border-radius:var(--radius);
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.92),rgba(229,244,237,.92)),
+    var(--paper);
+  box-shadow:var(--shadow);
 }
-
-/* ── Section ── */
-.section { margin-bottom: 28px; }
-.section-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
+.eyebrow{
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  padding:6px 10px;
+  border:1px solid #bdd9cc;
+  border-radius:999px;
+  background:#f8fffb;
+  color:var(--green);
+  font-size:13px;
+  font-weight:800;
 }
-.section-icon {
-  width: 40px; height: 40px;
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px; flex-shrink: 0;
+h1{
+  margin:18px 0 10px;
+  max-width:680px;
+  font-size:clamp(32px,4.8vw,58px);
+  line-height:1.05;
+  font-weight:900;
 }
-.section-title { font-size: 20px; font-weight: 800; color: var(--text); }
-.section-sub { font-size: 13px; color: var(--muted); }
-
-/* ── Unit card (reference unit intro) ── */
-.unit-card {
-  background: white;
-  border-radius: var(--radius);
-  padding: 20px;
-  box-shadow: var(--shadow);
-  border: 2px solid var(--green);
-  margin-bottom: 20px;
+.hero-lead{
+  max-width:650px;
+  margin:0;
+  color:var(--muted);
+  font-size:18px;
 }
-.unit-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 12px;
+.hero-lead strong{color:var(--ink)}
+.hero-stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:28px;
 }
-.unit-item {
-  background: var(--green-light);
-  border-radius: 12px;
-  padding: 14px;
-  text-align: center;
+.stat{
+  min-height:116px;
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:#fff;
 }
-.unit-big { font-size: 36px; display: block; margin-bottom: 4px; }
-.unit-name { font-size: 14px; font-weight: 700; color: var(--green); }
-.unit-price { font-size: 22px; font-weight: 800; color: var(--text); }
-.unit-note { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-/* ── Info cards ── */
-.card {
-  background: white;
-  border-radius: var(--radius);
-  padding: 20px;
-  box-shadow: var(--shadow);
-  margin-bottom: 12px;
+.stat span{display:block;color:var(--muted);font-size:13px;font-weight:700}
+.stat strong{
+  display:block;
+  margin-top:6px;
+  color:var(--green);
+  font-size:clamp(23px,2.35vw,29px);
+  line-height:1.1;
+  font-weight:900;
+  word-break:keep-all;
 }
-.card-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
+.stat small{display:block;margin-top:6px;color:var(--muted);font-size:12px;line-height:1.4}
+.hero-note{
+  margin-top:16px;
+  padding:12px 14px;
+  border-left:4px solid var(--amber);
+  border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--amber-soft);
+  color:#744004;
+  font-size:14px;
 }
-.card-icon-wrap {
-  font-size: 32px;
-  flex-shrink: 0;
-  width: 48px;
-  text-align: center;
-  padding-top: 2px;
+.hero-media{
+  position:relative;
+  min-height:470px;
+  overflow:hidden;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  background:#d9e8df;
 }
-.card-content { flex: 1; min-width: 0; }
-.card-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-.card-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
-.card-price {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--green);
-  margin-bottom: 2px;
+.scene{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#dff0e8,#fbf7e8);
 }
-.card-bowls {
-  font-size: 12px;
-  color: var(--green);
-  background: var(--green-light);
-  padding: 2px 8px;
-  border-radius: 8px;
-  display: inline-block;
-  font-weight: 600;
-  margin-bottom: 6px;
+.scene svg{width:100%;height:100%;display:block}
+.scene-city{background:linear-gradient(180deg,#9cc9df 0,#e7f4f1 52%,#9cc9d7 53%,#7bb2c7 100%)}
+.scene-noodle{background:linear-gradient(135deg,#fff2d8,#f8cf8e)}
+.scene-market{background:linear-gradient(135deg,#e7f5ec,#fff7da)}
+.scene-bridge{background:linear-gradient(180deg,#c8e5f3,#eaf5f2 55%,#9cc9d7 56%,#76aec3)}
+.scene-home{background:linear-gradient(135deg,#e9f4f0,#f7ead4)}
+.hero-caption{
+  position:absolute;
+  left:16px;
+  right:16px;
+  bottom:16px;
+  padding:13px 14px;
+  border:1px solid rgba(255,255,255,.36);
+  border-radius:var(--radius);
+  color:#fff;
+  background:rgba(11,37,31,.66);
+  backdrop-filter:blur(8px);
+  font-size:13px;
 }
-.tip-box {
-  margin-top: 10px;
-  background: var(--amber-light);
-  border-left: 3px solid var(--amber);
-  border-radius: 0 8px 8px 0;
-  padding: 8px 12px;
-  font-size: 12px;
-  color: #92400e;
-  line-height: 1.55;
+.nav{
+  position:sticky;
+  top:0;
+  z-index:5;
+  border-top:1px solid rgba(18,98,79,.12);
+  border-bottom:1px solid rgba(18,98,79,.18);
+  background:rgba(255,253,248,.92);
+  backdrop-filter:blur(10px);
 }
-.tip-box strong { font-weight: 700; }
-
-/* ── Highlight total card ── */
-.card.total {
-  background: linear-gradient(135deg, var(--green-light) 0%, #c3edd8 100%);
-  border: 2px solid var(--green);
+.nav-inner{display:flex;gap:8px;overflow-x:auto;padding:10px 0}
+.nav a{
+  flex:0 0 auto;
+  padding:7px 12px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:#fff;
+  color:var(--muted);
+  text-decoration:none;
+  font-size:13px;
+  font-weight:800;
+  white-space:nowrap;
 }
-.card.total .card-price { font-size: 28px; }
-
-/* ── Icon grid (visual price representation) ── */
-.icon-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px;
-  margin: 10px 0 4px;
-  padding: 10px;
-  background: var(--bg);
-  border-radius: 8px;
+.nav a:hover{border-color:var(--green);color:var(--green);background:var(--mint)}
+.section{padding:34px 0}
+.section-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:16px;
 }
-.icon-grid .ico { font-size: 16px; line-height: 1; }
-.icon-grid-caption { font-size: 11px; color: var(--muted); margin-top: 4px; }
-
-/* ── Comparison table ── */
-.compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
-.compare-table th {
-  background: var(--green);
-  color: white;
-  padding: 8px 10px;
-  text-align: left;
-  font-weight: 700;
+.section-title{margin:0;font-size:28px;line-height:1.2;font-weight:900}
+.section-sub{margin:4px 0 0;color:var(--muted);font-size:14px}
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 10px;
+  border-radius:999px;
+  border:1px solid #bdd9cc;
+  background:var(--mint);
+  color:var(--green);
+  font-size:13px;
+  font-weight:900;
+  white-space:nowrap;
 }
-.compare-table th:first-child { border-radius: 8px 0 0 0; }
-.compare-table th:last-child { border-radius: 0 8px 0 0; }
-.compare-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
-.compare-table tr:last-child td { border-bottom: none; }
-.compare-table tr:nth-child(even) td { background: var(--bg); }
-.compare-table .bold { font-weight: 700; }
-.compare-table .green { color: var(--green); font-weight: 700; }
-.compare-table .red { color: var(--red); font-weight: 700; }
-
-/* ── Progress bar ── */
-.bar-row { margin-bottom: 10px; }
-.bar-label { font-size: 13px; margin-bottom: 3px; display: flex; justify-content: space-between; }
-.bar-label .val { font-weight: 700; color: var(--green); }
-.bar-track {
-  height: 18px;
-  background: var(--border);
-  border-radius: 9px;
-  overflow: hidden;
+.photo-grid{
+  display:grid;
+  grid-template-columns:1.2fr .9fr .9fr;
+  gap:12px;
+  margin:18px 0 8px;
 }
-.bar-fill {
-  height: 100%;
-  border-radius: 9px;
-  background: linear-gradient(90deg, var(--green), var(--green-mid));
-  transition: width .4s ease;
-  display: flex;
-  align-items: center;
-  padding-left: 8px;
-  font-size: 10px;
-  color: white;
-  font-weight: 700;
-  white-space: nowrap;
+.photo-card{
+  position:relative;
+  min-height:205px;
+  overflow:hidden;
+  border-radius:var(--radius);
+  background:#e6ece7;
 }
-
-/* ── Day timeline ── */
-.timeline { position: relative; padding-left: 24px; }
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 8px; top: 8px; bottom: 8px;
-  width: 2px;
-  background: linear-gradient(to bottom, var(--green), var(--border));
-  border-radius: 1px;
+.photo-card .label{
+  position:absolute;
+  left:12px;
+  right:12px;
+  bottom:12px;
+  padding:9px 10px;
+  border-radius:var(--radius);
+  background:rgba(16,39,33,.68);
+  color:#fff;
+  font-size:13px;
+  font-weight:800;
 }
-.tl-item { position: relative; margin-bottom: 12px; }
-.tl-dot {
-  position: absolute;
-  left: -20px; top: 4px;
-  width: 12px; height: 12px;
-  border-radius: 50%;
-  background: var(--green);
-  border: 2px solid white;
-  box-shadow: 0 0 0 2px var(--green);
+.ruler-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
 }
-.tl-time { font-size: 11px; color: var(--muted); font-weight: 600; }
-.tl-text { font-size: 13px; color: var(--text); }
-.tl-cost { font-size: 12px; color: var(--green); font-weight: 700; }
-
-/* ── Job card ── */
-.job-card {
-  background: white;
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  margin-bottom: 12px;
+.ruler-card{
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:#fff;
+  box-shadow:0 10px 30px rgba(27,47,39,.06);
 }
-.job-header {
-  padding: 14px 18px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.ruler-card .icon{font-size:30px}
+.ruler-card h3{margin:8px 0 4px;font-size:16px}
+.ruler-card .num{color:var(--green);font-size:26px;font-weight:900;line-height:1.15}
+.ruler-card p{margin:6px 0 0;color:var(--muted);font-size:13px}
+.grid-2{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}
+.panel{
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:#fff;
+  box-shadow:0 12px 34px rgba(23,32,28,.07);
 }
-.job-icon { font-size: 36px; flex-shrink: 0; }
-.job-title { font-size: 15px; font-weight: 800; }
-.job-salary { font-size: 22px; font-weight: 800; color: var(--green); }
-.job-body { padding: 0 18px 14px; border-top: 1px solid var(--border); padding-top: 12px; }
-.job-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 12px; }
-.job-stat {
-  background: var(--bg);
-  border-radius: 10px;
-  padding: 8px;
-  text-align: center;
+.panel.pad{padding:20px}
+.big-money{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
 }
-.job-stat-val { font-size: 16px; font-weight: 800; color: var(--green); }
-.job-stat-label { font-size: 10px; color: var(--muted); margin-top: 1px; }
-.job-deliveries {
-  background: var(--orange-light);
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 13px;
-  color: #9a3412;
+.money-box{
+  padding:16px;
+  border-radius:var(--radius);
+  border:1px solid #c6dbd1;
+  background:linear-gradient(180deg,#f9fffb,#e8f5ee);
 }
-.job-deliveries strong { font-weight: 700; display: block; margin-bottom: 2px; }
-
-/* ── Mom section ── */
-.mom-header {
-  background: linear-gradient(135deg, #fce7f3 0%, #fdf2f8 100%);
-  border-radius: var(--radius) var(--radius) 0 0;
-  padding: 20px;
-  text-align: center;
-  border: 1px solid #fbcfe8;
+.money-box span{display:block;color:var(--muted);font-size:13px;font-weight:800}
+.money-box strong{display:block;margin-top:5px;color:var(--green);font-size:34px;line-height:1.05;font-weight:900}
+.money-box small{display:block;margin-top:7px;color:var(--muted);font-size:12px}
+.receipt{padding:10px}
+.receipt-row{
+  display:grid;
+  grid-template-columns:86px 1fr 82px;
+  gap:10px;
+  align-items:center;
+  padding:11px 10px;
+  border-bottom:1px solid var(--line);
 }
-.mom-emoji { font-size: 56px; display: block; margin-bottom: 8px; }
-.mom-title { font-size: 20px; font-weight: 800; color: #9d174d; }
-.mom-body {
-  background: white;
-  border-radius: 0 0 var(--radius) var(--radius);
-  padding: 20px;
-  border: 1px solid #fbcfe8;
-  border-top: none;
-  box-shadow: var(--shadow);
+.receipt-row:last-child{border-bottom:0}
+.receipt-row .time{color:var(--muted);font-size:12px;font-weight:900}
+.receipt-row .thing{font-size:14px;font-weight:800}
+.receipt-row .thing small{display:block;color:var(--muted);font-size:12px;font-weight:600}
+.receipt-row .cost{text-align:right;color:var(--green);font-size:18px;font-weight:900}
+.receipt-total{
+  margin-top:12px;
+  padding:16px;
+  border-radius:var(--radius);
+  background:var(--green);
+  color:#fff;
 }
-.mom-role {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
+.receipt-total strong{font-size:34px;line-height:1;font-weight:900}
+.receipt-total span{display:block;margin-top:6px;font-size:13px;opacity:.88}
+.visual-note{
+  margin-top:12px;
+  padding:13px;
+  border-radius:var(--radius);
+  background:var(--blue-soft);
+  color:#173d66;
+  font-size:13px;
 }
-.mom-role:last-child { border-bottom: none; }
-.mom-role-icon { font-size: 22px; width: 32px; text-align: center; flex-shrink: 0; }
-.mom-role-name { font-size: 13px; font-weight: 600; flex: 1; }
-.mom-role-value { font-size: 14px; font-weight: 800; color: #be185d; }
-.mom-total {
-  margin-top: 16px;
-  background: linear-gradient(135deg, #fce7f3 0%, #fdf2f8 100%);
-  border-radius: 12px;
-  padding: 14px;
-  text-align: center;
-  border: 2px solid #f9a8d4;
+.cards{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:10px;
 }
-.mom-total-label { font-size: 13px; color: #9d174d; margin-bottom: 4px; }
-.mom-total-value { font-size: 32px; font-weight: 800; color: #9d174d; }
-.mom-total-note { font-size: 12px; color: var(--muted); margin-top: 4px; }
-
-/* ── Big number cards ── */
-.big-num-card {
-  background: white;
-  border-radius: var(--radius);
-  padding: 20px;
-  box-shadow: var(--shadow);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
+.cost-card{
+  grid-column:span 2;
+  display:flex;
+  flex-direction:column;
+  min-height:292px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:#fff;
+  overflow:hidden;
+  box-shadow:0 12px 34px rgba(23,32,28,.07);
 }
-.big-num-emoji { font-size: 44px; flex-shrink: 0; }
-.big-num-body { flex: 1; }
-.big-num-label { font-size: 13px; color: var(--muted); margin-bottom: 2px; }
-.big-num-value { font-size: 26px; font-weight: 800; color: var(--text); line-height: 1.1; }
-.big-num-bowls { font-size: 13px; color: var(--green); font-weight: 700; margin-top: 2px; }
-.big-num-note { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
-
-/* ── Callout box ── */
-.callout {
-  border-radius: var(--radius);
-  padding: 16px 18px;
-  margin-bottom: 12px;
-  font-size: 14px;
-  line-height: 1.65;
+.cost-card.wide{grid-column:span 3}
+.card-img{
+  height:96px;
+  background:var(--soft);
+  overflow:hidden;
 }
-.callout.green { background: var(--green-light); border: 1px solid #a7d5be; color: #14532d; }
-.callout.amber { background: var(--amber-light); border: 1px solid #fcd34d; color: #78350f; }
-.callout.red   { background: var(--red-light);   border: 1px solid #fca5a5; color: #7f1d1d; }
-.callout.blue  { background: var(--blue-light);  border: 1px solid #93c5fd; color: #1e3a8a; }
-.callout.purple{ background: var(--purple-light);border: 1px solid #c4b5fd; color: #4c1d95; }
-.callout-title { font-weight: 800; display: block; margin-bottom: 4px; font-size: 15px; }
-
-/* ── Divider ── */
-.divider {
-  display: flex; align-items: center; gap: 10px;
-  margin: 28px 0 20px;
-  font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .06em;
+.card-visual{
+  height:96px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,var(--mint),#fff);
+  font-size:42px;
 }
-.divider::before, .divider::after {
-  content: ''; flex: 1; height: 1px; background: var(--border);
+.cost-body{display:flex;flex-direction:column;gap:10px;flex:1;padding:16px}
+.cost-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.cost-title{font-size:16px;font-weight:900}
+.cost-title span{display:block;color:var(--muted);font-size:12px;font-weight:700}
+.amount{text-align:right;color:var(--green);font-size:24px;line-height:1;font-weight:900;white-space:nowrap}
+.range{color:var(--muted);font-size:12px;text-align:right}
+.bar{height:10px;border-radius:999px;background:#eef1ed;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),#7ab798)}
+.concrete{
+  display:grid;
+  gap:5px;
+  margin:0;
+  padding:0;
+  list-style:none;
+  color:var(--muted);
+  font-size:13px;
 }
-
-/* ── Mobile ── */
-@media(max-width:500px){
-  .hero h1 { font-size: 22px; }
-  .unit-grid { grid-template-columns: 1fr; }
-  .job-stats { grid-template-columns: repeat(3,1fr); }
-  .big-num-card { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .big-num-emoji { font-size: 36px; }
+.concrete strong{color:var(--ink)}
+.tagline{
+  margin-top:auto;
+  padding:9px 10px;
+  border-radius:var(--radius);
+  background:var(--amber-soft);
+  color:#744004;
+  font-size:12px;
+  font-weight:700;
+}
+.insurance{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.insurance-card{
+  padding:18px;
+  border-radius:var(--radius);
+  border:1px solid var(--line);
+  background:#fff;
+}
+.insurance-card h3{margin:0 0 8px;font-size:17px}
+.insurance-card .price{color:var(--green);font-size:30px;font-weight:900;line-height:1.1}
+.insurance-card p{margin:8px 0 0;color:var(--muted);font-size:13px}
+.calc{
+  display:grid;
+  grid-template-columns:.8fr 1.2fr;
+  gap:16px;
+}
+.calc-control{
+  padding:18px;
+  border-radius:var(--radius);
+  background:var(--purple-soft);
+  border:1px solid #d5c9f4;
+}
+.calc-control label{display:block;font-size:13px;font-weight:900;color:#4c3b82}
+.calc-control input{
+  width:100%;
+  margin-top:8px;
+  padding:12px;
+  border:1px solid #c8bee8;
+  border-radius:var(--radius);
+  background:#fff;
+  color:var(--ink);
+  font-size:22px;
+  font-weight:900;
+}
+.calc-control input:focus{outline:3px solid rgba(102,77,163,.2)}
+.calc-results{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.result{
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:#fff;
+}
+.result span{display:block;color:var(--muted);font-size:12px;font-weight:800}
+.result strong{display:block;margin-top:6px;color:var(--purple);font-size:28px;line-height:1.1;font-weight:900}
+.calendar{
+  display:grid;
+  grid-template-columns:repeat(30,1fr);
+  gap:4px;
+  margin-top:14px;
+}
+.day-dot{
+  aspect-ratio:1;
+  border-radius:4px;
+  background:linear-gradient(180deg,#d7eadf,#92c5a9);
+  border:1px solid #bad8c8;
+}
+.mom-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.mom-list{
+  display:grid;
+  gap:9px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.mom-list li{
+  display:grid;
+  grid-template-columns:42px 1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:10px;
+  border:1px solid #f3c4d5;
+  border-radius:var(--radius);
+  background:#fff;
+}
+.mom-list b{font-size:14px}
+.mom-list span{display:block;color:var(--muted);font-size:12px;font-weight:600}
+.mom-list strong{color:var(--rose);font-size:14px;white-space:nowrap}
+.callout{
+  padding:17px 18px;
+  border-radius:var(--radius);
+  font-size:14px;
+}
+.callout.green{border:1px solid #bad8c8;background:var(--mint);color:#164d3d}
+.callout.blue{border:1px solid #bfd3e8;background:var(--blue-soft);color:#183f69}
+.callout.rose{border:1px solid #f3c4d5;background:var(--rose-soft);color:#7d2547}
+.callout.red{border:1px solid #f1bbb0;background:var(--red-soft);color:#792b20}
+.callout h3{margin:0 0 8px;font-size:18px}
+.callout p{margin:0}
+.source-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.source{
+  padding:13px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:#fff;
+  color:var(--muted);
+  font-size:12px;
+}
+.source a{color:var(--green);font-weight:900}
+footer{padding:26px 0 40px;color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:980px){
+  .hero,.grid-2,.calc{grid-template-columns:1fr}
+  .hero-copy,.hero-media{min-height:auto}
+  .hero-media{height:360px}
+  .ruler-grid{grid-template-columns:repeat(2,1fr)}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .cost-card,.cost-card.wide{grid-column:span 1}
+  .source-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:680px){
+  .wrap{width:min(100% - 22px,1120px)}
+  .hero{padding-top:14px}
+  .hero-copy{padding:22px}
+  .hero-stats,.big-money,.insurance,.mom-grid,.calc-results,.photo-grid,.source-grid{grid-template-columns:1fr}
+  .ruler-grid,.cards{grid-template-columns:1fr}
+  .section-head{display:block}
+  .pill{margin-top:10px}
+  .receipt-row{grid-template-columns:66px 1fr 70px}
+  .calendar{grid-template-columns:repeat(10,1fr)}
 }
 </style>
 </head>
 <body>
-
-<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
-<div class="hero">
-  <span class="hero-emoji">🏙️</span>
-  <h1>武汉生活，要花多少钱？</h1>
-  <p>给8岁小朋友的生活成本指南 · 2024年武汉真实数据</p>
-  <span class="hero-tag">🍜 热干面参考版 · 向下滑动探索吧</span>
-</div>
-
-<div class="page">
-
-<!-- ═══════════════════════════ 参考单位 ═══════════════════════════════ -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-icon" style="background:#e7f5ef">📏</div>
-    <div>
-      <div class="section-title">我们的"价格尺子"</div>
-      <div class="section-sub">用你每天都见过的东西来比较价格</div>
-    </div>
-  </div>
-
-  <div class="unit-card">
-    <div style="font-size:14px;color:var(--muted);margin-bottom:10px">武汉的东西贵不贵？我们用两把"尺子"来量一量：</div>
-    <div class="unit-grid">
-      <div class="unit-item">
-        <span class="unit-big">🍜</span>
-        <div class="unit-name">一碗热干面</div>
-        <div class="unit-price">5元</div>
-        <div class="unit-note">街边小店 · 武汉人的早饭</div>
+<header class="wrap hero" id="top">
+  <div class="hero-copy">
+    <div class="eyebrow">武汉 · 妈妈和孩子两个人 · 2026口径</div>
+    <h1>家里一个月到底要花多少钱？</h1>
+    <p class="hero-lead">
+      这份账本只算 <strong>妈妈 + 8岁孩子</strong> 两个人。每个数字都换成孩子能看见的东西：
+      热干面、外卖单、一天一天的小格子，还有保险这把“安全伞”。
+    </p>
+    <div class="hero-stats">
+      <div class="stat">
+        <span>中等账本合计</span>
+        <strong>约9480元</strong>
+        <small>每月。不算旅游、大件电器和突发大病自费</small>
       </div>
-      <div class="unit-item">
-        <span class="unit-big">🛵</span>
-        <div class="unit-name">骑手送1单外卖</div>
-        <div class="unit-price">约5元</div>
-        <div class="unit-note">骑手每送一单赚约5元</div>
+      <div class="stat">
+        <span>摊到每天</span>
+        <strong>约316元</strong>
+        <small>睡觉、上学、吃饭时都在发生</small>
+      </div>
+      <div class="stat">
+        <span>换成热干面</span>
+        <strong>1580碗</strong>
+        <small>每月。按普通小店6元/碗计算</small>
       </div>
     </div>
-    <div class="callout green" style="margin-top:12px;margin-bottom:0">
-      <span class="callout-title">💡 怎么用这把尺子？</span>
-      一件东西 <strong>100元</strong>，就等于骑手要 <strong>送20单外卖</strong>才能挣到。<br>
-      家里每个月花 <strong>8000元</strong>，骑手要送 <strong>1600单</strong> 才够！
+    <div class="hero-note">
+      读法：这不是要让孩子害怕钱，而是让孩子知道，饭菜、房间、医保、课外书都来自真实劳动。
     </div>
   </div>
-</div>
-
-<!-- ═══════════════════════════ 一天的花费 ═══════════════════════════════ -->
-<div class="divider">一天要花多少钱</div>
-
-<div class="section">
-  <div class="section-header">
-    <div class="section-icon" style="background:#fef3c7">🌅</div>
-    <div>
-      <div class="section-title">从早到晚：一天的账单</div>
-      <div class="section-sub">三口之家，一天从起床到睡觉要花多少</div>
+  <div class="hero-media">
+    <div class="scene scene-city" role="img" aria-label="武汉城市天际线插画">
+      <svg viewBox="0 0 900 620" aria-hidden="true">
+        <rect x="0" y="0" width="900" height="620" fill="transparent"/>
+        <circle cx="690" cy="120" r="62" fill="#fff2b8"/>
+        <path d="M0 380 C170 340 320 410 500 370 C665 332 760 350 900 320 L900 620 L0 620 Z" fill="#87b8c8"/>
+        <path d="M0 410 C180 382 340 440 520 405 C690 372 790 390 900 360 L900 620 L0 620 Z" fill="#6ba8bf" opacity=".7"/>
+        <g fill="#245c64">
+          <rect x="90" y="238" width="58" height="156" rx="3"/>
+          <rect x="165" y="196" width="76" height="198" rx="3"/>
+          <rect x="265" y="150" width="58" height="244" rx="3"/>
+          <rect x="345" y="220" width="92" height="174" rx="3"/>
+          <rect x="465" y="175" width="66" height="219" rx="3"/>
+          <rect x="560" y="250" width="96" height="144" rx="3"/>
+          <rect x="690" y="205" width="70" height="189" rx="3"/>
+        </g>
+        <g fill="#e6f6ee" opacity=".85">
+          <rect x="108" y="260" width="10" height="18"/><rect x="128" y="260" width="10" height="18"/>
+          <rect x="184" y="222" width="12" height="20"/><rect x="208" y="222" width="12" height="20"/>
+          <rect x="282" y="180" width="10" height="18"/><rect x="302" y="180" width="10" height="18"/>
+          <rect x="370" y="248" width="12" height="20"/><rect x="402" y="248" width="12" height="20"/>
+          <rect x="484" y="205" width="11" height="19"/><rect x="508" y="205" width="11" height="19"/>
+          <rect x="590" y="276" width="13" height="19"/><rect x="626" y="276" width="13" height="19"/>
+          <rect x="711" y="235" width="12" height="20"/><rect x="738" y="235" width="12" height="20"/>
+        </g>
+        <path d="M80 420 C240 310 560 310 760 420" fill="none" stroke="#fffdf8" stroke-width="16" stroke-linecap="round"/>
+        <path d="M80 420 L760 420" stroke="#fffdf8" stroke-width="14" stroke-linecap="round"/>
+        <g stroke="#fffdf8" stroke-width="5" opacity=".9">
+          <path d="M190 390 L190 448"/><path d="M330 366 L330 448"/><path d="M470 366 L470 448"/><path d="M610 390 L610 448"/>
+        </g>
+      </svg>
     </div>
+    <div class="hero-caption">武汉是一座真实的城市。每盏灯背后，都是一个家庭每天的小账本。</div>
   </div>
+</header>
 
-  <!-- Timeline -->
-  <div class="card">
-    <div class="timeline">
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-time">早上 6:30</div>
-        <div class="tl-text">🍜 热干面早餐 × 3人</div>
-        <div class="tl-cost">5元/碗 × 3 = 15元 &nbsp;|&nbsp; 🛵 相当于骑手送3单</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-time">上午 7:30</div>
-        <div class="tl-text">🚌 交通：爸妈坐地铁上班 + 你坐公交上学</div>
-        <div class="tl-cost">约3元×3人 = 9元 &nbsp;|&nbsp; 🛵 相当于骑手送2单</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-time">中午 12:00</div>
-        <div class="tl-text">🍱 学校食堂午饭（你）+ 爸妈单位附近吃饭</div>
-        <div class="tl-cost">约15元+20元+20元 = 55元 &nbsp;|&nbsp; 🛵 骑手送11单</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-time">下午 3:30</div>
-        <div class="tl-text">🍦 放学后零食饮料（你的零花钱）</div>
-        <div class="tl-cost">约5–15元 &nbsp;|&nbsp; 🛵 骑手送1–3单</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-time">傍晚 6:00</div>
-        <div class="tl-text">🥘 妈妈做晚饭，买菜食材（3人份）</div>
-        <div class="tl-cost">约40–60元 &nbsp;|&nbsp; 🛵 骑手送8–12单</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-time">晚上 9:30</div>
-        <div class="tl-text">💡 家里用电（空调/灯/电视）一天的电费</div>
-        <div class="tl-cost">约5–15元（夏天20–35元）</div>
-      </div>
-    </div>
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="#ruler">价格尺子</a>
+    <a href="#day">一天账单</a>
+    <a href="#month">每月大账</a>
+    <a href="#insurance">保险安全伞</a>
+    <a href="#concrete">数字变具体</a>
+    <a href="#mom">妈妈的付出</a>
+    <a href="#sources">数据口径</a>
   </div>
+</nav>
 
-  <div class="card total">
-    <div class="card-row">
-      <div class="card-icon-wrap">☀️</div>
-      <div class="card-content">
-        <div class="card-title">三口之家：一天基本花费</div>
-        <div class="card-price">约130–170元</div>
-        <div class="card-bowls">🍜 = 26–34碗热干面 &nbsp;|&nbsp; 🛵 = 骑手送26–34单</div>
-        <div class="card-desc">这只算吃饭+交通+零食+水电，还没算房租！<br>一年仅这些就花 <strong>约5万元</strong>。</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="callout amber">
-    <span class="callout-title">🤔 叫外卖 vs 自己做饭</span>
-    如果一家三口晚饭叫外卖：约<strong>80–120元</strong>（3份菜+配送费）<br>
-    妈妈自己买菜做：约<strong>40–60元</strong><br>
-    每天节省约 <strong>40元</strong> → 一个月省 <strong>1200元</strong> → 一年省 <strong>14400元</strong>！<br>
-    这笔钱能报 <strong>一年的兴趣班</strong>！
-  </div>
-</div>
-
-<!-- ═══════════════════════════ 一个月账单 ═══════════════════════════════ -->
-<div class="divider">一个月的大账单</div>
-
-<div class="section">
-  <div class="section-header">
-    <div class="section-icon" style="background:#dbeafe">📊</div>
-    <div>
-      <div class="section-title">家里每月要花哪些钱</div>
-      <div class="section-sub">武汉普通三口之家，2024年真实数据</div>
-    </div>
-  </div>
-
-  <!-- 住房 -->
-  <div class="card">
-    <div class="card-row">
-      <div class="card-icon-wrap">🏠</div>
-      <div class="card-content">
-        <div class="card-title">房租 / 房贷</div>
-        <div class="card-price">2000–5000元/月</div>
-        <div class="card-bowls">🛵 骑手要送400–1000单</div>
-        <div class="card-desc">
-          武汉租房价格（两室一厅）：<br>
-          • <strong>汉口繁华区</strong>（江汉/江岸）：3500–5000元/月<br>
-          • <strong>武昌/洪山</strong>（光谷附近）：2500–4000元/月<br>
-          • <strong>郊区</strong>（东西湖/蔡甸）：1500–2500元/月<br><br>
-          如果贷款买了一套 <strong>150万的房子</strong>：<br>
-          首付45万 + 每月还款 <strong>约5500元</strong>（30年还清）
-        </div>
-        <div class="tip-box">
-          <strong>🤯 你知道吗：</strong>每天一睁眼，家里就要花掉<strong>约100元房费</strong>（不论上班还是周末），365天不停歇。
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 水电气 -->
-  <div class="card">
-    <div class="card-row">
-      <div class="card-icon-wrap">⚡</div>
-      <div class="card-content">
-        <div class="card-title">水费 + 电费 + 燃气</div>
-        <div class="card-price">150–450元/月</div>
-        <div class="card-bowls">🛵 骑手要送30–90单</div>
-        <div class="card-desc">
-          武汉一家三口月度账单：
-        </div>
-        <table class="compare-table" style="margin-top:8px">
-          <tr><th>项目</th><th>春秋季</th><th>夏天（空调）</th></tr>
-          <tr><td>电费</td><td>80–120元</td><td class="red">200–450元</td></tr>
-          <tr><td>水费</td><td colspan="2">30–60元</td></tr>
-          <tr><td>天然气</td><td>30–50元</td><td>20–30元</td></tr>
-          <tr><td class="bold">合计</td><td class="green">140–230元</td><td class="red">250–540元</td></tr>
-        </table>
-        <div class="tip-box" style="margin-top:10px">
-          <strong>💡 省电小技巧：</strong>空调每升高1度节省6–7%电费。25度比24度，一个夏天省约50元！
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 物业 -->
-  <div class="card">
-    <div class="card-row">
-      <div class="card-icon-wrap">🏘️</div>
-      <div class="card-content">
-        <div class="card-title">物业管理费</div>
-        <div class="card-price">100–400元/月</div>
-        <div class="card-bowls">🛵 骑手要送20–80单</div>
-        <div class="card-desc">
-          • 普通小区（100平）：100–200元/月<br>
-          • 品质小区（100平）：200–400元/月<br><br>
-          这笔钱用来给：保安叔叔发工资、清洁阿姨打扫楼道、修电梯、浇花种草……
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 食品 -->
-  <div class="card">
-    <div class="card-row">
-      <div class="card-icon-wrap">🛒</div>
-      <div class="card-content">
-        <div class="card-title">一家人的食品费</div>
-        <div class="card-price">2500–4500元/月</div>
-        <div class="card-bowls">🛵 骑手要送500–900单</div>
-        <div class="card-desc">
-          武汉菜市场2024年价格参考：<br>
-          • 猪肉：<strong>22–28元/斤</strong><br>
-          • 草鱼：<strong>10–15元/斤</strong><br>
-          • 鸡蛋：<strong>6–8元/斤</strong>（约5–6个）<br>
-          • 大白菜：<strong>1–2元/斤</strong><br>
-          • 西红柿：<strong>3–5元/斤</strong><br>
-          • 大米（10斤）：<strong>35–55元</strong><br><br>
-          三口之家1个月要吃：<br>
-          约15斤猪/鸡/鱼、50个鸡蛋、20斤蔬菜、10斤水果……
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 教育 -->
-  <div class="card">
-    <div class="card-row">
-      <div class="card-icon-wrap">📚</div>
-      <div class="card-content">
-        <div class="card-title">你的学费 + 课外班</div>
-        <div class="card-price">500–3000元/月</div>
-        <div class="card-bowls">🛵 骑手要送100–600单</div>
-        <div class="card-desc">
-          公立小学学费：<strong>几乎免费</strong>（义务教育）<br><br>
-          课外班价格（武汉2024年）：
-        </div>
-        <table class="compare-table" style="margin-top:8px">
-          <tr><th>课外班类型</th><th>每月费用</th></tr>
-          <tr><td>数学思维（学而思等）</td><td class="green">800–1500元</td></tr>
-          <tr><td>英语（英孚/新东方）</td><td class="green">800–1600元</td></tr>
-          <tr><td>钢琴（1对1）</td><td class="green">800–1600元</td></tr>
-          <tr><td>游泳班</td><td class="green">600–1200元</td></tr>
-          <tr><td>编程课</td><td class="green">800–1500元</td></tr>
-        </table>
-        <div class="tip-box" style="margin-top:10px">
-          <strong>🎯 爸妈的心愿：</strong>报1个课外班就花800–1500元/月，相当于骑手送160–300单外卖。认真学习是对他们最好的回报。
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 交通通信 -->
-  <div class="card">
-    <div class="card-row">
-      <div class="card-icon-wrap">📱</div>
-      <div class="card-content">
-        <div class="card-title">交通 + 手机 + 网络</div>
-        <div class="card-price">300–600元/月</div>
-        <div class="card-bowls">🛵 骑手要送60–120单</div>
-        <div class="card-desc">
-          • 地铁/公交通勤：<strong>100–200元/月</strong><br>
-          • 两部手机套餐：<strong>99–199元×2 = 约300元</strong><br>
-          • 家庭宽带（300Mbps）：<strong>40–80元/月</strong><br><br>
-          武汉地铁已有15条线，坐地铁比打车便宜10倍！<br>
-          打一次滴滴10km ≈ 30元；同样路程地铁 ≈ 4元
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 合计 -->
-  <div class="card total">
-    <div class="card-row">
-      <div class="card-icon-wrap">📅</div>
-      <div class="card-content">
-        <div class="card-title">💥 一个月账单合计</div>
-        <div class="card-price">7500–13000元/月</div>
-        <div class="card-bowls">🛵 骑手要送1500–2600单！ · 🍜 1500–2600碗热干面</div>
-        <div style="margin-top:10px">
-          <div class="bar-row">
-            <div class="bar-label"><span>🏠 住房</span><span class="val">3000元</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:40%">40%</div></div>
-          </div>
-          <div class="bar-row">
-            <div class="bar-label"><span>🛒 食品</span><span class="val">2800元</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:37%">37%</div></div>
-          </div>
-          <div class="bar-row">
-            <div class="bar-label"><span>📚 教育</span><span class="val">1200元</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:16%">16%</div></div>
-          </div>
-          <div class="bar-row">
-            <div class="bar-label"><span>⚡ 水电</span><span class="val">300元</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:4%"></div></div>
-          </div>
-          <div class="bar-row">
-            <div class="bar-label"><span>📱 通信</span><span class="val">450元</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:6%">6%</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="callout red">
-    <span class="callout-title">😲 你知道吗？</span>
-    武汉2024年平均工资约 <strong>8000元/月</strong>。<br>
-    而维持一家三口的基本生活就要 <strong>7500–10000元</strong>。<br>
-    很多家庭每个月剩不了多少钱——这就是爸爸妈妈每天努力工作的原因。
-  </div>
-</div>
-
-<!-- ═══════════════════════════ 普通人怎么挣钱 ═══════════════════════════════ -->
-<div class="divider">普通人怎么挣钱</div>
-
-<div class="section">
-  <div class="section-header">
-    <div class="section-icon" style="background:#ffedd5">💪</div>
-    <div>
-      <div class="section-title">武汉普通工作者的收入</div>
-      <div class="section-sub">真实数据 · 2024年 · 他们每天都很辛苦</div>
-    </div>
-  </div>
-
-  <!-- 外卖员 -->
-  <div class="job-card">
-    <div class="job-header">
-      <div class="job-icon">🛵</div>
+<main>
+  <section class="wrap section" id="ruler">
+    <div class="section-head">
       <div>
-        <div class="job-title">外卖骑手（美团/饿了么）</div>
-        <div class="job-salary">6000–10000元/月</div>
+        <h2 class="section-title">先拿四把“价格尺子”</h2>
+        <p class="section-sub">孩子不一定懂9000元，但会懂6元一碗面、24元一小时、每天30个小格子。</p>
+      </div>
+      <div class="pill">下面所有换算都用这四把尺子</div>
+    </div>
+    <div class="photo-grid">
+      <div class="photo-card">
+        <div class="scene scene-noodle" role="img" aria-label="热干面插画">
+          <svg viewBox="0 0 520 300" aria-hidden="true">
+            <rect width="520" height="300" fill="transparent"/>
+            <ellipse cx="260" cy="218" rx="168" ry="42" fill="#b7622b"/>
+            <path d="M100 182 C116 260 406 260 420 182 Z" fill="#f2f4f1"/>
+            <ellipse cx="260" cy="181" rx="170" ry="55" fill="#fffdf8"/>
+            <ellipse cx="260" cy="181" rx="138" ry="38" fill="#e0a24a"/>
+            <g fill="none" stroke="#7b3e1d" stroke-width="8" stroke-linecap="round">
+              <path d="M150 175 C205 142 250 210 310 170 C342 149 372 164 392 188"/>
+              <path d="M140 192 C200 160 245 212 300 190 C342 173 365 180 392 202"/>
+              <path d="M178 160 C218 190 270 140 322 175"/>
+            </g>
+            <g fill="#2f8d70">
+              <circle cx="208" cy="160" r="10"/><circle cx="342" cy="176" r="9"/><circle cx="286" cy="153" r="7"/><circle cx="236" cy="195" r="7"/>
+            </g>
+            <path d="M340 66 L410 154" stroke="#7c4b2f" stroke-width="10" stroke-linecap="round"/>
+            <path d="M367 54 L430 140" stroke="#7c4b2f" stroke-width="10" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="label">一碗普通热干面：约6元</div>
+      </div>
+      <div class="photo-card">
+        <div class="scene scene-market" role="img" aria-label="菜篮子插画">
+          <svg viewBox="0 0 520 300" aria-hidden="true">
+            <rect width="520" height="300" fill="transparent"/>
+            <rect x="96" y="128" width="330" height="112" rx="18" fill="#b56a31"/>
+            <path d="M130 136 C170 78 350 78 390 136" fill="none" stroke="#8b4f2d" stroke-width="14" stroke-linecap="round"/>
+            <g>
+              <circle cx="160" cy="132" r="34" fill="#52a05e"/><circle cx="196" cy="132" r="34" fill="#6dbb63"/>
+              <circle cx="232" cy="132" r="34" fill="#3f9a54"/><circle cx="310" cy="132" r="36" fill="#d24536"/>
+              <circle cx="350" cy="134" r="32" fill="#f0b436"/><circle cx="390" cy="140" r="30" fill="#d24536"/>
+              <path d="M244 108 C262 74 300 80 306 114" fill="#6dbb63"/>
+              <path d="M142 210 L398 210" stroke="#8b4f2d" stroke-width="10" stroke-linecap="round"/>
+              <path d="M160 162 L160 234 M212 162 L212 234 M264 162 L264 234 M316 162 L316 234 M368 162 L368 234" stroke="#8b4f2d" stroke-width="7" opacity=".55"/>
+            </g>
+          </svg>
+        </div>
+        <div class="label">一天菜篮子：约35到55元</div>
+      </div>
+      <div class="photo-card">
+        <div class="scene scene-bridge" role="img" aria-label="武汉长江大桥插画">
+          <svg viewBox="0 0 520 300" aria-hidden="true">
+            <rect width="520" height="300" fill="transparent"/>
+            <path d="M0 190 C110 165 210 215 318 186 C420 160 480 174 520 160 L520 300 L0 300 Z" fill="#78adc2"/>
+            <path d="M30 156 L490 156" stroke="#8d5b36" stroke-width="16" stroke-linecap="round"/>
+            <path d="M50 178 L470 178" stroke="#f5f1df" stroke-width="8" stroke-linecap="round"/>
+            <g stroke="#8d5b36" stroke-width="10">
+              <path d="M90 156 L90 230"/><path d="M190 156 L190 230"/><path d="M290 156 L290 230"/><path d="M390 156 L390 230"/>
+            </g>
+            <g fill="#245c64">
+              <rect x="72" y="84" width="54" height="72" rx="3"/>
+              <rect x="370" y="74" width="58" height="82" rx="3"/>
+              <rect x="154" y="110" width="36" height="46" rx="3"/>
+              <rect x="450" y="118" width="28" height="38" rx="3"/>
+            </g>
+          </svg>
+        </div>
+        <div class="label">城市很大，通勤和住房都要钱</div>
       </div>
     </div>
-    <div class="job-body">
-      <div class="job-stats">
-        <div class="job-stat">
-          <div class="job-stat-val">每单5–8元</div>
-          <div class="job-stat-label">骑手每单收入</div>
-        </div>
-        <div class="job-stat">
-          <div class="job-stat-val">每天50–80单</div>
-          <div class="job-stat-label">日均接单量</div>
-        </div>
-        <div class="job-stat">
-          <div class="job-stat-val">10–12小时</div>
-          <div class="job-stat-label">每天工作时长</div>
-        </div>
+    <div class="ruler-grid">
+      <div class="ruler-card">
+        <div class="icon">🍜</div>
+        <h3>热干面尺</h3>
+        <div class="num">6元/碗</div>
+        <p>100元约等于17碗。孩子能立刻想象一大桌早餐。</p>
       </div>
-      <div class="job-deliveries">
-        <strong>🤔 "送多少单"换算——</strong>
-        骑手月薪8000元 ÷ 6元/单 = 每月要送约 <strong>1333单</strong>，每天约 <strong>44单</strong>（还不算平台抽成）<br><br>
-        • 买一双100元的运动鞋 = 骑手送 <strong>20单</strong>（约1小时）<br>
-        • 一个月的电费300元 = 骑手送 <strong>60单</strong>（约3小时）<br>
-        • 一年补课费15000元 = 骑手送 <strong>3000单</strong>（约150天工作量）
+      <div class="ruler-card">
+        <div class="icon">🛵</div>
+        <h3>外卖单尺</h3>
+        <div class="num">约6元/单</div>
+        <p>骑手每完成一单的收入按6元估算，方便换算劳动量。</p>
       </div>
-      <div class="tip-box" style="margin-top:10px">
-        <strong>😰 骑手的辛苦：</strong>武汉夏天40°C骑车送餐，冬天零下5°C淋雨送餐，没有节假日，超时被差评还要罚钱。下次收到外卖，记得说声谢谢！
+      <div class="ruler-card">
+        <div class="icon">⏱️</div>
+        <h3>最低时薪尺</h3>
+        <div class="num">24元/小时</div>
+        <p>武汉市区非全日制最低工资标准，1小时约买4碗热干面。</p>
+      </div>
+      <div class="ruler-card">
+        <div class="icon">📅</div>
+        <h3>每天小格子</h3>
+        <div class="num">30天/月</div>
+        <p>把月账单除以30，孩子会发现“每天都在花钱”。</p>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- 网约车 -->
-  <div class="job-card">
-    <div class="job-header">
-      <div class="job-icon">🚗</div>
+  <section class="wrap section" id="day">
+    <div class="section-head">
       <div>
-        <div class="job-title">网约车司机（滴滴/高德）</div>
-        <div class="job-salary">5500–9000元/月（净收入）</div>
+        <h2 class="section-title">一天账单：从早上睁眼开始</h2>
+        <p class="section-sub">这一天没有买玩具，没有旅游，只是普通地生活。</p>
+      </div>
+      <div class="pill">约316元/天</div>
+    </div>
+    <div class="grid-2">
+      <div class="panel receipt">
+        <div class="receipt-row">
+          <div class="time">早上</div>
+          <div class="thing">早餐 <small>妈妈和孩子：热干面、豆浆、鸡蛋之类</small></div>
+          <div class="cost">14元</div>
+        </div>
+        <div class="receipt-row">
+          <div class="time">中午</div>
+          <div class="thing">午饭 <small>孩子学校午餐约13元，妈妈工作餐约20元</small></div>
+          <div class="cost">33元</div>
+        </div>
+        <div class="receipt-row">
+          <div class="time">傍晚</div>
+          <div class="thing">晚饭食材 <small>青菜、肉蛋、米饭、汤，家里做饭</small></div>
+          <div class="cost">35元</div>
+        </div>
+        <div class="receipt-row">
+          <div class="time">零食</div>
+          <div class="thing">水果零食 <small>一个苹果、一盒牛奶或一点小点心</small></div>
+          <div class="cost">5元</div>
+        </div>
+        <div class="receipt-row">
+          <div class="time">路上</div>
+          <div class="thing">交通 <small>公交、地铁，偶尔共享单车或短途打车</small></div>
+          <div class="cost">16元</div>
+        </div>
+        <div class="receipt-row">
+          <div class="time">家里</div>
+          <div class="thing">水电气物业 <small>电灯、洗澡、做饭、空调、楼道清洁</small></div>
+          <div class="cost">17元</div>
+        </div>
+        <div class="receipt-row">
+          <div class="time">房间</div>
+          <div class="thing">住房摊到每天 <small>房租2800元/月，睡觉时也在计费</small></div>
+          <div class="cost">93元</div>
+        </div>
+        <div class="receipt-row">
+          <div class="time">学校</div>
+          <div class="thing">教育摊到每天 <small>文具、课外书、兴趣课或托管</small></div>
+          <div class="cost">40元</div>
+        </div>
+        <div class="receipt-row">
+          <div class="time">安全伞</div>
+          <div class="thing">保险摊到每天 <small>妈妈社保医保 + 孩子居民医保</small></div>
+          <div class="cost">44元</div>
+        </div>
+        <div class="receipt-row">
+          <div class="time">备用</div>
+          <div class="thing">药品衣物杂费 <small>感冒药、牙刷、袜子、作业本</small></div>
+          <div class="cost">19元</div>
+        </div>
+        <div class="receipt-total">
+          <strong>316元</strong>
+          <span>约53碗热干面，约53单外卖收入，约13小时最低时薪。</span>
+        </div>
+      </div>
+      <div class="panel pad">
+        <div class="big-money">
+          <div class="money-box">
+            <span>一天的316元</span>
+            <strong>不是一次花掉</strong>
+            <small>它被早餐、房租、保险、水电一点点分走。</small>
+          </div>
+          <div class="money-box">
+            <span>最容易被忽略</span>
+            <strong>房租+保险</strong>
+            <small>一天就约137元，比当天吃饭还高。</small>
+          </div>
+        </div>
+        <div class="calendar" aria-label="一个月30天">
+          <span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span>
+          <span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span>
+          <span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span>
+          <span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span>
+          <span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span>
+          <span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span><span class="day-dot"></span>
+        </div>
+        <div class="visual-note">
+          上面30个小格子，每个格子都是约316元。一个月走完，约9480元就离开了家里的钱包。
+        </div>
+        <div class="callout green" style="margin-top:14px">
+          <h3>给孩子的一句话</h3>
+          <p>你吃的一口饭、写字用的一支笔、晚上亮着的一盏灯，都不是“自动出现”的，是妈妈每天工作和安排换来的。</p>
+        </div>
       </div>
     </div>
-    <div class="job-body">
-      <div class="job-stats">
-        <div class="job-stat">
-          <div class="job-stat-val">20–30单/天</div>
-          <div class="job-stat-label">日均接单</div>
-        </div>
-        <div class="job-stat">
-          <div class="job-stat-val">扣油/电+抽成</div>
-          <div class="job-stat-label">每月约2000元成本</div>
-        </div>
-        <div class="job-stat">
-          <div class="job-stat-val">约20元/小时</div>
-          <div class="job-stat-label">实际时薪</div>
-        </div>
-      </div>
-      <div class="card-desc" style="font-size:13px;margin-top:8px;color:var(--muted)">
-        <strong>真实一天：</strong>早高峰6–9点多单，白天少单，晚高峰17–20点多单，深夜加价单。一天约在外面开10–12小时，行驶300–400公里，非常疲劳。
-      </div>
-    </div>
-  </div>
+  </section>
 
-  <!-- 快递员 -->
-  <div class="job-card">
-    <div class="job-header">
-      <div class="job-icon">📦</div>
+  <section class="wrap section" id="month">
+    <div class="section-head">
       <div>
-        <div class="job-title">快递员（顺丰/京东/菜鸟）</div>
-        <div class="job-salary">5000–8000元/月</div>
+        <h2 class="section-title">一个月大账：钱都去哪了</h2>
+        <p class="section-sub">下面用“中等账本”做示例。实际家庭会因为房租、课外班、工作社保方式不同而上下浮动。</p>
       </div>
+      <div class="pill">合计约9480元/月</div>
     </div>
-    <div class="job-body">
-      <div class="job-stats">
-        <div class="job-stat">
-          <div class="job-stat-val">200–300件</div>
-          <div class="job-stat-label">每天派件量</div>
+    <div class="cards">
+      <article class="cost-card wide">
+        <div class="card-img">
+          <div class="scene scene-home" role="img" aria-label="住房插画">
+            <svg viewBox="0 0 520 180" aria-hidden="true">
+              <rect width="520" height="180" fill="transparent"/>
+              <rect x="86" y="45" width="122" height="112" rx="5" fill="#245c64"/>
+              <rect x="226" y="24" width="142" height="133" rx="5" fill="#12624f"/>
+              <rect x="386" y="68" width="78" height="89" rx="5" fill="#2f8d70"/>
+              <g fill="#fff2b8">
+                <rect x="108" y="66" width="20" height="20"/><rect x="146" y="66" width="20" height="20"/><rect x="108" y="108" width="20" height="20"/><rect x="146" y="108" width="20" height="20"/>
+                <rect x="252" y="48" width="22" height="22"/><rect x="298" y="48" width="22" height="22"/><rect x="252" y="92" width="22" height="22"/><rect x="298" y="92" width="22" height="22"/>
+                <rect x="406" y="90" width="18" height="18"/><rect x="436" y="90" width="18" height="18"/>
+              </g>
+              <path d="M42 157 H486" stroke="#8d5b36" stroke-width="8" stroke-linecap="round"/>
+            </svg>
+          </div>
         </div>
-        <div class="job-stat">
-          <div class="job-stat-val">0.5–1.5元/件</div>
-          <div class="job-stat-label">每件派费</div>
+        <div class="cost-body">
+          <div class="cost-top">
+            <div class="cost-title">住房 <span>小两室或一室一厅，按租房口径</span></div>
+            <div><div class="amount">2800元</div><div class="range">常见约2000-3600</div></div>
+          </div>
+          <div class="bar"><i style="width:30%"></i></div>
+          <ul class="concrete">
+            <li>每天先“扣掉”<strong>93元</strong>，不管有没有出门。</li>
+            <li>等于<strong>467碗热干面</strong>，或骑手约467单。</li>
+            <li>孩子能有自己的床和书桌，主要靠这笔钱。</li>
+          </ul>
+          <div class="tagline">房子不是只在交租那天花钱，而是每天都在花。</div>
         </div>
-        <div class="job-stat">
-          <div class="job-stat-val">早5:30–晚8点</div>
-          <div class="job-stat-label">工作时间</div>
+      </article>
+      <article class="cost-card wide">
+        <div class="card-img">
+          <div class="scene scene-market" role="img" aria-label="菜篮子插画">
+            <svg viewBox="0 0 520 180" aria-hidden="true">
+              <rect width="520" height="180" fill="transparent"/>
+              <rect x="105" y="78" width="310" height="70" rx="14" fill="#b56a31"/>
+              <path d="M140 80 C180 28 340 28 380 80" fill="none" stroke="#8b4f2d" stroke-width="12" stroke-linecap="round"/>
+              <circle cx="164" cy="76" r="28" fill="#52a05e"/><circle cx="202" cy="76" r="28" fill="#6dbb63"/>
+              <circle cx="250" cy="74" r="30" fill="#d24536"/><circle cx="304" cy="76" r="28" fill="#f0b436"/><circle cx="356" cy="80" r="26" fill="#d24536"/>
+              <path d="M142 130 L388 130" stroke="#8b4f2d" stroke-width="8" stroke-linecap="round"/>
+            </svg>
+          </div>
         </div>
-      </div>
-      <div class="card-desc" style="font-size:13px;margin-top:8px;color:var(--muted)">
-        <strong>每天爬楼：</strong>相当于爬 <strong>30–50层楼</strong>，推着100–200斤的小车穿行小区。双11大促期间每天派400件，累到手抖。
-      </div>
-      <div class="tip-box" style="margin-top:8px">
-        <strong>📦 想一想：</strong>你网上买的每一件玩具、每一本书，都是快递叔叔爬着楼梯送来的。
-      </div>
+        <div class="cost-body">
+          <div class="cost-top">
+            <div class="cost-title">吃饭和菜篮子 <span>早中晚饭、水果、少量零食</span></div>
+            <div><div class="amount">2600元</div><div class="range">常见约2200-3200</div></div>
+          </div>
+          <div class="bar"><i style="width:27%"></i></div>
+          <ul class="concrete">
+            <li>每天约<strong>87元</strong>，一家两个人并不奢侈。</li>
+            <li>武汉商务局监测中，2026年春季超市后腿肉约<strong>25元/公斤</strong>。</li>
+            <li>一顿外卖看起来方便，但两个人一天都外卖会明显变贵。</li>
+          </ul>
+          <div class="tagline">妈妈做饭省下来的钱，常常被孩子看不见。</div>
+        </div>
+      </article>
+      <article class="cost-card">
+        <div class="card-visual">💡</div>
+        <div class="cost-body">
+          <div class="cost-top">
+            <div class="cost-title">水电气物业 <span>空调、洗澡、电梯、清洁</span></div>
+            <div><div class="amount">520元</div><div class="range">约350-750</div></div>
+          </div>
+          <div class="bar"><i style="width:6%"></i></div>
+          <ul class="concrete">
+            <li>每天约<strong>17元</strong>。</li>
+            <li>夏天空调月，电费会比春秋高很多。</li>
+            <li>电梯和楼道干净，也在物业费里。</li>
+          </ul>
+        </div>
+      </article>
+      <article class="cost-card">
+        <div class="card-visual">🚇</div>
+        <div class="cost-body">
+          <div class="cost-top">
+            <div class="cost-title">交通通信 <span>公交地铁、手机、宽带</span></div>
+            <div><div class="amount">480元</div><div class="range">约350-650</div></div>
+          </div>
+          <div class="bar"><i style="width:5%"></i></div>
+          <ul class="concrete">
+            <li>每天约<strong>16元</strong>。</li>
+            <li>地铁一次3到5元，看起来少，一个月会累加。</li>
+            <li>家里网课、查资料、和学校联系都需要网络。</li>
+          </ul>
+        </div>
+      </article>
+      <article class="cost-card">
+        <div class="card-visual">📚</div>
+        <div class="cost-body">
+          <div class="cost-top">
+            <div class="cost-title">教育 <span>公立小学免费，但成长不全免费</span></div>
+            <div><div class="amount">1200元</div><div class="range">约400-2500</div></div>
+          </div>
+          <div class="bar"><i style="width:13%"></i></div>
+          <ul class="concrete">
+            <li>每天约<strong>40元</strong>。</li>
+            <li>包括文具、课外书、托管或一个兴趣班。</li>
+            <li>如果报两门课，这一栏会很快变大。</li>
+          </ul>
+        </div>
+      </article>
+      <article class="cost-card wide">
+        <div class="card-visual">🛡️</div>
+        <div class="cost-body">
+          <div class="cost-top">
+            <div class="cost-title">保险和社保 <span>妈妈的养老医保 + 孩子的医保</span></div>
+            <div><div class="amount">1330元</div><div class="range">约500-1500</div></div>
+          </div>
+          <div class="bar"><i style="width:14%"></i></div>
+          <ul class="concrete">
+            <li>如果妈妈自己缴社保：养老约<strong>899.6元/月</strong>，职工医保约<strong>366.81元/月</strong>。</li>
+            <li>孩子居民医保<strong>400元/年</strong>，平均约33元/月。</li>
+            <li>这笔钱像雨伞：晴天看不见用处，下雨时很重要。</li>
+          </ul>
+          <div class="tagline">保险不是“浪费”，是在防止一次生病把家里钱包掏空。</div>
+        </div>
+      </article>
+      <article class="cost-card">
+        <div class="card-visual">🧦</div>
+        <div class="cost-body">
+          <div class="cost-top">
+            <div class="cost-title">医药衣物杂费 <span>药、牙膏、袜子、作业本</span></div>
+            <div><div class="amount">550元</div><div class="range">约300-900</div></div>
+          </div>
+          <div class="bar"><i style="width:6%"></i></div>
+          <ul class="concrete">
+            <li>每天约<strong>18元</strong>。</li>
+            <li>一盒感冒药、一次牙科检查、几本练习册都会进这里。</li>
+            <li>这些不是每天买，但每月总会出现。</li>
+          </ul>
+        </div>
+      </article>
     </div>
-  </div>
+  </section>
 
-  <!-- 工厂工人 -->
-  <div class="job-card">
-    <div class="job-header">
-      <div class="job-icon">🏭</div>
+  <section class="wrap section" id="insurance">
+    <div class="section-head">
       <div>
-        <div class="job-title">工厂生产工人（武汉汽车厂/电子厂）</div>
-        <div class="job-salary">4500–7000元/月</div>
+        <h2 class="section-title">保险安全伞：为什么每月也要算</h2>
+        <p class="section-sub">孩子容易以为“没生病就不用交”。其实保险买的是遇到困难时的保护。</p>
+      </div>
+      <div class="pill">安全伞约1330元/月</div>
+    </div>
+    <div class="insurance">
+      <div class="insurance-card">
+        <h3>妈妈的基础社保</h3>
+        <div class="price">约1266.41元/月</div>
+        <p>按灵活就业自己缴的低档示例：养老899.6元/月 + 职工医保366.81元/月。若妈妈在公司上班，个人直接承担的部分通常会少一些，公司也会缴一部分。</p>
+      </div>
+      <div class="insurance-card">
+        <h3>孩子的医保和小额保障</h3>
+        <div class="price">约63元/月</div>
+        <p>武汉2026年度居民医保个人缴费400元/年，平均33元/月；再留约30元/月给意外、门诊或药品小备用。</p>
       </div>
     </div>
-    <div class="job-body">
-      <div class="job-stats">
-        <div class="job-stat">
-          <div class="job-stat-val">约15–20元</div>
-          <div class="job-stat-label">时薪</div>
-        </div>
-        <div class="job-stat">
-          <div class="job-stat-val">三班倒</div>
-          <div class="job-stat-label">早/午/夜班轮换</div>
-        </div>
-        <div class="job-stat">
-          <div class="job-stat-val">重复操作</div>
-          <div class="job-stat-label">同一动作做几百次/天</div>
-        </div>
+    <div class="callout blue" style="margin-top:14px">
+      <h3>给孩子的比喻</h3>
+      <p>保险像书包里的雨伞。晴天背着觉得占地方，可突然下雨时，它能让你不被淋湿。医保也是这样，平时每月交一点，生病住院时就不是一个人硬扛。</p>
+    </div>
+  </section>
+
+  <section class="wrap section" id="concrete">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">把抽象数字变成看得见的东西</h2>
+        <p class="section-sub">输入任意金额，马上换成热干面、外卖单和最低工资小时。</p>
       </div>
-      <div class="card-desc" style="font-size:13px;margin-top:8px;color:var(--muted)">
-        武汉有东风汽车、烽火科技等大型工厂。工人们每天站8–10小时，重复同一个工序，生产出你家里的汽车、家电、手机配件。
+      <div class="pill">试试100、2800、9480</div>
+    </div>
+    <div class="panel pad calc">
+      <div class="calc-control">
+        <label for="moneyInput">输入一个金额（元）</label>
+        <input id="moneyInput" type="number" min="0" step="1" value="9480">
       </div>
-    </div>
-  </div>
-
-  <!-- 最低工资 -->
-  <div class="callout blue">
-    <span class="callout-title">📋 武汉最低工资标准（2024年）</span>
-    月最低工资：<strong>2280元</strong>（约 🛵 456单）<br>
-    小时最低工资：<strong>18元/小时</strong><br><br>
-    2280元在武汉只够：<br>
-    ✓ 租一间郊区单间房<br>
-    ✓ 自己一个人吃饭（几乎没有余钱）<br>
-    ✗ 无法支撑三口之家的基本生活
-  </div>
-
-  <!-- 工资比较 -->
-  <div class="card">
-    <div class="card-title" style="margin-bottom:12px;font-size:15px;font-weight:700">📊 武汉各职业收入对比</div>
-    <table class="compare-table">
-      <tr><th>职业</th><th>月收入</th><th>相当于送几单？</th></tr>
-      <tr><td>外卖骑手</td><td class="green">6000–10000元</td><td>1200–2000单</td></tr>
-      <tr><td>网约车司机</td><td class="green">5500–9000元</td><td>1100–1800单</td></tr>
-      <tr><td>快递员</td><td class="green">5000–8000元</td><td>1000–1600单</td></tr>
-      <tr><td>工厂工人</td><td class="green">4500–7000元</td><td>900–1400单</td></tr>
-      <tr><td>小学老师</td><td class="green">5000–9000元</td><td>1000–1800单</td></tr>
-      <tr><td>护士（公立医院）</td><td class="green">5000–9000元</td><td>1000–1800单</td></tr>
-      <tr><td>最低工资工作者</td><td>2280元</td><td>456单</td></tr>
-    </table>
-  </div>
-</div>
-
-<!-- ═══════════════════════════ 妈妈的价值 ═══════════════════════════════ -->
-<div class="divider">妈妈的付出</div>
-
-<div class="section">
-  <div class="mom-header">
-    <span class="mom-emoji">👩‍👦</span>
-    <div class="mom-title">妈妈，是世界上最贵的职业</div>
-    <div style="font-size:13px;color:#9d174d;margin-top:4px;opacity:.85">她的工作，比你想象的值钱得多</div>
-  </div>
-  <div class="mom-body">
-
-    <div style="font-size:13px;color:var(--muted);margin-bottom:14px">如果把妈妈每天做的事都按市场价计算，她每月创造的价值是：</div>
-
-    <div class="mom-role">
-      <div class="mom-role-icon">👩‍🍳</div>
-      <div class="mom-role-name">专属厨师（每天3顿饭）<br><span style="font-size:11px;color:var(--muted)">钟点厨师市价100–200元/次</span></div>
-      <div class="mom-role-value">≈ 3000–6000元/月</div>
-    </div>
-    <div class="mom-role">
-      <div class="mom-role-icon">🧹</div>
-      <div class="mom-role-name">家务管理员（打扫/洗衣/采购）<br><span style="font-size:11px;color:var(--muted)">钟点工市价30–50元/小时</span></div>
-      <div class="mom-role-value">≈ 2000–4000元/月</div>
-    </div>
-    <div class="mom-role">
-      <div class="mom-role-icon">👩‍🏫</div>
-      <div class="mom-role-name">私人家教（辅导作业）<br><span style="font-size:11px;color:var(--muted)">1对1家教市价100–300元/小时</span></div>
-      <div class="mom-role-value">≈ 2000–4000元/月</div>
-    </div>
-    <div class="mom-role">
-      <div class="mom-role-icon">🚗</div>
-      <div class="mom-role-name">专属司机（接送上下学）<br><span style="font-size:11px;color:var(--muted)">网约车代驾市价20–40元/次</span></div>
-      <div class="mom-role-value">≈ 1000–2000元/月</div>
-    </div>
-    <div class="mom-role">
-      <div class="mom-role-icon">🩺</div>
-      <div class="mom-role-name">24小时私人护士（生病照顾）<br><span style="font-size:11px;color:var(--muted)">护工市价200–400元/天</span></div>
-      <div class="mom-role-value">≈ 1500–3000元/月</div>
-    </div>
-    <div class="mom-role">
-      <div class="mom-role-icon">💆</div>
-      <div class="mom-role-name">心理辅导员（情绪支持）<br><span style="font-size:11px;color:var(--muted)">心理咨询师市价300–800元/小时</span></div>
-      <div class="mom-role-value">无法计算</div>
-    </div>
-
-    <div class="mom-total">
-      <div class="mom-total-label">妈妈每月创造的市场价值（最保守估计）</div>
-      <div class="mom-total-value">≈ 10000–20000元/月</div>
-      <div class="mom-total-note">🛵 相当于骑手每月送 2000–4000单外卖<br>但她不需要报酬，只需要你健康快乐</div>
-    </div>
-
-    <div style="margin-top:16px;padding:14px;background:#fdf2f8;border-radius:12px;border:1px solid #fbcfe8">
-      <div style="font-size:14px;font-weight:800;color:#9d174d;margin-bottom:8px">⏰ 妈妈一天的工作时间表</div>
-      <div class="timeline">
-        <div class="tl-item">
-          <div class="tl-dot" style="background:#f472b6"></div>
-          <div class="tl-time">6:00 起床</div>
-          <div class="tl-text" style="color:#9d174d">做早饭、叫你起床、帮你整理书包</div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-dot" style="background:#f472b6"></div>
-          <div class="tl-time">7:30 送你上学</div>
-          <div class="tl-text" style="color:#9d174d">骑车/开车送到学校门口</div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-dot" style="background:#f472b6"></div>
-          <div class="tl-time">8:00–15:00</div>
-          <div class="tl-text" style="color:#9d174d">买菜、洗衣、打扫、做午饭、准备晚饭食材</div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-dot" style="background:#f472b6"></div>
-          <div class="tl-time">15:30 接你放学</div>
-          <div class="tl-text" style="color:#9d174d">接你、听你讲今天的事、买你喜欢的零食</div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-dot" style="background:#f472b6"></div>
-          <div class="tl-time">16:00–17:30</div>
-          <div class="tl-text" style="color:#9d174d">督促/辅导作业，做晚饭</div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-dot" style="background:#f472b6"></div>
-          <div class="tl-time">21:00 哄你睡觉</div>
-          <div class="tl-text" style="color:#9d174d">讲故事、道晚安</div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-dot" style="background:#f472b6"></div>
-          <div class="tl-time">22:00 才是自己的时间</div>
-          <div class="tl-text" style="color:#9d174d">可能还在担心明天的菜、你的作业……</div>
-        </div>
-      </div>
-      <div style="font-size:13px;color:#9d174d;font-weight:600;margin-top:10px;text-align:center">
-        每天工作约14小时 · 全年无休 · 不需要工资 · 只需要你的爱❤️
+      <div class="calc-results">
+        <div class="result"><span>可以买热干面</span><strong id="bowlsOut">1580碗</strong></div>
+        <div class="result"><span>约等于骑手送</span><strong id="ordersOut">1580单</strong></div>
+        <div class="result"><span>最低时薪要工作</span><strong id="hoursOut">395小时</strong></div>
       </div>
     </div>
-
-    <div class="callout" style="background:#fdf2f8;border:1px solid #f9a8d4;color:#9d174d;margin-top:12px">
-      <span class="callout-title">💗 怎么感谢妈妈？（不花钱的！）</span>
-      ✅ 放学回家大声说"<strong>妈妈，我回来了！</strong>"<br>
-      ✅ 吃饭时说"<strong>妈妈今天做的饭真好吃！</strong>"<br>
-      ✅ 主动收拾自己的书包和房间<br>
-      ✅ 认真完成作业，不让妈妈催<br>
-      ✅ 睡前给她一个大大的拥抱<br>
-      ✅ 现在就去抱抱她，说"妈妈辛苦了"
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════ 大数字 ═══════════════════════════════ -->
-<div class="divider">一年和一辈子的大数字</div>
-
-<div class="section">
-  <div class="section-header">
-    <div class="section-icon" style="background:#ede9fe">🔢</div>
-    <div>
-      <div class="section-title">放大看：更大的数字</div>
-      <div class="section-sub">一年、一辈子，钱都去哪了？</div>
-    </div>
-  </div>
-
-  <div class="big-num-card">
-    <div class="big-num-emoji">🍚</div>
-    <div class="big-num-body">
-      <div class="big-num-label">三口之家一年吃饭花费</div>
-      <div class="big-num-value">约3万–5万元</div>
-      <div class="big-num-bowls">🛵 相当于骑手送6000–10000单</div>
-      <div class="big-num-note">一年要吃掉：约150斤大米、200斤猪肉、700个鸡蛋、400斤蔬菜水果……</div>
-    </div>
-  </div>
-
-  <div class="big-num-card">
-    <div class="big-num-emoji">🏠</div>
-    <div class="big-num-body">
-      <div class="big-num-label">一年的住房费用（租房）</div>
-      <div class="big-num-value">约3万–6万元</div>
-      <div class="big-num-bowls">🛵 相当于骑手送6000–12000单</div>
-      <div class="big-num-note">如果买了150万的房子贷款，一年还贷款约6.6万元（30年还清）</div>
-    </div>
-  </div>
-
-  <div class="big-num-card">
-    <div class="big-num-emoji">📱</div>
-    <div class="big-num-body">
-      <div class="big-num-label">一部手机</div>
-      <div class="big-num-value">2000–13000元</div>
-      <div class="big-num-bowls">🛵 骑手送400–2600单才能买到</div>
-      <div class="big-num-note">iPhone 16 Pro Max（1TB）：约15999元 = 骑手送3200单！</div>
-    </div>
-  </div>
-
-  <div class="big-num-card">
-    <div class="big-num-emoji">🚗</div>
-    <div class="big-num-body">
-      <div class="big-num-label">买一辆家用汽车</div>
-      <div class="big-num-value">8万–20万元</div>
-      <div class="big-num-bowls">🛵 骑手要送16000–40000单</div>
-      <div class="big-num-note">买了车每年还要花1.5万–3万元（保险+油/电+停车）</div>
-    </div>
-  </div>
-
-  <div class="big-num-card">
-    <div class="big-num-emoji">🎓</div>
-    <div class="big-num-body">
-      <div class="big-num-label">小学六年课外补课总费用</div>
-      <div class="big-num-value">约5万–20万元</div>
-      <div class="big-num-bowls">🛵 骑手要送10000–40000单</div>
-      <div class="big-num-note">每月1000元课外班 × 12月 × 6年 = 7.2万元；每月3000元 = 21.6万元</div>
-    </div>
-  </div>
-
-  <div class="big-num-card">
-    <div class="big-num-emoji">🏛️</div>
-    <div class="big-num-body">
-      <div class="big-num-label">大学四年总费用（武汉高校）</div>
-      <div class="big-num-value">约12万–22万元</div>
-      <div class="big-num-bowls">🛵 骑手要送24000–44000单</div>
-      <div class="big-num-note">包括学费（5000元/年）+住宿+4年生活费（约1500–2500元/月）</div>
-    </div>
-  </div>
-
-  <div class="big-num-card" style="background:linear-gradient(135deg,#fff7ed,#ffedd5);border:2px solid #fed7aa">
-    <div class="big-num-emoji">🏘️</div>
-    <div class="big-num-body">
-      <div class="big-num-label" style="color:#9a3412">在武汉买一套房子</div>
-      <div class="big-num-value" style="color:#9a3412">100万–400万元</div>
-      <div class="big-num-bowls" style="color:#ea580c">🛵 骑手要送20万–80万单！！</div>
-      <div class="big-num-note">
-        武汉中等地段两室一厅约 <strong>150万</strong><br>
-        首付45万（30%）：如果每月存3000元，要攒 <strong>12.5年</strong>！<br>
-        再加30年月供……爸妈可能一辈子都在为这套房子努力。
+    <div class="grid-2" style="margin-top:16px">
+      <div class="callout red">
+        <h3>9480元为什么很大？</h3>
+        <p>按武汉市区全日制最低工资2400元/月看，9480元接近4个月最低工资。也就是说，很多低收入工作者即使认真工作，一个月也很难独自支撑这样的账本。</p>
+      </div>
+      <div class="callout green">
+        <h3>9480元为什么又很快花完？</h3>
+        <p>因为它不是一次买了一个大玩具，而是被30天分走：房子93元/天，保险44元/天，吃饭87元/天，教育40元/天，水电交通和杂费也每天都在加。</p>
       </div>
     </div>
-  </div>
-</div>
+  </section>
 
-<!-- ═══════════════════════════ 总结 ═══════════════════════════════ -->
-<div class="divider">最后想告诉你的话</div>
+  <section class="wrap section" id="mom">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">妈妈的付出：不是账单，却非常贵</h2>
+        <p class="section-sub">这里不把爱明码标价，只让孩子看见：家里很多劳动没有工资条。</p>
+      </div>
+      <div class="pill">看见劳动，就是看见爱</div>
+    </div>
+    <div class="mom-grid">
+      <div class="panel pad" style="background:linear-gradient(180deg,#fff,#fff4f8)">
+        <ul class="mom-list">
+          <li><div>👩‍🍳</div><div><b>做饭采购</b><span>买菜、洗菜、做饭、收拾厨房</span></div><strong>每天2小时+</strong></li>
+          <li><div>🧹</div><div><b>家务整理</b><span>洗衣、拖地、整理书桌和房间</span></div><strong>每天1小时+</strong></li>
+          <li><div>📚</div><div><b>学习陪伴</b><span>听写、签字、讲错题、提醒作息</span></div><strong>每天1小时+</strong></li>
+          <li><div>🩺</div><div><b>健康照顾</b><span>发烧、咳嗽、牙疼时最先发现</span></div><strong>随时待命</strong></li>
+          <li><div>🧭</div><div><b>家庭调度</b><span>交费、预约、买票、记学校通知</span></div><strong>看不见</strong></li>
+        </ul>
+      </div>
+      <div class="panel pad">
+        <div class="money-box">
+          <span>如果把这些劳动请人做</span>
+          <strong>可能超过1万元/月</strong>
+          <small>做饭、家政、家教、接送、照护分别请人，费用会非常高。</small>
+        </div>
+        <div class="callout rose" style="margin-top:14px">
+          <h3>孩子能做的三件小事</h3>
+          <p>吃饭时认真说“谢谢妈妈”；自己的书包和袜子自己收；写作业先尽力完成，再请妈妈帮忙检查。它们不花钱，但会让妈妈轻松一点。</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<div class="callout purple">
-  <span class="callout-title">🌟 给8岁的你</span>
-  现在你知道了：<br><br>
-  🍜 <strong>爸爸妈妈每个月</strong>要挣到 <strong>7500–13000元</strong>，才能让一家人住好、吃好、让你上学。<br><br>
-  🛵 这相当于一个骑手 <strong>每月送1500–2600单外卖</strong>，风雨无阻，每天10小时以上。<br><br>
-  💰 一套武汉的普通房子，是爸妈 <strong>10年以上</strong>的积蓄。<br><br>
-  👩‍👦 妈妈全职在家照顾你，每月贡献的劳动价值超过 <strong>10000元</strong>，但她不需要工资。<br><br>
-  <strong>钱很重要，但比钱更重要的是：</strong>爸妈愿意用所有的努力，让你有一个安全温暖的家，有书读，有饭吃，有人爱。<br><br>
-  你现在能做的最好的事，就是 <strong>认真学习，爱护家人，珍惜每一粒米。</strong>
-</div>
+  <section class="wrap section" id="sources">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">数据口径和来源</h2>
+        <p class="section-sub">生活成本会变动，页面采用2026年前后公开数据 + 中等家庭估算。房租和课外班差异最大，可按自家情况改数。</p>
+      </div>
+    </div>
+    <div class="source-grid">
+      <div class="source"><a href="https://ybj.wuhan.gov.cn/zwgk_52/ybdt/tzgg/202510/t20251016_2660682.shtml">武汉市医保局</a>：2026年度城乡居民医保个人缴费400元/年。</div>
+      <div class="source"><a href="https://www.wuhan.gov.cn/ztzl/ztfw/lhjyryjnsb/index.shtml">武汉市人民政府</a>：灵活就业职工医保按7496元×4.8%+7元，即366.81元/月。</div>
+      <div class="source"><a href="https://www.dxh.gov.cn/hdjl/rxgq_2020/202512/t20251230_2704600.shtml">湖北省政府通知转载</a>：2025年12月1日起，武汉市区最低工资2400元/月，非全日制24元/小时。</div>
+      <div class="source"><a href="https://m.wh.bendibao.com/live/183915.shtm">武汉本地宝</a>：2025年度武汉灵活就业养老保险低档899.6元/月。</div>
+      <div class="source"><a href="https://sw.wuhan.gov.cn/zfxxgk/fdzdgknr/sjfb/whzynfcpscxq/202604/t20260408_2750762.shtml">武汉市商务局</a>：2026年春季生活必需品市场监测，猪肉、蔬菜等价格基本平稳。</div>
+      <div class="source"><a href="https://wh.zf.58.com/zujin/ershi/">58同城租房趋势</a>：武汉二室租金多在约2000元/月附近，不同城区差异明显。</div>
+    </div>
+  </section>
+</main>
 
-<div style="text-align:center;padding:20px 0;font-size:13px;color:var(--muted)">
-  数据来源：武汉市2024年真实生活成本 · 本指南为亲子教育用途
-</div>
+<footer class="wrap">
+  本页用于亲子金钱教育，不替代家庭财务规划。建议和孩子一起读，一边读一边改成自家的真实数字。
+</footer>
 
-</div><!-- end .page -->
+<script>
+const NOODLE = 6;
+const ORDER = 6;
+const MIN_HOUR = 24;
+const moneyInput = document.getElementById('moneyInput');
+const bowlsOut = document.getElementById('bowlsOut');
+const ordersOut = document.getElementById('ordersOut');
+const hoursOut = document.getElementById('hoursOut');
 
+function fmt(n){
+  return Math.round(n).toLocaleString('zh-CN');
+}
+function updateCalc(){
+  const val = Math.max(0, Number(moneyInput.value || 0));
+  bowlsOut.textContent = fmt(val / NOODLE) + '碗';
+  ordersOut.textContent = fmt(val / ORDER) + '单';
+  hoursOut.textContent = fmt(val / MIN_HOUR) + '小时';
+}
+moneyInput.addEventListener('input', updateCalc);
+updateCalc();
+</script>
 </body>
 </html>
