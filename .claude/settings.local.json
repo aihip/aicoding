@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(bash *)",
-      "Bash(open *)",
-      "Bash(GEMINI_CLI_TRUST_WORKSPACE=true git commit *)"
-    ]
-  }
-}
