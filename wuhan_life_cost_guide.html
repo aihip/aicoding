@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>武汉生活成本认知指南</title>
+<style>
+:root{
+  --guide-bg:var(--color-background-primary,#fff);
+  --guide-soft:#f6f8f6;
+  --guide-text:var(--color-text-primary,#17201b);
+  --guide-muted:var(--color-text-secondary,#68736d);
+  --guide-faint:var(--color-text-tertiary,#8b9690);
+  --guide-border:var(--color-border-tertiary,#dfe6e1);
+  --guide-border-strong:var(--color-border-secondary,#bdc9c1);
+  --guide-green:#0f6e56;
+  --guide-green-bg:#e7f5ef;
+  --guide-amber:#89520b;
+  --guide-amber-bg:#fff3dc;
+  --guide-red:#a32d2d;
+  --guide-red-bg:#fff0ed;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif);color:var(--guide-text);background:var(--guide-bg)}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+
+.page-header{padding:32px 0 20px}
+.eyebrow{font-size:12px;color:var(--guide-muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+h1{font-size:28px;line-height:1.18;font-weight:700;color:var(--guide-text);max-width:720px;margin-top:4px}
+.sub{font-size:14px;line-height:1.65;color:var(--guide-muted);max-width:860px;margin-top:8px}
+.noodle-rate{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:8px 14px;background:var(--guide-green-bg);border:1px solid var(--guide-border);border-radius:20px;font-size:13px;color:var(--guide-green);font-weight:600}
+
+.toolbar{position:sticky;top:0;z-index:3;background:rgba(255,255,255,.92);background:color-mix(in srgb,var(--guide-bg) 92%,transparent);backdrop-filter:blur(8px);padding:12px 0 10px;border-bottom:1px solid var(--guide-border);margin-bottom:14px}
+.search-row{position:relative;display:flex;gap:8px;margin-bottom:10px}
+.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--guide-faint);pointer-events:none}
+#search{width:100%;min-height:42px;font-size:14px;padding:9px 12px 9px 38px;border:1px solid var(--guide-border-strong);border-radius:8px;background:var(--guide-bg);color:var(--guide-text)}
+#search:focus{outline:none;border-color:var(--guide-green);box-shadow:0 0 0 3px rgba(15,110,86,.15)}
+.clear-btn{height:42px;padding:0 14px;border:1px solid var(--guide-border);border-radius:8px;background:var(--guide-bg);font-size:13px;color:var(--guide-muted);cursor:pointer;white-space:nowrap}
+.clear-btn:hover{background:var(--guide-soft)}
+
+.tab-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tab-btn{padding:7px 14px;border:1px solid var(--guide-border);border-radius:20px;font-size:13px;font-weight:500;color:var(--guide-muted);background:var(--guide-bg);cursor:pointer;white-space:nowrap}
+.tab-btn:hover{background:var(--guide-soft)}
+.tab-btn.active{background:var(--guide-green);color:#fff;border-color:var(--guide-green)}
+
+.cat-row{display:flex;gap:6px;flex-wrap:wrap;min-height:32px}
+.cat-btn{padding:4px 12px;border:1px solid var(--guide-border);border-radius:20px;font-size:12px;color:var(--guide-muted);background:var(--guide-bg);cursor:pointer;white-space:nowrap}
+.cat-btn:hover{background:var(--guide-soft)}
+.cat-btn.active{background:var(--guide-green-bg);color:var(--guide-green);border-color:var(--guide-green);font-weight:600}
+
+.section-area{display:none}
+.section-area.active{display:block}
+
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;padding-bottom:16px}
+.card{border:1px solid var(--guide-border);border-radius:8px;background:var(--guide-bg);overflow:hidden}
+.card[hidden]{display:none!important}
+.card-head{width:100%;text-align:left;background:none;border:none;padding:14px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.card-head:hover{background:var(--guide-soft)}
+.card-head:focus-visible{outline:2px solid var(--guide-green);outline-offset:-2px}
+.card-title{font-size:14px;font-weight:600;color:var(--guide-text);flex:1;text-align:left}
+.card-meta{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.bowl-badge{font-size:11px;padding:2px 7px;border-radius:10px;background:var(--guide-green-bg);color:var(--guide-green);font-weight:700;white-space:nowrap}
+.chevron{color:var(--guide-faint);font-size:12px;transition:transform .2s;flex-shrink:0}
+.card.open .chevron{transform:rotate(180deg)}
+.card-body{padding:0 16px 14px;border-top:1px solid var(--guide-border);display:none}
+.card.open .card-body{display:block}
+.card-price{font-size:22px;font-weight:700;color:var(--guide-green);margin:10px 0 4px}
+.card-brief{font-size:13px;line-height:1.6;color:var(--guide-muted);margin-bottom:10px}
+.card-detail{font-size:13px;line-height:1.65;color:var(--guide-text);margin-bottom:8px}
+.card-detail p{margin-bottom:4px}
+.card-detail ul{padding-left:18px;margin:4px 0}
+.card-detail li{margin-bottom:2px}
+.parent-tip{margin-top:10px;padding:8px 12px;background:var(--guide-amber-bg);border-radius:6px;font-size:12px;color:var(--guide-amber);line-height:1.55}
+.parent-tip strong{font-weight:700}
+
+.card.total{border-color:var(--guide-green);background:var(--guide-green-bg)}
+.card.total .card-title{color:var(--guide-green)}
+
+mark{background:rgba(255,212,0,.4);color:inherit;border-radius:2px;padding:0 1px}
+
+.no-results{padding:40px 20px;text-align:center;color:var(--guide-muted);font-size:14px;display:none}
+.no-results.visible{display:block}
+
+.calculator{margin:16px 0 40px;padding:20px;border:1px solid var(--guide-border);border-radius:8px;background:var(--guide-soft)}
+.calc-title{font-size:16px;font-weight:700;margin-bottom:4px}
+.calc-sub{font-size:13px;color:var(--guide-muted);margin-bottom:16px}
+.calc-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.calc-select{padding:8px 12px;border:1px solid var(--guide-border-strong);border-radius:8px;font-size:13px;color:var(--guide-text);background:var(--guide-bg);min-width:160px}
+.calc-select:focus{outline:none;border-color:var(--guide-green)}
+.calc-eq{font-size:18px;color:var(--guide-faint)}
+.calc-result{padding:14px 20px;border-radius:8px;background:var(--guide-green-bg);border:1px solid var(--guide-border)}
+.calc-result-main{font-size:20px;font-weight:700;color:var(--guide-green)}
+.calc-result-bowl{font-size:14px;color:var(--guide-muted);margin-top:4px}
+
+@media(max-width:600px){
+  h1{font-size:22px}
+  .cards-grid{grid-template-columns:1fr}
+  .calc-row{flex-direction:column;align-items:stretch}
+  .calc-eq{text-align:center}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="page-header">
+    <p class="eyebrow">武汉 · 2024-2025年数据</p>
+    <h1>生活要花多少钱？</h1>
+    <p class="sub">一份给8岁小朋友的生活成本认知指南。每一分钱都来自爸爸妈妈的辛苦劳动。</p>
+    <div class="noodle-rate">🍜 1碗热干面 = 10元，是我们的「价格尺子」</div>
+  </header>
+
+  <div class="toolbar">
+    <div class="search-row">
+      <span class="search-icon">🔍</span>
+      <input type="search" id="search" placeholder="搜索费用项目…" autocomplete="off">
+      <button class="clear-btn" id="clearBtn">清除</button>
+    </div>
+    <div class="tab-row" id="tabRow"></div>
+    <div class="cat-row" id="catRow"></div>
+  </div>
+
+  <div id="noResults" class="no-results">没有找到相关内容，试试其他关键词 🔍</div>
+  <div id="sectionsContainer"></div>
+</div>
+<script>
+const BOWL = 10;
+
+const TABS = [
+  {id:'day',   label:'🍜 一天花多少'},
+  {id:'month', label:'📅 一个月账单'},
+  {id:'year',  label:'📊 一年大数字'},
+  {id:'earn',  label:'💪 普通人怎么挣'},
+  {id:'mom',   label:'❤️ 妈妈的付出'},
+];
+
+const TAB_CATS = {
+  day:   ['全部','早餐','午饭','晚餐','零食饮料','日常杂费'],
+  month: ['全部','住房','水电气物业','食品','教育','交通通信','医疗备用'],
+  year:  ['全部','年度汇总','大件开销','长期目标'],
+  earn:  ['全部','外卖员','网约车','快递员','工厂工人'],
+  mom:   ['全部','时间价值','市场对比','感恩时刻'],
+};
+
+const CARDS = [
+  // ── 一天花多少 ──────────────────────────────────────
+  {tab:'day',cat:'早餐',title:'热干面早餐',price:'10元',bowls:1,
+   brief:'一碗热干面 = 我们的"价格尺子"！所有花费都可以用它来比较。',
+   detail:'武汉热干面小知识：\n• 价格：街边小店8–12元/碗，商场里15–20元\n• 食材：碱水面 + 芝麻酱 + 葱花 + 萝卜丁 + 辣椒油\n• 武汉人一年吃掉约10亿碗热干面！\n• 比较：在武汉，10元还能买什么？\n  → 2根冰淇淋（5元/根）\n  → 一个大馒头+豆浆（4元+5元=9元）\n  → 半斤猪肉（猪肉约20–25元/斤）',
+   tip:'早餐很重要！不吃早饭，上午会注意力不集中，成绩会下降。10元热干面让你精力充沛上到午饭。'},
+
+  {tab:'day',cat:'早餐',title:'武汉其他早餐选择',price:'5–25元',bowls:[0.5,2.5],
+   brief:'武汉早餐非常丰富，热干面只是其中一种，价格从5元到25元不等。',
+   detail:'武汉早餐价格表：\n• 豆皮（武汉名小吃）：8–15元\n• 面窝（面糊炸制）：3–5元\n• 糯米鸡：8–12元\n• 蛋炒饭（小店）：8–12元\n• 煎饼果子：6–10元\n• 牛奶+面包（家里做）：5–8元\n• 汉堡（麦当劳/肯德基）：15–25元\n\n最省钱的早餐：家里做，只需3–5元！',
+   tip:'外面买早餐方便，但长期算下来贵很多。妈妈早起给你做早餐，每天省下5–10元，一年省3000元！'},
+
+  {tab:'day',cat:'午饭',title:'学校食堂午饭',price:'12–18元',bowls:1.5,
+   brief:'学校食堂的午饭，约1.5碗热干面的价格，比外面便宜实惠。',
+   detail:'武汉小学食堂午饭标准（2024年）：\n• 武汉市公立小学：每天约12–15元（含米饭+2荤2素+汤）\n• 私立学校食堂：15–25元，菜品更丰富\n• 比校门口外卖便宜：同样的饭外卖要30–40元\n\n食堂午饭能量对比：\n• 一份米饭 + 排骨 + 青菜 ≈ 600大卡\n• 你一天需要约1800大卡\n• 午饭提供全天能量的三分之一',
+   tip:'有些同学嫌食堂不好吃，但食堂是专业营养师设计的菜单。比外卖健康，比家里省妈妈的时间。'},
+
+  {tab:'day',cat:'午饭',title:'校门口外卖/小吃',price:'20–40元',bowls:[2,4],
+   brief:'校门口的炸鸡、奶茶、汉堡，价格是食堂的2–3倍，但没那么健康。',
+   detail:'校门口常见小吃价格（武汉）：\n• 奶茶（一点点/茶百道）：12–22元\n• 炸鸡腿：10–15元\n• 烤肠：5–8元\n• 汉堡套餐：25–35元\n• 糖葫芦：5–10元\n\n健康问题：\n• 校门口小吃油炸多、糖分高\n• 长期吃容易发胖、影响牙齿\n• 营养不均衡，下午上课容易犯困',
+   tip:'偶尔吃一次没关系，但不要天天吃。用这20–40元，可以买4本课外书，或者攒着买一个自己想要的玩具。'},
+
+  {tab:'day',cat:'晚餐',title:'家里晚饭（3人份食材）',price:'40–80元',bowls:[4,8],
+   brief:'妈妈买菜做一顿饭，三口之家的食材费约40–80元，比外卖便宜一半以上。',
+   detail:'一顿家常晚饭的成本（武汉超市2024年均价）：\n• 一条鱼（鲫鱼/草鱼）：15–25元（约1斤）\n• 青菜（菠菜/白菜/空心菜）：4–8元（0.5斤）\n• 西红柿炒蛋（2个鸡蛋+2个西红柿）：5–8元\n• 米饭（0.3斤大米）：1–2元\n• 汤（豆腐紫菜）：3–5元\n合计约28–48元\n\n如果叫外卖：\n• 同样的菜：外卖要80–120元\n• 加上配送费：再加6–9元\n• 一个月差价：约2000元',
+   tip:'妈妈做饭每天花约1–1.5小时（买菜+烧饭+洗碗），一年约500小时。这是她给全家最大的爱。'},
+
+  {tab:'day',cat:'零食饮料',title:'课后零食 + 饮料',price:'5–20元',bowls:[0.5,2],
+   brief:'放学后的零食和饮料，一天花5–20元，看起来不多，但月累起来很可观。',
+   detail:'常见零食价格（武汉便利店/超市）：\n• 农夫山泉（550ml）：2元\n• 奶茶（茶百道/蜜雪冰城）：6–18元\n• 薯片（好多鱼）：5–8元\n• 冰淇淋（东北大板）：3–5元\n• 辣条（卫龙）：2–5元\n• 士力架/牛奶（旺仔）：5–8元\n\n一个月零食消费对比：\n• 每天5元零食 × 30天 = 150元\n• 每天15元零食 × 30天 = 450元\n• 150元 = 15本课外书！',
+   tip:'喝白开水不花钱，学校的开水是免费的。奶茶里糖分很高，一杯含糖量相当于吃10块方糖！'},
+
+  {tab:'day',cat:'日常杂费',title:'上下学交通费',price:'0–20元',bowls:[0,2],
+   brief:'走路上学：0元。坐公交：3元/次。打滴滴：10–25元/次。选择不同，差价很大。',
+   detail:'武汉上学交通方式对比：\n• 步行/骑自行车：0元（健康环保）\n• 武汉公交：2–3元/次，学生有优惠\n• 武汉地铁：3–5元/次，学生卡打折\n• 打滴滴快车：3km约10–15元，5km约15–25元\n• 校车（私立学校）：400–800元/月\n\n一个月交通花费对比：\n• 步行：0元\n• 公交（单程3元×2×22天）：132元\n• 天天打滴滴：约1000元',
+   tip:'如果你家离学校在2公里以内，走路上学不仅省钱，还能锻炼身体，增强体质！'},
+
+  {tab:'day',cat:'日常杂费',title:'文具/书本零花钱',price:'5–30元',bowls:[0.5,3],
+   brief:'买文具、零花钱、班费…每天平均花5–30元。',
+   detail:'小学生常见日常花费：\n• 铅笔（2支）：1–2元\n• 橡皮：1–3元\n• 作业本：1–2元/本\n• 班费（每学期一次）：50–200元\n• 同学生日礼物：30–100元\n• 买课外书：15–50元/本\n\n零花钱合理范围参考（武汉）：\n• 小学低年级（1–3年级）：每天5–10元\n• 小学高年级（4–6年级）：每天10–20元',
+   tip:'每天记一下自己花了多少钱，买了什么。一个月后回看，你会发现很多钱花得不值！这叫"记账"。'},
+
+  {tab:'day',cat:'日常杂费',title:'🍜 一天合计（三口之家）',price:'约100–150元',bowls:[10,15],total:true,
+   brief:'三口之家一天最基本的开销：吃饭+交通+零花，合计约100–150元。',
+   detail:'三口之家一天花费明细：\n• 早餐（3人）：10+15+15 = 40元\n• 午饭（学校+爸妈单位）：15+20+20 = 55元\n• 晚饭食材：50元\n• 零食饮料：15元\n• 交通杂费：20元\n合计：约180元/天\n\n换算成热干面：18碗/天\n一个月：180元×30天 = 5400元（只算吃饭交通！）\n一年：5400×12 = 64800元\n\n注意：这还没有算房租、学费、电费等大开销！',
+   tip:'100元一天看起来不多，但一年就是36000元。爸爸妈妈每天都要挣100元以上才够用，才能养活整个家。'},
+
+  // ── 一个月账单 ──────────────────────────────────────
+  {tab:'month',cat:'住房',title:'租房费用（武汉各区）',price:'1500–5000元',bowls:[150,500],
+   brief:'武汉不同地段，同样大小的房子，租金可能差3倍！',
+   detail:'武汉租房价格对比（2024年，2室1厅约80–90平）：\n• 江汉区/武昌区繁华地段：3500–5000元/月\n• 洪山区（光谷附近）：2500–4000元/月\n• 硚口区/青山区：2000–3000元/月\n• 东西湖区/江夏区：1500–2500元/月\n\n租房=每月都要付，永远不是自己的\n买房=首付一大笔，之后月供，最终是自己的\n\n武汉中等地段一套两室一厅：总价约150万元\n首付（30%）：45万元 → 爸爸妈妈攒10年可能才有\n贷款70%（105万，30年）：每月还约5000元',
+   tip:'你现在住的家，可能是租的，也可能是买的。每个月交房租或房贷，这是家里最大的开支，需要爸爸妈妈每天认真工作才能付得起。'},
+
+  {tab:'month',cat:'住房',title:'买房需要多少年的积蓄',price:'150万–300万元',bowls:[150000,300000],
+   brief:'在武汉买一套普通住宅，需要积攒很多年的收入，这是很多家庭一生中最大的开销。',
+   detail:'武汉买房所需时间估算（以武昌普通两室为例，约150万元）：\n• 需要首付：150万 × 30% = 45万元\n• 月供：约6000–7000元（30年还清）\n\n如果家庭月收入10000元，每月存3000元：\n• 攒够首付：45万 ÷ 3000元/月 = 12.5年！\n• 然后还要再还30年月供\n\n换算成热干面：\n• 150万元 = 15万碗热干面\n• 如果1天吃1碗：要吃411年才能"吃完"这套房的钱！',
+   tip:'很多爸爸妈妈为了给家人一个稳定的家，一辈子都在努力攒钱还房贷。有了自己的家，就是安全感。'},
+
+  {tab:'month',cat:'水电气物业',title:'电费（武汉最烧钱的账单）',price:'80–500元',bowls:[8,50],
+   brief:'武汉夏天很热冬天很冷，空调是必须品。7–8月电费最高，可达300–500元！',
+   detail:'武汉家庭月度电费（3人，100平）：\n• 春秋季（3–4月、10–11月）：80–120元\n• 冬季（12–2月）：150–250元（暖气+热水器）\n• 夏季（6–8月）：200–500元（空调24小时）\n\n电器耗电量对比：\n• 空调开1小时：0.8–1.5度电（约0.6–1.1元）\n• 电视看1小时：0.08度电（约0.06元）\n• 冰箱24小时：0.5–1度电（约0.4–0.7元）\n• 手机充满电1次：0.02度电（约1分钱！）\n\n武汉电价：0.58–0.83元/度（阶梯电价）',
+   tip:'每次离开房间记得关空调和灯！一个夏天，随手关空调可以节省50–100元。这笔钱可以买10本课外书。'},
+
+  {tab:'month',cat:'水电气物业',title:'水费和燃气费',price:'60–150元',bowls:[6,15],
+   brief:'武汉自来水和天然气价格适中，一家三口每月60–150元。',
+   detail:'武汉水费价格（2024年）：\n• 自来水：2.76元/吨（第一阶梯，月用不超30吨）\n• 一家三口月用水：约10–15吨\n• 月水费：约28–42元\n\n用水对比（直观理解）：\n• 冲一次马桶：约6升水（0.016元）\n• 洗澡15分钟：约60升水（0.17元）\n• 刷牙不关水：2分钟流掉约12升水（浪费！）\n\n天然气费用：\n• 武汉天然气：约2.88元/立方米\n• 做饭烧水：每月约20–40元\n• 冬天热水器：每月约50–100元',
+   tip:'刷牙时关水龙头，洗澡控制在10分钟以内，是最简单的节水方式。你每次节约的水，就是在帮爸爸妈妈省钱。'},
+
+  {tab:'month',cat:'水电气物业',title:'物业管理费',price:'150–600元',bowls:[15,60],
+   brief:'住在小区里，每月要交物业费。这笔钱让你的小区有保安、有人打扫卫生、有人修电梯。',
+   detail:'武汉小区物业费标准（2024年）：\n• 老旧小区（无电梯）：0.5–1元/平米/月\n  → 100平 = 50–100元/月\n• 普通小区：1–2元/平米/月\n  → 100平 = 100–200元/月\n• 品质小区（有游泳池/健身房）：2–4元/平米/月\n  → 100平 = 200–400元/月\n• 高端楼盘：4–8元/平米/月\n\n物业费用于支付：\n• 保安工资（24小时值班）\n• 保洁阿姨工资（打扫公共区域）\n• 电梯维修保养\n• 绿化养护（种树浇花）',
+   tip:'下次看到小区保洁阿姨，可以微笑点头打个招呼。他们维护了你生活的环境，但工资不高，每月约3000–4000元。'},
+
+  {tab:'month',cat:'食品',title:'一家人每月吃饭花多少',price:'2500–5000元',bowls:[250,500],
+   brief:'三口之家一个月的伙食费，约250–500碗热干面的价格。',
+   detail:'武汉三口之家月食品支出明细（2024年）：\n• 大米（10斤/月）：约30–50元（3–5元/斤）\n• 肉类（猪肉/鸡肉/鱼）：约600–1000元\n  → 猪肉：20–25元/斤\n  → 鸡腿：15–20元/斤\n  → 草鱼：10–15元/斤\n• 蔬菜水果：约600–1000元\n  → 白菜：2–3元/斤\n  → 西红柿：3–5元/斤\n  → 苹果：5–10元/斤\n• 鸡蛋（每天2个）：约120元（6–7元/斤）\n• 牛奶（每天1盒）：约180元（6元/盒）\n• 外出吃饭/外卖：500–1500元\n合计：约2000–4500元/月',
+   tip:'自己在家做饭比外卖便宜50%以上，而且更健康。妈妈每天做饭，一个月可以帮家里节省1000–2000元。'},
+
+  {tab:'month',cat:'食品',title:'武汉餐馆价格参考',price:'人均30–300元',bowls:[3,30],
+   brief:'武汉有各种档次的餐馆，从苍蝇小馆到高档酒楼，价格差10倍以上。',
+   detail:'武汉不同档次餐馆人均消费（2024年）：\n• 街边小馆（热干面/包子铺）：8–20元\n• 快餐（老乡鸡/真功夫）：20–35元\n• 正餐（家常菜馆）：35–60元\n• 武汉特色餐厅（藕汤/排骨）：60–120元\n• 火锅（海底捞/小龙坎）：80–150元\n• 商场餐厅（中等偏上）：80–200元\n• 高档酒楼（接待客人）：200–500元+\n\n武汉名菜参考价：\n• 藕汤（每人）：38–68元\n• 武昌鱼（一条）：68–128元\n• 小龙虾（1斤）：38–88元',
+   tip:'全家下馆子吃一顿，可能花掉200–400元，相当于20–40碗热干面。偶尔改善生活很好，但不适合天天吃。'},
+
+  {tab:'month',cat:'教育',title:'公立学校费用（义务教育）',price:'200–600元/学期',bowls:[20,60],
+   brief:'武汉公立小学基本免费，但书本费、校服费、校车费等还是需要钱。',
+   detail:'武汉公立小学一学期费用清单（2024年）：\n• 学费：0元（义务教育免费！）\n• 书本费（统一发放）：150–300元\n• 校服（2–3套）：100–300元\n• 体育课活动费：50–100元\n• 班级活动费/春游：50–200元\n• 期末照相费：50–80元\n• 餐费（如有食堂）：1500–2500元/学期\n\n一学年合计（不含餐费）：约600–1200元\n\n对比：私立小学学费一年：约2万–8万元！',
+   tip:'国家提供免费的义务教育，是非常宝贵的。很多国家的孩子要花很多钱才能上学。要珍惜这个机会！'},
+
+  {tab:'month',cat:'教育',title:'课外补课和兴趣班',price:'500–3000元/月',bowls:[50,300],
+   brief:'武汉很多家庭每月花500–3000元给孩子报课外班，是仅次于住房的重大支出。',
+   detail:'武汉常见课外班价格（2024年）：\n• 数学思维（学而思等）：800–1500元/月\n• 语文写作：600–1200元/月\n• 英语（英孚/新东方）：800–1600元/月\n• 钢琴课（1对1）：200–400元/课时，4节约800–1600元/月\n• 游泳班：600–1200元/月\n• 编程（乐博/核桃）：800–1500元/月\n• 美术班：400–800元/月\n• 武术/跆拳道：400–800元/月\n\n如果报3个班：每月1500–4500元！\n一年学费可达1.8万–5.4万元',
+   tip:'爸爸妈妈花这么多钱让你学习各种技能，是希望你拥有更多可能性。认真对待每一节课，是对他们最好的回报。'},
+
+  {tab:'month',cat:'交通通信',title:'武汉地铁/公交费用',price:'60–200元/月',bowls:[6,20],
+   brief:'武汉地铁已有13条线路！坐地铁或公交上下班，每月60–200元，比打车便宜很多。',
+   detail:'武汉公共交通价格（2024年）：\n• 地铁：起步价3元，超5公里每5km加0.5元\n  → 5km：3元，10km：3.5元，20km：4.5元\n• 公交：1–2元（普通车），3元（空调车）\n• 学生地铁卡：8折优惠\n\n上下班通勤月费估算：\n• 地铁5km × 2次 × 22天 = 132元/月\n• 公交2元 × 2次 × 22天 = 88元/月\n\n武汉地铁vs打车对比（10km）：\n• 地铁：3.5元\n• 滴滴快车：约25–35元\n• 打车贵10倍！',
+   tip:'武汉地铁每天运送约400万人次。坐地铁不堵车、不污染、便宜安全。爸爸妈妈如果坐地铁上班，每月可以节省400–600元交通费。'},
+
+  {tab:'month',cat:'交通通信',title:'手机费和家庭宽带',price:'150–350元',bowls:[15,35],
+   brief:'两部手机话费+家庭宽带，每月约150–350元，让全家随时保持联系。',
+   detail:'武汉通信费用（2024年）：\n• 手机套餐（移动/联通/电信）：\n  → 便宜套餐：19–49元/月（有限流量）\n  → 主流套餐：99–199元/月（无限流量）\n• 两部手机合计：100–300元/月\n• 家庭宽带（300Mbps）：40–100元/月\n• 合计：140–400元/月\n\n手机套餐小知识：\n• 运营商经常有促销，年付比月付便宜20–30%\n• 很多套餐可以共享流量给家人\n• 学生专属套餐更便宜：9元/月起',
+   tip:'你可能觉得刷视频/玩游戏理所当然，但背后的网络费用每月要几百元。合理使用手机和网络，减少不必要的流量消耗。'},
+
+  {tab:'month',cat:'医疗备用',title:'看病花多少钱',price:'50–2000元/次',bowls:[5,200],
+   brief:'小病花几十元，大病可能花几千元。医保可以报销一部分，但自己也要付钱。',
+   detail:'武汉常见医疗费用（2024年，含挂号+检查+药）：\n• 普通感冒（诊所/社区医院）：50–150元\n• 感冒发烧（三甲医院门诊）：150–400元\n• 阑尾炎手术（住院）：8000–20000元\n• 骨折（住院手术）：10000–30000元\n• 看牙（补一颗蛀牙）：200–800元\n\n医保报销比例（武汉2024年）：\n• 在社区医院就诊：报销约80%\n• 在三甲医院就诊：报销约60%\n• 自付部分自己承担\n\n看牙医注意：武汉公立医院看牙挂号费只需10–20元，私立牙科动辄200–500元/次！',
+   tip:'生病最直接的影响是痛苦和花钱。每天刷牙2次、多运动、早睡早起，是最省钱的"健康投资"，能避免很多看病的钱。'},
+
+  {tab:'month',cat:'医疗备用',title:'📅 一个月合计（三口普通家庭）',price:'7500–13000元',bowls:[750,1300],total:true,
+   brief:'武汉普通三口之家，每月最少要花7500元才能维持正常生活。',
+   detail:'武汉三口之家月支出明细（2024年中等水平）：\n• 租房/房贷：3000元\n• 电费：150元\n• 水费+燃气：80元\n• 物业费：200元\n• 食品（自己做饭为主）：2500元\n• 孩子课外班：1000元\n• 交通：200元\n• 手机+宽带：200元\n• 医疗备用：150元\n小计：7480元/月\n\n注意：这还没算：\n• 衣服（每季换新）：约200元/月\n• 孩子玩具/书籍：约100元/月\n• 父母父母赡养费：约500元/月\n• 存款（应对突发）：应存10–20%\n\n武汉2024年平均月工资：约7800元\n→ 普通工资几乎全部用于日常生活，很难存钱！',
+   tip:'看完这个数字，你是否理解了爸爸妈妈为什么每天那么努力工作？7500元是最低生活线，稍有不慎就入不敷出。'},
+
+  // ── 一年大数字 ──────────────────────────────────────
+  {tab:'year',cat:'年度汇总',title:'一年吃饭花多少',price:'3万–5万元',bowls:[3000,5000],
+   brief:'三口之家一年吃饭的费用，等于3000–5000碗热干面。这只是吃饭，不含其他！',
+   detail:'年度饮食费用计算：\n• 月食品费2500–4000元 × 12个月 = 3万–4.8万元/年\n\n换算成孩子熟悉的单位：\n• 3万元 = 3000碗热干面\n• 3万元 = 600碗武汉著名小龙虾（50元/碗）\n• 3万元 = 1500张电影票（20元/张）\n• 3万元 = 300本课外书（100元/本）\n\n一家人一年吃掉：\n• 大米：约150–200斤\n• 猪肉：约150斤\n• 鸡蛋：约700个\n• 蔬菜：约600斤\n• 水果：约400斤',
+   tip:'吃饭是最基本的生存需求，但也是家里最大的日常开支之一。珍惜每一顿饭，不挑食、不浪费，是对食物和金钱的尊重。'},
+
+  {tab:'year',cat:'年度汇总',title:'一年住房花多少',price:'3.6万–6万元',bowls:[3600,6000],
+   brief:'不管是租房还是还房贷，住房一年要花3.6万–6万元，这是最大的固定支出。',
+   detail:'年度住房费用：\n• 租房（武汉普通两居室3000元/月）：36000元/年\n• 房贷（200万贷款30年，月供约8000元）：96000元/年！\n\n住房费用占收入的比例：\n• 国际标准：住房不超过收入的30%\n• 武汉现实：很多家庭住房占收入50%以上\n\n换个角度理解：\n• 36000元/年 = 98.6元/天\n• 相当于每天一睁眼就花掉近100元的房租\n• 不论晴雨、不管上班不上班，每天都在"烧钱"',
+   tip:'在武汉，很多爸爸妈妈一辈子最大的心愿就是"有自己的房子"。一套普通的房子，可能需要他们20–30年的积蓄。'},
+
+  {tab:'year',cat:'年度汇总',title:'一年教育花多少',price:'1万–6万元',bowls:[1000,6000],
+   brief:'从书本费到补课班，一个孩子一年的教育投入，可以是1万到6万元。',
+   detail:'武汉一年教育支出明细（小学生）：\n• 学校书本/校服/活动费：约800–1500元\n• 课外补习班（每月1000–3000元）：1.2万–3.6万元/年\n• 兴趣特长班（每月500–1500元）：0.6万–1.8万元/年\n• 课外书/文具：约500–1000元\n\n武汉教育支出对比：\n• 不报任何课外班：约1000–2000元/年\n• 报2个课外班：约2.4万–5.4万元/年\n• 报4个以上：超过6万元/年\n\n你知道吗：爸爸妈妈花在你教育上的钱，\n可能占家庭收入的20–40%！',
+   tip:'每报一个课外班，父母就要多工作几十个小时来支付。认真学习，是你能给爸爸妈妈最好的回报。'},
+
+  {tab:'year',cat:'大件开销',title:'手机：200–8000元',price:'200–8000元',bowls:[20,800],
+   brief:'手机是现代生活的必需品，但价格差别很大，从入门机到旗舰机相差40倍！',
+   detail:'武汉手机市场价格（2024年）：\n• 入门智能机（二手/国产）：200–600元\n• 中端国产手机（小米/OPPO/vivo）：1000–3000元\n• 旗舰国产手机（华为Mate/小米15）：4000–6000元\n• iPhone 16（128G）：约5999元\n• iPhone 16 Pro Max（512G）：约12999元！\n\n"买手机"需要工作多久（外卖员8000元/月）：\n• 入门手机（300元）：工作1天\n• 中端手机（2000元）：工作7–8天\n• iPhone 16（5999元）：工作约22天\n• iPhone Pro Max（12999元）：工作约50天！',
+   tip:'手机是工具，不是炫耀的资本。一部够用的手机完全可以，不需要追求最贵最新款。爸爸妈妈省下买旗舰手机的钱，可以给你报半年的课外班。'},
+
+  {tab:'year',cat:'大件开销',title:'买一辆自行车：200–2000元',price:'200–2000元',bowls:[20,200],
+   brief:'一辆自行车200–2000元，不烧油、不堵车、锻炼身体，是性价比极高的交通工具。',
+   detail:'武汉自行车价格参考（2024年）：\n• 普通城市自行车：200–500元\n• 山地车（喜德盛/捷安特入门）：500–1500元\n• 品牌中端山地车（美利达/Giant）：1500–3000元\n• 公路赛车（专业）：3000–20000元+\n\n自行车vs其他交通工具年费对比：\n• 自行车（500元买+20元/年维修）：520元/年\n• 公交地铁：约1500元/年\n• 电动车：购车2000元+电费100元+保险200元 = 约2300元/年\n• 开汽车：油费/电费+保险+停车 = 约1.5万–3万元/年\n\n骑车还能健身，省去健身房费用（武汉健身房600–2000元/年）！',
+   tip:'如果你家离学校不太远，骑自行车上学是非常好的选择。不花油钱、锻炼身体，一举两得！'},
+
+  {tab:'year',cat:'大件开销',title:'买一辆电动车：2000–8000元',price:'2000–8000元',bowls:[200,800],
+   brief:'武汉很多家庭用电动车接送孩子，比汽车便宜很多，比公交方便很多。',
+   detail:'武汉电动车价格（2024年）：\n• 入门款（雅迪/爱玛普通款）：2000–3000元\n• 中端款：3000–5000元\n• 高端款（小米/九号）：5000–8000元\n• 豪华款（台铃旗舰）：8000元以上\n\n年度使用成本：\n• 电费：每充一次约1–2元，每月约30–60元，全年360–720元\n• 保险：约100–200元/年\n• 维修：约100–300元/年\n• 合计：约600–1200元/年\n\n对比开汽车：省了约1.5万–2.5万元/年！\n\n注意：武汉规定电动车必须戴头盔！',
+   tip:'武汉街头有大量电动车，这是很多普通家庭最划算的交通工具。骑电动车记得戴头盔——头盔是生命的保险，而不是可有可无的配件。'},
+
+  {tab:'year',cat:'大件开销',title:'买一辆汽车：7万–30万元',price:'7万–30万元',bowls:[7000,30000],
+   brief:'一辆家用汽车7万–30万元，买了之后还有每年1万–3万元的"养车费"。',
+   detail:'武汉热销车型价格（2024年新能源时代）：\n• 比亚迪海鸥（小型电车）：7.98万元\n• 比亚迪海豚（紧凑型）：10.98–13.68万元\n• 大众朗逸（燃油）：10.99–15.39万元\n• 比亚迪汉DM-i（中型）：16.98–23.98万元\n• 丰田凯美瑞（中型）：17.98–23.98万元\n\n买车后的年费：\n• 保险：5000–15000元/年\n• 汽油/充电：5000–15000元/年\n• 停车费（市区）：3000–12000元/年\n• 保养维修：2000–5000元/年\n合计：1.5万–4.7万元/年！\n\n换算：养一辆车，每年要花1500–4700碗热干面！',
+   tip:'汽车让出行更方便，但是很贵。很多家庭买车要贷款3–5年。买车前，要确保家里有足够的"余粮"。'},
+
+  {tab:'year',cat:'长期目标',title:'买武汉一套房：100万–500万元',price:'100万–500万元',bowls:[100000,500000],
+   brief:'武汉的房价在全国属于中等偏高。买一套普通的家，需要爸爸妈妈十几年甚至一辈子的积蓄。',
+   detail:'武汉各区房价参考（2024年，单价×面积）：\n• 新洲/蔡甸/汉南（远郊）：6000–10000元/平\n  → 90平约54万–90万元\n• 东西湖/江夏（近郊）：10000–15000元/平\n  → 90平约90万–135万元\n• 洪山/青山（主城）：15000–22000元/平\n  → 90平约135万–198万元\n• 武昌/汉口（核心）：20000–35000元/平\n  → 90平约180万–315万元\n• 学区房（南湖/名校附近）：30000–60000元/平\n  → 90平约270万–540万元！\n\n买房需要多少年：\n• 家庭月净收入10000元，每月存3000元\n• 购买150万的房子，需首付45万\n• 攒够首付：45万 ÷ 3000元 = 12.5年\n• 再加30年还月供……',
+   tip:'武汉的房价让很多年轻人感到压力很大。爸爸妈妈为了给你一个稳定的家，付出了非常多。理解这一点，就会更感恩。'},
+
+  {tab:'year',cat:'长期目标',title:'读大学要花多少',price:'约15万–25万元（4年）',bowls:[15000,25000],
+   brief:'读完大学四年，学费+住宿+生活费，总共约花15万–25万元。',
+   detail:'武汉高校大学4年总花费（2024年）：\n• 学费：\n  → 公立综合类：4000–6000元/年\n  → 理工类/医学类：5000–8000元/年\n  → 艺术类：8000–15000元/年\n• 住宿费：1200–2400元/年\n• 生活费：1500–3000元/月 × 12 × 4年 = 7.2万–14.4万元\n4年合计：约12万–21万元\n\n武汉名校录取难度：\n• 武汉大学/华中科技大学：湖北省前1%\n• 中南财经政法大学：湖北省前3%\n• 武汉理工/华中师范：湖北省前10%\n\n大学毕业起薪参考（武汉2024年）：\n• 普通院校：3500–5000元/月\n• 985/211高校：5000–12000元/月\n• 顶尖院校+热门专业：8000–30000元/月',
+   tip:'读大学是让爸爸妈妈最骄傲的事。他们愿意为你的大学花费15万–25万元，因为他们相信教育是最好的投资。你现在努力学习，将来可以靠自己挣到更多。'},
+
+  {tab:'year',cat:'长期目标',title:'老人的赡养费',price:'2000–5000元/月',bowls:[200,500],
+   brief:'爷爷奶奶、外公外婆年老了需要照顾和生活费，这也是爸爸妈妈的重要责任。',
+   detail:'武汉老人生活成本（2024年）：\n• 老人自住基本生活费：1500–3000元/月\n  → 吃饭：800–1500元\n  → 药费：300–800元\n  → 水电物业：300–500元\n• 保姆或养老院：\n  → 家政保姆上门：3000–5000元/月\n  → 普通养老院：3000–6000元/月\n  → 品质养老院：8000–20000元/月\n\n爸爸妈妈可能同时要养：\n• 你（孩子的教育生活费）\n• 爷爷奶奶（父系）\n• 外公外婆（母系）\n• 再加上自己的房贷/生活\n这就是为什么很多家长说"压力很大"。',
+   tip:'爷爷奶奶外公外婆年轻时也这样养育了爸爸妈妈。有空多陪陪老人，一个拥抱、一个问候，对他们来说比金钱更珍贵。'},
+
+  // ── 普通人怎么挣 ──────────────────────────────────────
+  {tab:'earn',cat:'外卖员',title:'外卖骑手的一天（武汉）',price:'200–350元/天',bowls:[20,35],
+   brief:'武汉外卖骑手每天工作10–12小时，跑50–80单，挣200–350元。下雨天最辛苦也最挣钱。',
+   detail:'外卖骑手工作细节（武汉2024年）：\n• 月收入：6000–10000元（勤快的可达12000元）\n• 日收入：200–350元（按接单量）\n• 时薪：约25–40元/小时\n• 每单收入：5–15元/单\n• 每天接单：50–80单\n• 工作时间：早8点到晚8点（12小时）\n• 中午11–13点、晚上17–20点是高峰\n\n骑手的辛苦：\n• 武汉夏天40度要送餐，汗流浃背\n• 武汉冬天4度要淋雨，手冻僵还在接单\n• 没有节假日，越是节日越要上班\n• 每单必须在30–45分钟内送达，否则被差评\n• 上下楼梯、找门牌，有时比骑车更累\n\n送100元外卖，骑手挣多少？约3–8元（3–8%）',
+   tip:'下次点外卖，记得看看骑手有多辛苦。给个好评、礼貌接单、不催不骂，是对他们最大的尊重。雨天送来的外卖，每一个都是在风雨中挣来的。'},
+
+  {tab:'earn',cat:'外卖员',title:'成为外卖员需要什么',price:'无需学历',bowls:null,
+   brief:'外卖员门槛低，有手机有电动车就能做。但稳定收入需要付出大量体力和时间。',
+   detail:'武汉成为外卖员的条件：\n• 年龄：18–55岁\n• 学历：无要求（初中、高中、大学都有）\n• 设备：智能手机（自备）+ 电动车（自备或租赁）\n• 培训：1–3天简单培训即可上岗\n\n收入影响因素：\n• 接单区域（市区比郊区单多）\n• 天气（下雨天有补贴，但危险）\n• 高峰期（早中晚三餐时间单最多）\n• 评分（差评会被罚款）\n• 是否加入专送（稳定但底薪低）vs众包（自由但收入不稳）\n\n职业风险：\n• 交通事故风险高（在路口争抢绿灯）\n• 平台有时压缩配送费\n• 年龄大了体力下降就做不了',
+   tip:'很多外卖员是为了养家糊口，有的是刚来城市的年轻人，有的是家里有困难的父亲。他们选择了一份很辛苦的工作，值得被尊重。'},
+
+  {tab:'earn',cat:'网约车',title:'网约车司机的一天（武汉）',price:'250–350元/天',bowls:[25,35],
+   brief:'武汉滴滴司机每天开10–12小时，跑20–30单，毛收入300–400元，扣成本净挣250元左右。',
+   detail:'武汉网约车司机收入细节（2024年）：\n• 月毛收入：8000–12000元\n• 月净收入（扣油/电/保险/平台抽成）：5000–9000元\n• 平台抽成：约20–25%\n• 油/电费：油车约2000元/月，电车约300元/月\n• 保险+保养：约400元/月\n• 真实时薪（净收入）：约18–28元/小时\n\n一天工作流程：\n• 早6点接早高峰单（6–9点）：约8–12单\n• 白天低谷期（10–16点）：约5–8单\n• 晚高峰（17–21点）：约8–12单\n• 深夜加单（22点后）：加价，单多\n• 合计：约20–30单，行驶200–300公里\n\n武汉常见接单区域：江汉区、武昌区、洪山区（大学城）',
+   tip:'每次坐滴滴，司机叔叔阿姨已经在外面开了好几个小时的车了。礼貌问好、不催促、下车说谢谢，是很暖心的小事。'},
+
+  {tab:'earn',cat:'快递员',title:'快递员的一天（武汉）',price:'150–280元/天',bowls:[15,28],
+   brief:'武汉快递员每天早6点出发，派送200–300个包裹，工作12小时，挣150–280元。',
+   detail:'武汉快递员收入细节（2024年）：\n• 月收入：5000–8000元\n• 每件派送费：0.5–1.5元\n• 每天派件：200–300件\n• 日收入：约150–250元\n• 双11大促：日收入可达300–400元！\n\n一天工作流程：\n• 早5:30–6:00：到分拣中心取件\n• 早6:00–9:00：分拣、装车\n• 上午9:00–12:00：第一轮派送\n• 下午13:00–18:00：第二轮派送\n• 晚上18:00–20:00：处理签收、回库\n• 结束时间：约晚上8–10点\n\n体力消耗：\n• 每天上下楼：相当于爬30–50层楼\n• 推着100–200斤的小车穿行小区\n• 夏天汗湿衣服，冬天手脚冰凉',
+   tip:'一个快递员每天要爬相当于30–50层楼的楼梯。下次收到快递，想想送件叔叔的辛苦——你玩一天的快乐，是他爬楼送来的。'},
+
+  {tab:'earn',cat:'工厂工人',title:'工厂工人的一天（武汉）',price:'150–200元/天',bowls:[15,20],
+   brief:'武汉汽车厂、电子厂工人，每天站8–10小时，做同样的动作，挣150–200元。',
+   detail:'武汉工厂工人收入细节（2024年）：\n• 月基本工资：3500–5000元\n• 加班费：约1000–2000元/月\n• 绩效奖金：约500–1000元/月\n• 月总收入：4500–6000元\n• 时薪：约15–20元/小时\n\n武汉主要工厂：\n• 东风汽车（武汉）：汽车装配工人约5000–7000元/月\n• 武汉光谷电子厂：3800–5500元/月\n• 武汉钢铁（冶钢）：5000–8000元/月\n\n工厂工作特点：\n• 三班倒（早班/午班/夜班轮换）\n• 站立工作，腰腿容易受损\n• 重复同一个动作数百次\n• 噪音大、有时有化学品气味\n• 很少节假日（只有法定节假日）',
+   tip:'你生活中的每一件工业品——汽车、手机、家电——背后都有工厂工人的辛苦。他们做着重复枯燥的工作，支撑着现代生活的运转。'},
+
+  {tab:'earn',cat:'工厂工人',title:'武汉最低工资标准',price:'2280元/月（2024年）',bowls:228,
+   brief:'2024年武汉最低月工资是2280元，约228碗热干面。这是法律规定的最低保障线。',
+   detail:'武汉最低工资数据（2024年）：\n• 月最低工资：2280元/月\n• 小时最低工资：18元/小时\n• 适用范围：全职正式员工\n\n2280元能买什么：\n• 2280 ÷ 10 = 228碗热干面\n• 可以支付：普通租房约1个月租金（郊区）\n• 但是：2280元在武汉买不了多少东西\n  → 只够一家三口吃两周饭\n  → 付不起市区的房租\n  → 孩子上一个补课班就用完了\n\n武汉工资分布（2024年）：\n• 月入3000元以下：约25%的工作者\n• 月入3000–6000元：约40%的工作者\n• 月入6000–10000元：约25%的工作者\n• 月入10000元以上：约10%的工作者',
+   tip:'2280元是法律给工人最基本的保护。但这些钱在武汉很难维持生活。许多人在努力提升技能，是为了挣更多的钱，过更好的生活。'},
+
+  // ── 妈妈的付出 ──────────────────────────────────────
+  {tab:'mom',cat:'市场对比',title:'家政保姆市价（武汉详细）',price:'5000–10000元/月',bowls:[500,1000],
+   brief:'请一个全天候照顾孩子+做家务的保姆，武汉市场价每月5000–10000元。妈妈做的比保姆多得多。',
+   detail:'武汉家政服务价格（2024年）：\n• 小时工（钟点工，3小时打扫）：50–100元/次\n• 上门保姆（8小时/天，不住家）：150–250元/天 = 4500–7500元/月\n• 住家保姆（24小时）：6000–10000元/月\n• 育儿嫂（专门照顾3岁以下）：8000–15000元/月\n• 月嫂（照顾新生儿前28天）：10000–20000元！\n\n妈妈的"保姆服务清单"：\n• 每天做3顿饭（不含早餐外买）：90分钟\n• 每天打扫卫生/洗衣：60分钟\n• 每天接送上下学：60分钟\n• 辅导作业：60–90分钟\n• 哄睡前故事：30分钟\n合计：每天约4.5–5小时"保姆工作"\n\n按市场价计算：200元/天 × 365天 = 73000元/年！',
+   tip:'妈妈做的一切，如果按市场价雇人来做，一年需要花7万元以上。但她不需要钱，只需要你的一个拥抱和一句"谢谢妈妈"。'},
+
+  {tab:'mom',cat:'市场对比',title:'小学老师月薪参考',price:'4500–8000元/月',bowls:[450,800],
+   brief:'武汉小学老师月薪4500–8000元，但一个老师要照顾40个学生。妈妈专门照顾你一个人！',
+   detail:'武汉教师薪资（2024年）：\n• 公立小学教师基本工资：3500–5000元\n• 绩效奖金+课时费：1000–3000元\n• 合计：4500–8000元/月\n\n老师的工作量 vs 妈妈的工作量：\n• 老师：每班约40个学生，每天上课约6小时\n• 每个学生每天分到：6小时 ÷ 40人 = 9分钟！\n\n妈妈：专门照顾你1个人\n• 每天陪伴时间：3–6小时\n• 辅导作业：1–2小时\n• 关注你的情绪变化：全天候\n• 比老师多关注你 → 20–40倍！\n\n如果雇一个私教老师专门辅导你：\n• 1对1辅导：200–400元/小时\n• 每天2小时：400–800元/天 = 12000–24000元/月！',
+   tip:'妈妈是你专属的老师、保姆、厨师、心理辅导员。她这样做，不是因为有多少薪水，而是因为爱。'},
+
+  {tab:'mom',cat:'市场对比',title:'家庭厨师 vs 妈妈做饭',price:'5000–12000元/月',bowls:[500,1200],
+   brief:'雇一个专门在家做饭的厨师，武汉市场价5000–12000元/月。妈妈做的是同样的事。',
+   detail:'武汉家庭厨师市场价（2024年）：\n• 钟点厨师（只做饭）：100–200元/次\n• 每天做3餐：300–600元/天 = 9000–18000元/月\n• 上门厨师（两餐）：150–300元/次\n\n妈妈一年做多少顿饭：\n• 早餐：365天 = 365顿\n• 午饭（周末）：104天 ≈ 104顿\n• 晚饭：365天 = 365顿\n• 合计：约834顿饭/年\n• 按市场价（100元/顿）：83400元/年！\n\n妈妈做饭的技能含量：\n• 了解全家口味（你爱吃什么，不爱吃什么）\n• 根据季节调整菜单\n• 考虑营养均衡\n• 生病时做适合的食物\n• 这不是普通厨师能做到的',
+   tip:'妈妈做的每一顿饭都是量身定制的。她记得你不喜欢香菜，爱吃鱼，不吃苦瓜。这份"了解"是世界上任何厨师都替代不了的。'},
+
+  {tab:'mom',cat:'时间价值',title:'妈妈的24小时时间表',price:'12–16小时/天工作',bowls:null,
+   brief:'全职妈妈每天工作12–16小时，没有周末，没有年假，生病了还要继续工作。',
+   detail:'一个全职妈妈的典型一天（你上小学时）：\n• 6:00 起床，开始做早饭\n• 6:30 叫你起床，帮你穿衣梳洗\n• 7:00 喂早饭，检查书包\n• 7:30 送你出门/骑车送学\n• 8:00–10:00 打扫房间、洗衣服\n• 10:00–11:30 买菜，研究今天做什么\n• 11:30–12:30 做午饭，自己吃\n• 12:30–14:00 短暂休息\n• 14:00–15:30 做家务、备菜\n• 15:30–16:00 去学校接你\n• 16:30–17:30 督促你做作业\n• 17:30–18:30 做晚饭\n• 18:30–20:00 全家吃饭+陪你玩\n• 20:00–21:00 帮你洗澡，讲故事\n• 21:00–23:00 处理各种家事，自己时间\n有效工作时长：约12–14小时',
+   tip:'妈妈一天的"自己时间"大概只有晚上21:00–23:00这两小时。这两小时她可能还在担心你明天的作业、换季的衣服、下周的生活……'},
+
+  {tab:'mom',cat:'时间价值',title:'妈妈10年的牺牲',price:'放弃收入40万–100万元',bowls:[40000,100000],
+   brief:'如果妈妈不全职照顾你，出去工作10年，可以挣40万–100万元。她选择了你。',
+   detail:'妈妈全职10年放弃的薪水（武汉2024年）：\n• 大专学历职场女性：3000–5000元/月\n  → 10年放弃：36万–60万元\n• 本科学历职场女性：5000–8000元/月\n  → 10年放弃：60万–96万元\n• 研究生及以上：8000–15000元/月\n  → 10年放弃：96万–180万元\n\n除了钱，还放弃了：\n• 职场技能的持续提升\n• 社会关系网络\n• 个人职业发展机会\n• 晋升和加薪机会\n\n妈妈选择留在家里，是因为她相信：\n陪伴孩子成长，比那些钱更重要。',
+   tip:'这是妈妈给你最昂贵的礼物——她的时间。时间是最珍贵的，因为花出去了就永远回不来。'},
+
+  {tab:'mom',cat:'时间价值',title:'❤️ 妈妈综合劳动价值',price:'至少12000元/月',bowls:1200,total:true,
+   brief:'如果把妈妈承担的所有工作都按市场价计算，她每月创造的价值至少12000元，相当于1200碗热干面。',
+   detail:'妈妈的角色拆解（按武汉市场价）：\n• 家务管理员（打扫、洗衣、采购）：2500–4000元\n• 专属厨师（三餐）：3000–5000元\n• 儿童教育顾问（辅导作业）：2000–4000元\n• 24小时私人护士（生病照顾）：1500–3000元\n• 专属司机（接送学校）：1000–2000元\n• 心理辅导员（情绪支持）：无价\n合计市场价：10000–18000元/月\n\n但妈妈给的还有更多：\n• 深夜你发烧时第一时间起来照顾你\n• 知道你最喜欢哪本书、哪个玩具\n• 在你难过时抱着你不说话\n• 这些，任何钱都买不来\n\n全年妈妈的劳动价值：12000元×12 = 144000元/年\n10年：144万元，换算 = 14.4万碗热干面',
+   tip:'妈妈是世界上唯一一个不需要薪水还愿意全力以赴照顾你的人。这一生，记得对她好。'},
+
+  {tab:'mom',cat:'感恩时刻',title:'怎么让妈妈知道你感谢她',price:'0元',bowls:0,
+   brief:'最贵的礼物不用花钱：一个拥抱、一句"妈妈辛苦了"、认真学习、帮做家务。',
+   detail:'让妈妈最开心的事（来自真实调查）：\n\n立刻可以做的（今天就行）：\n• 妈妈做完饭，主动说"妈妈做的饭最好吃！"\n• 放学回家第一句话："妈妈，我回来了！"\n• 看到妈妈在打扫，主动说"我来帮忙！"\n• 睡前给妈妈一个拥抱\n\n坚持一个月的事：\n• 每天自己收拾书包和房间\n• 自觉完成作业，不让妈妈催\n• 吃饭时说"妈妈，今天的饭很好吃"\n• 记住妈妈的生日，画一张画送给她\n\n长远来看：\n• 认真学习，考上好学校\n• 将来有能力，带妈妈去旅游\n• 经常打电话，不让她担心\n• 让她为你骄傲',
+   tip:'妈妈从来不希望你用钱回报她。但你今天的一个微笑、一个拥抱，会让她感到所有的辛苦都值了。去，现在就去抱抱她。'},
+];
+
+const JOBS = [
+  {label:'外卖骑手',hourly:30},
+  {label:'网约车司机',hourly:25},
+  {label:'快递员',hourly:22},
+  {label:'工厂工人',hourly:17},
+];
+const ITEMS = [
+  {label:'一碗热干面（10元）',price:10},
+  {label:'一张公交车票（2元）',price:2},
+  {label:'一个冰淇淋（5元）',price:5},
+  {label:'一包薯片（8元）',price:8},
+  {label:'一本课外书（30元）',price:30},
+  {label:'一件校服（100元）',price:100},
+  {label:'一个乐高玩具（200元）',price:200},
+  {label:'一双运动鞋（300元）',price:300},
+  {label:'一辆自行车（600元）',price:600},
+  {label:'一部入门手机（2000元）',price:2000},
+  {label:'一台iPad（5000元）',price:5000},
+  {label:'一个月房租（3000元）',price:3000},
+  {label:'一年补课费（15000元）',price:15000},
+  {label:'一年电费（2400元）',price:2400},
+];
+
+// ── Utilities ────────────────────────────────────────────────────────────
+function escHtml(s){
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+// Split on regex (capturing group), then escape each part, wrap matches in <mark>.
+// This prevents HTML entity corruption when query text overlaps entity chars.
+function highlight(text, q){
+  if(!q) return escHtml(text);
+  const safeQ = q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  const regex = new RegExp('(' + safeQ + ')','gi');
+  return text.split(regex).map((part, i) =>
+    i % 2 === 1 ? '<mark>' + escHtml(part) + '</mark>' : escHtml(part)
+  ).join('');
+}
+
+function fmtBowls(bowls){
+  if(bowls === null || bowls === undefined) return null;
+  if(Array.isArray(bowls)) return '🍜×' + bowls[0] + '–' + bowls[1] + '碗';
+  if(bowls === 0) return '🍜×0（免费）';
+  return '🍜×' + bowls + '碗';
+}
+
+function qs(sel,ctx){ return (ctx||document).querySelector(sel); }
+
+// ── State ────────────────────────────────────────────────────────────────
+const CAT_ALL = '全部';
+let activeTab = TABS[0].id;
+let activeCat = CAT_ALL;
+let searchQ   = '';
+
+// ── Build DOM once ────────────────────────────────────────────────────────
+// Pre-build all card elements keyed by card index
+const cardEls = CARDS.map((c,i) => {
+  const card = document.createElement('div');
+  card.className = 'card' + (c.total ? ' total' : '');
+  card.dataset.tab = c.tab;
+  card.dataset.cat = c.cat;
+  card.dataset.idx = i;
+
+  const bowlStr = fmtBowls(c.bowls);
+  const metaHtml = bowlStr ? '<span class="bowl-badge">' + escHtml(bowlStr) + '</span>' : '';
+
+  const bodyId = 'cb' + i;
+  card.innerHTML =
+    '<button class="card-head" aria-expanded="false" aria-controls="' + bodyId + '">' +
+      '<span class="card-title">' + escHtml(c.title) + '</span>' +
+      '<span class="card-meta">' + metaHtml + '<span class="chevron">▼</span></span>' +
+    '</button>' +
+    '<div class="card-body" id="' + bodyId + '" role="region">' +
+      '<p class="card-price">' + escHtml(c.price) + '</p>' +
+      '<p class="card-brief">' + escHtml(c.brief) + '</p>' +
+      (c.detail ? renderDetail(c.detail) : '') +
+      (c.tip ? '<div class="parent-tip"><strong>父母贴士：</strong>' + escHtml(c.tip) + '</div>' : '') +
+    '</div>';
+
+  const head = card.querySelector('.card-head');
+  head.addEventListener('click', () => {
+    const isOpen = card.classList.toggle('open');
+    head.setAttribute('aria-expanded', String(isOpen));
+  });
+  head.addEventListener('keydown', e => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); head.click(); }
+  });
+  return card;
+});
+
+function renderDetail(text){
+  const lines = text.split('\n');
+  let html = '';
+  let inList = false;
+  for(const raw of lines){
+    const line = raw.trim();
+    if(!line){ if(inList){html+='</ul>';inList=false;} continue; }
+    if(line.startsWith('•')){
+      if(!inList){html+='<ul>';inList=true;}
+      html += '<li>' + escHtml(line.slice(1).trim()) + '</li>';
+    } else {
+      if(inList){html+='</ul>';inList=false;}
+      html += '<p>' + escHtml(line) + '</p>';
+    }
+  }
+  if(inList) html += '</ul>';
+  return html ? '<div class="card-detail">' + html + '</div>' : '';
+}
+
+// Update highlights on visible card elements only
+function applyHighlights(){
+  cardEls.forEach((card, i) => {
+    if(card.hidden) return;
+    const c = CARDS[i];
+    card.querySelector('.card-title').innerHTML = highlight(c.title, searchQ);
+    card.querySelector('.card-price').innerHTML = highlight(c.price, searchQ);
+    card.querySelector('.card-brief').innerHTML = highlight(c.brief, searchQ);
+    const tipEl = card.querySelector('.parent-tip');
+    if(tipEl && c.tip) tipEl.innerHTML = '<strong>父母贴士：</strong>' + highlight(c.tip, searchQ);
+  });
+}
+
+// ── Build section containers once ────────────────────────────────────────
+const sections = {};
+const sectionsContainer = qs('#sectionsContainer');
+
+TABS.forEach(t => {
+  const sec = document.createElement('div');
+  sec.className = 'section-area';
+  sec.dataset.tab = t.id;
+  const grid = document.createElement('div');
+  grid.className = 'cards-grid';
+  sec.appendChild(grid);
+  if(t.id === 'earn'){
+    const calcDiv = buildCalculator();
+    sec.appendChild(calcDiv);
+  }
+  sections[t.id] = {sec, grid};
+  sectionsContainer.appendChild(sec);
+});
+
+// Place cards into their section grids (once)
+cardEls.forEach(el => {
+  sections[el.dataset.tab].grid.appendChild(el);
+});
+
+// ── Render tabs ──────────────────────────────────────────────────────────
+function renderTabs(){
+  const row = qs('#tabRow');
+  row.innerHTML = TABS.map(t =>
+    '<button class="tab-btn' + (t.id === activeTab ? ' active' : '') + '" data-tab="' + t.id + '">' +
+    escHtml(t.label) + '</button>'
+  ).join('');
+}
+
+function renderCats(){
+  const row = qs('#catRow');
+  const cats = TAB_CATS[activeTab] || [CAT_ALL];
+  row.innerHTML = cats.map(c =>
+    '<button class="cat-btn' + (c === activeCat ? ' active' : '') + '" data-cat="' + escHtml(c) + '">' +
+    escHtml(c) + '</button>'
+  ).join('');
+}
+
+// ── Filter: show/hide cards and sections ─────────────────────────────────
+function applyFilter(){
+  let anyVisible = false;
+
+  cardEls.forEach(el => {
+    const c = CARDS[Number(el.dataset.idx)];
+    const tabMatch = c.tab === activeTab;
+    const catMatch = activeCat === CAT_ALL || c.cat === activeCat;
+    const searchMatch = !searchQ || (
+      (c.title + c.brief + c.price + (c.detail||'') + (c.tip||'')).toLowerCase()
+        .includes(searchQ.toLowerCase())
+    );
+    const show = tabMatch && catMatch && searchMatch;
+    el.hidden = !show;
+    if(show) anyVisible = true;
+  });
+
+  // Show/hide sections
+  Object.entries(sections).forEach(([tabId, {sec}]) => {
+    sec.classList.toggle('active', tabId === activeTab);
+  });
+
+  qs('#noResults').classList.toggle('visible', !anyVisible);
+}
+
+// ── Calculator ────────────────────────────────────────────────────────────
+function buildCalculator(){
+  const div = document.createElement('div');
+  div.className = 'calculator';
+  div.innerHTML =
+    '<p class="calc-title">⏱ 需要工作多久？</p>' +
+    '<p class="calc-sub">选择职业和商品，看看买它要工作多长时间</p>' +
+    '<div class="calc-row">' +
+      '<select class="calc-select" id="calcJob">' +
+      JOBS.map(j => '<option value="' + j.hourly + '">' + escHtml(j.label) + '</option>').join('') +
+      '</select>' +
+      '<span class="calc-eq">买</span>' +
+      '<select class="calc-select" id="calcItem">' +
+      ITEMS.map(it => '<option value="' + it.price + '">' + escHtml(it.label) + '</option>').join('') +
+      '</select>' +
+    '</div>' +
+    '<div class="calc-result" id="calcResult"></div>';
+
+  function calcUpdate(){
+    const hourly = Number(div.querySelector('#calcJob').value);
+    const price  = Number(div.querySelector('#calcItem').value);
+    const hours  = price / hourly;
+    const bowls  = price / BOWL;
+    let timeStr;
+    if(hours < 1){
+      timeStr = '约 ' + Math.round(hours * 60) + ' 分钟';
+    } else if(hours < 8){
+      timeStr = '约 ' + hours.toFixed(1) + ' 小时';
+    } else {
+      timeStr = '约 ' + hours.toFixed(0) + ' 小时（' + (hours/8).toFixed(1) + ' 个工作日）';
+    }
+    div.querySelector('#calcResult').innerHTML =
+      '<p class="calc-result-main">需要工作 ' + escHtml(timeStr) + '</p>' +
+      '<p class="calc-result-bowl">相当于 🍜 ' + bowls + ' 碗热干面的价格</p>';
+  }
+
+  calcUpdate();
+  div.addEventListener('change', calcUpdate);
+  return div;
+}
+
+// ── Event delegation (bound once) ─────────────────────────────────────────
+qs('#tabRow').addEventListener('click', e => {
+  const btn = e.target.closest('.tab-btn');
+  if(!btn) return;
+  activeTab = btn.dataset.tab;
+  activeCat = CAT_ALL;
+  renderTabs();
+  renderCats();
+  applyFilter();
+});
+
+qs('#catRow').addEventListener('click', e => {
+  const btn = e.target.closest('.cat-btn');
+  if(!btn) return;
+  activeCat = btn.dataset.cat;
+  renderCats();
+  applyFilter();
+});
+
+let searchTimer = null;
+qs('#search').addEventListener('input', e => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    searchQ = e.target.value.trim();
+    applyHighlights();
+    applyFilter();
+  }, 200);
+});
+
+qs('#clearBtn').addEventListener('click', () => {
+  qs('#search').value = '';
+  searchQ = '';
+  activeCat = CAT_ALL;
+  applyHighlights();
+  renderCats();
+  applyFilter();
+});
+
+// ── Init ───────────────────────────────────────────────────────────────────
+renderTabs();
+renderCats();
+applyFilter();
+</script>
+</body>
+</html>
