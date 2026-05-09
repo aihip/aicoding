@@ -1,0 +1,1072 @@
+# 儿童日常保健指南 Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Create `children_health_guide.html` — a single-file interactive health guide for 8-year-old boys, featuring 4 tabs (日常习惯/预防疾病/安全守则/每日打卡), search, category filters, expandable cards, and a localStorage-backed daily checklist.
+
+**Architecture:** Single HTML file, zero external dependencies. CSS follows `tcm_medicine_guide.html` variable conventions (`--guide-*`). All interactivity via vanilla JS. Four `.tab-panel` divs controlled by `switchTab()`. Cards have `data-cat` and `data-text` attributes for filtering. Checklist uses `localStorage` keyed by today's date (auto-resets daily).
+
+**Tech Stack:** HTML5, CSS3 custom properties, Vanilla JavaScript ES6+
+
+---
+
+### Task 1: Create file skeleton with complete CSS
+
+**Files:**
+- Create: `children_health_guide.html`
+
+- [ ] **Step 1: Create the file with DOCTYPE, head, and full CSS**
+
+```html
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>儿童日常保健指南 · 8岁男孩</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --guide-bg:var(--color-background-primary,#fff);
+  --guide-soft:#f6f8f6;
+  --guide-text:var(--color-text-primary,#17201b);
+  --guide-muted:var(--color-text-secondary,#68736d);
+  --guide-faint:var(--color-text-tertiary,#8b9690);
+  --guide-border:var(--color-border-tertiary,#dfe6e1);
+  --guide-border-strong:var(--color-border-secondary,#bdc9c1);
+  --guide-green:#0f6e56;
+  --guide-green-bg:#e7f5ef;
+  --guide-amber:#89520b;
+  --guide-amber-bg:#fff3dc;
+  --guide-red:#a32d2d;
+  --guide-red-bg:#fff0ed;
+}
+body{font-family:var(--font-sans,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif);color:var(--guide-text);background:var(--guide-bg);letter-spacing:0}
+button,input{font:inherit}
+button{border:0;background:none;color:inherit;cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 16px 36px}
+/* Header */
+.top{display:grid;gap:16px;margin-bottom:18px}
+.eyebrow{font-size:12px;color:var(--guide-muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+h1{font-size:28px;line-height:1.18;font-weight:700;color:var(--guide-text);max-width:720px;margin-top:4px}
+.sub{font-size:14px;line-height:1.65;color:var(--guide-muted);max-width:860px}
+/* Info board */
+.info-board{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:14px;border:1px solid var(--guide-border);border-radius:8px;background:var(--guide-soft)}
+.info-step{min-width:0;padding:3px 8px 3px 12px;border-left:3px solid var(--guide-border-strong)}
+.info-step.green{border-left-color:var(--guide-green)}
+.info-step.amber{border-left-color:var(--guide-amber)}
+.info-step.red{border-left-color:var(--guide-red)}
+.step-title{font-size:13px;font-weight:700;margin-bottom:5px;color:var(--guide-text)}
+.step-copy{font-size:13px;line-height:1.55;color:var(--guide-muted)}
+/* Toolbar */
+.toolbar{position:sticky;top:0;z-index:3;background:color-mix(in srgb,var(--guide-bg) 92%,transparent);backdrop-filter:blur(8px);padding:12px 0 10px;border-bottom:1px solid var(--guide-border);margin-bottom:14px}
+.search-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;margin-bottom:10px}
+.search-box{position:relative}
+#search{width:100%;min-height:42px;font-size:14px;padding:9px 12px 9px 38px;border:1px solid var(--guide-border-strong);border-radius:8px;background:var(--guide-bg);color:var(--guide-text)}
+#search:focus{outline:none;border-color:var(--guide-green);box-shadow:0 0 0 3px color-mix(in srgb,var(--guide-green) 15%,transparent)}
+.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--guide-faint);pointer-events:none}
+.clear-btn{height:42px;padding:0 14px;border:1px solid var(--guide-border);border-radius:8px;background:var(--guide-bg);font-size:13px;color:var(--guide-muted)}
+.clear-btn:hover{border-color:var(--guide-border-strong);color:var(--guide-text)}
+/* Main tabs */
+.main-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tab-btn{display:inline-flex;align-items:center;min-height:36px;padding:7px 15px;border:1px solid var(--guide-border);border-radius:999px;font-size:13px;font-weight:600;color:var(--guide-muted);background:transparent;transition:all .15s}
+.tab-btn:hover{border-color:var(--guide-border-strong);color:var(--guide-text)}
+.tab-btn.active{background:var(--guide-green);color:#fff;border-color:var(--guide-green)}
+/* Category filter */
+.cat-row{display:flex;gap:6px;flex-wrap:wrap;min-height:30px}
+.cat-btn{display:inline-flex;align-items:center;min-height:30px;padding:5px 11px;border:1px solid var(--guide-border);border-radius:999px;font-size:12px;color:var(--guide-muted);background:transparent;transition:all .15s}
+.cat-btn:hover{border-color:var(--guide-border-strong);color:var(--guide-text)}
+.cat-btn.active{background:var(--guide-text);color:var(--guide-bg);border-color:var(--guide-text)}
+/* Tab panels */
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+/* Cards grid */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(292px,1fr));gap:12px;margin-top:2px}
+/* Health card */
+.health-card{background:var(--guide-bg);border:1px solid var(--guide-border);border-radius:8px;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+.health-card:hover{border-color:var(--guide-border-strong)}
+.health-card.open{border-color:var(--guide-text);box-shadow:0 8px 24px rgba(24,34,28,.07)}
+.health-card[data-hidden]{display:none}
+.card-head{padding:12px 14px;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) 20px;gap:8px;align-items:start}
+.card-title-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:3px}
+.card-title{font-size:15px;font-weight:700;color:var(--guide-text)}
+.cat-tag{font-size:11px;padding:2px 7px;border-radius:999px;font-weight:600;background:var(--guide-green-bg);color:#0b5544;flex-shrink:0}
+.freq-tag{font-size:11px;padding:2px 7px;border-radius:999px;font-weight:600;background:#f2f3f1;color:#59635d;flex-shrink:0}
+.warn-tag{font-size:11px;padding:2px 7px;border-radius:999px;font-weight:600;background:var(--guide-red-bg);color:var(--guide-red);flex-shrink:0}
+.card-brief{font-size:13px;color:var(--guide-muted);line-height:1.45}
+.chevron{font-size:16px;color:var(--guide-muted);transition:transform .2s;margin-top:2px;display:block;text-align:center;line-height:1}
+.health-card.open .chevron{transform:rotate(180deg)}
+/* Card body */
+.card-body{display:none;border-top:1px solid var(--guide-border);padding:12px 14px}
+.health-card.open .card-body{display:grid;gap:10px}
+.card-detail{font-size:13px;line-height:1.65;color:var(--guide-muted)}
+.card-detail ul{padding-left:16px;display:grid;gap:4px;margin-top:6px}
+.card-detail li{line-height:1.55}
+.parent-tip{background:var(--guide-amber-bg);border:1px solid #f0d89a;border-radius:6px;padding:8px 12px;font-size:12px;color:var(--guide-amber);line-height:1.55}
+.parent-tip strong{color:#6f4208}
+/* Checklist */
+.checklist-wrap{display:grid;gap:20px;max-width:560px}
+.progress-bar-wrap{background:var(--guide-soft);border:1px solid var(--guide-border);border-radius:8px;padding:14px}
+.progress-label{font-size:13px;color:var(--guide-muted);margin-bottom:8px}
+.progress-track{height:8px;background:var(--guide-border);border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;background:var(--guide-green);border-radius:999px;transition:width .3s;width:0%}
+.check-segment{display:grid;gap:8px}
+.segment-title{font-size:14px;font-weight:700;color:var(--guide-text);padding-bottom:6px;border-bottom:1px solid var(--guide-border)}
+.check-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--guide-bg);border:1px solid var(--guide-border);border-radius:8px;cursor:pointer;font-size:13px;color:var(--guide-text);transition:background .15s;user-select:none}
+.check-item:hover{background:var(--guide-soft)}
+.check-item input[type=checkbox]{width:17px;height:17px;accent-color:var(--guide-green);cursor:pointer;flex-shrink:0}
+.check-item.done{background:var(--guide-green-bg);border-color:#b8ddd0;color:#0b5544}
+/* Empty state */
+.empty-state{grid-column:1/-1;text-align:center;color:var(--guide-muted);font-size:14px;padding:46px 0;border:1px dashed var(--guide-border);border-radius:8px;background:#fafbf9;display:none}
+/* Highlight */
+mark{background:#fff3a0;color:inherit;border-radius:2px;padding:0 1px}
+/* Responsive */
+@media(max-width:820px){
+  .wrap{padding:18px 12px 30px}
+  h1{font-size:24px}
+  .info-board{grid-template-columns:1fr}
+  .toolbar{position:static}
+}
+@media(max-width:560px){
+  h1{font-size:22px}
+  .search-row{grid-template-columns:1fr}
+  .clear-btn{width:100%}
+  .cards-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- CONTENT GOES HERE -->
+</div>
+<script>
+// JS GOES HERE
+</script>
+</body>
+</html>
+```
+
+- [ ] **Step 2: Open in browser to verify CSS loads without errors**
+
+```bash
+open /Users/victor/Desktop/Claude/children_health_guide.html
+```
+
+Expected: blank page, no console errors (open DevTools → Console).
+
+---
+
+### Task 2: Add header HTML
+
+**Files:**
+- Modify: `children_health_guide.html` — replace `<!-- CONTENT GOES HERE -->` with header content below
+
+- [ ] **Step 1: Replace the content placeholder with the header section**
+
+```html
+  <header class="top">
+    <div>
+      <div class="eyebrow">儿童健康 · 8岁男孩日常参考</div>
+      <h1>日常保健指南</h1>
+      <p class="sub">涵盖日常习惯、疾病预防、安全守则与每日打卡。亲子共读版——孩子理解核心规则，父母获取专业贴士。</p>
+    </div>
+
+    <section class="info-board" aria-label="使用说明">
+      <div class="info-step green">
+        <div class="step-title">📋 查阅知识</div>
+        <p class="step-copy">切换标签浏览日常习惯、疾病预防、安全守则，点击卡片展开详细说明和父母贴士。</p>
+      </div>
+      <div class="info-step amber">
+        <div class="step-title">🔍 快速搜索</div>
+        <p class="step-copy">在搜索框输入关键词（如"刷牙"、"感冒"、"安全"），即时过滤相关内容。</p>
+      </div>
+      <div class="info-step red">
+        <div class="step-title">✅ 每日打卡</div>
+        <p class="step-copy">切换到「每日打卡」标签，勾选完成项目，进度每天自动重置。</p>
+      </div>
+    </section>
+  </header>
+
+  <!-- TOOLBAR GOES HERE -->
+  <!-- PANELS GO HERE -->
+```
+
+- [ ] **Step 2: Verify in browser**
+
+Refresh the page. Expected: title, subtitle, and three-column info board visible.
+
+---
+
+### Task 3: Add toolbar and tab panel containers
+
+**Files:**
+- Modify: `children_health_guide.html` — replace `<!-- TOOLBAR GOES HERE -->` and `<!-- PANELS GO HERE -->`
+
+- [ ] **Step 1: Add toolbar and empty panel containers**
+
+Replace `<!-- TOOLBAR GOES HERE -->` and `<!-- PANELS GO HERE -->` with:
+
+```html
+  <section class="toolbar" aria-label="导航与筛选">
+    <div class="search-row">
+      <label class="search-box" for="search">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input id="search" type="text" placeholder="搜索习惯、症状、安全知识…">
+      </label>
+      <button class="clear-btn" type="button" id="clearBtn">清空筛选</button>
+    </div>
+    <div class="main-tabs" role="tablist">
+      <button class="tab-btn" data-tab="habits"     role="tab">🌿 日常习惯</button>
+      <button class="tab-btn" data-tab="prevention" role="tab">🛡️ 预防疾病</button>
+      <button class="tab-btn" data-tab="safety"     role="tab">⚠️ 安全守则</button>
+      <button class="tab-btn" data-tab="checklist"  role="tab">📋 每日打卡</button>
+    </div>
+    <div class="cat-row" id="catRow"></div>
+  </section>
+
+  <div class="tab-panel" data-panel="habits"     id="panel-habits"><!-- HABITS --></div>
+  <div class="tab-panel" data-panel="prevention" id="panel-prevention"><!-- PREVENTION --></div>
+  <div class="tab-panel" data-panel="safety"     id="panel-safety"><!-- SAFETY --></div>
+  <div class="tab-panel" data-panel="checklist"  id="panel-checklist"><!-- CHECKLIST --></div>
+```
+
+- [ ] **Step 2: Verify in browser**
+
+Refresh. Expected: toolbar with 4 tab buttons and search box visible. No panel content yet.
+
+---
+
+### Task 4: Add 日常习惯 tab content (7 cards)
+
+**Files:**
+- Modify: `children_health_guide.html` — replace `<!-- HABITS -->` inside `#panel-habits`
+
+- [ ] **Step 1: Replace `<!-- HABITS -->` with the 7 cards**
+
+```html
+<div class="cards-grid" id="grid-habits">
+
+  <div class="health-card" data-cat="口腔卫生" data-text="每日刷牙 口腔卫生 含氟牙膏 蛀牙 早晚刷牙">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">🦷 每日刷牙</span>
+          <span class="cat-tag">口腔卫生</span>
+          <span class="freq-tag">每日必做</span>
+        </div>
+        <div class="card-brief">早晚各一次，每次2分钟，使用含氟牙膏</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>每天早起和睡前各刷一次，每次至少2分钟。使用儿童含氟牙膏，用量约豌豆大小。</p>
+        <ul>
+          <li>刷牙顺序：外侧→内侧→咬合面，不遗漏任何角落</li>
+          <li>牙刷每3个月更换一次，刷毛弯曲时提前更换</li>
+          <li>7岁前建议父母帮忙或检查刷牙效果</li>
+        </ul>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>晚间刷牙比早晨更关键——睡前刷牙后不再进食，可减少蛀牙风险约60%。可用牙菌斑显示片定期检查孩子刷牙是否彻底。</div>
+    </div>
+  </div>
+
+  <div class="health-card" data-cat="饮食营养" data-text="均衡饮食 五色蔬果 零食 含糖饮料 营养">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">🍎 均衡饮食</span>
+          <span class="cat-tag">饮食营养</span>
+        </div>
+        <div class="card-brief">每天五色蔬果，控制零食和含糖饮料</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>8岁儿童每天需要均衡摄入五大类食物：谷物、蔬菜、水果、蛋白质（肉蛋豆）、奶制品。</p>
+        <ul>
+          <li>每天至少5种不同颜色的蔬菜水果</li>
+          <li>含糖饮料（果汁、可乐、奶茶）每周不超过1次</li>
+          <li>零食选择水果、坚果、酸奶，避免高盐高糖零食</li>
+          <li>三餐定时，不跳过早餐</li>
+        </ul>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>不要用食物作为奖惩工具。孩子不喜欢某种蔬菜很正常——同一种食物需要尝试8-15次才能接受，坚持提供但不强迫进食。</div>
+    </div>
+  </div>
+
+  <div class="health-card" data-cat="饮食营养" data-text="足量饮水 喝水 白水 补水 水分">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">💧 足量饮水</span>
+          <span class="cat-tag">饮食营养</span>
+          <span class="freq-tag">每日必做</span>
+        </div>
+        <div class="card-brief">每天6-8杯水，首选白开水</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>8岁儿童每天需要约1200-1500ml水分（约6-8杯）。运动后和天气热时需要额外补充。</p>
+        <ul>
+          <li>早起空腹喝一杯温水，有助于肠胃蠕动</li>
+          <li>课间休息时主动喝水，不等渴了才喝</li>
+          <li>尿液颜色淡黄色为佳，深黄色说明需要多喝水</li>
+        </ul>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>给孩子准备专属水杯，标记刻度帮助量化饮水量。可以在水里加薄片柠檬增加趣味，但避免含糖果汁代替白水。</div>
+    </div>
+  </div>
+
+  <div class="health-card" data-cat="运动睡眠" data-text="规律睡眠 睡眠 作息 睡觉 休息 屏幕">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">😴 规律睡眠</span>
+          <span class="cat-tag">运动睡眠</span>
+          <span class="freq-tag">每日必做</span>
+        </div>
+        <div class="card-brief">每天9-11小时，固定作息时间</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>充足睡眠对8岁儿童的大脑发育、免疫力和情绪管理至关重要。建议每晚9-11小时。</p>
+        <ul>
+          <li>固定上床时间（如21:00），周末偏差不超过30分钟</li>
+          <li>睡前1小时关闭所有电子屏幕（手机、平板、电视）</li>
+          <li>睡前例程：洗漱→阅读15分钟→关灯，帮助大脑进入睡眠状态</li>
+          <li>卧室保持安静、凉爽（18-20°C为佳）、遮光</li>
+        </ul>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>蓝光会抑制褪黑素分泌。睡前使用屏幕是影响儿童睡眠质量的最主要因素。建立手机"睡觉"的习惯（与孩子一起把手机放到卧室外），以身作则比单纯禁止更有效。</div>
+    </div>
+  </div>
+
+  <div class="health-card" data-cat="运动睡眠" data-text="每日运动 户外活动 运动 跑跳 体育">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">🏃 每日运动</span>
+          <span class="cat-tag">运动睡眠</span>
+          <span class="freq-tag">每日必做</span>
+        </div>
+        <div class="card-brief">每天60分钟中等强度户外活动</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>世界卫生组织建议5-17岁儿童每天至少60分钟中等至剧烈强度体力活动，以有氧运动为主。</p>
+        <ul>
+          <li>中等强度：快走、骑自行车、游泳、跳绳</li>
+          <li>剧烈强度：跑步、踢足球、打篮球</li>
+          <li>课间10分钟跑跳也计入每日运动量</li>
+          <li>每周至少3次强化肌肉和骨骼的活动（如爬杆、跳跃）</li>
+        </ul>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>户外活动除了身体益处，还能减少近视风险。研究显示每天户外活动2小时可显著降低儿童近视发生率。让孩子参与自己喜欢的运动项目，乐趣是坚持的最大驱动力。</div>
+    </div>
+  </div>
+
+  <div class="health-card" data-cat="个人卫生" data-text="洗手 手部卫生 7步洗手法 细菌 病毒">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">🧼 正确洗手</span>
+          <span class="cat-tag">个人卫生</span>
+          <span class="freq-tag">多次/天</span>
+        </div>
+        <div class="card-brief">7步洗手法，每次20秒以上</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>正确洗手是预防感冒、肠胃炎等传染病最简单有效的方法。必须洗手的关键时刻：</p>
+        <ul>
+          <li>饭前、便后</li>
+          <li>从外面回家后</li>
+          <li>接触宠物、动物后</li>
+          <li>咳嗽、打喷嚏、擤鼻涕后</li>
+          <li>接触垃圾或脏东西后</li>
+        </ul>
+        <p style="margin-top:8px">7步洗手法：内（搓手心）→外（搓手背）→夹（搓指缝）→弓（搓指关节）→大（搓大拇指）→立（搓指尖）→腕（搓手腕）。每步至少3次。</p>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>用肥皂洗手比单纯用水有效10倍以上。可以教孩子唱一首儿歌的时间（约20秒）来保证洗手时长。洗手液和固体皂效果相当，选择孩子喜欢的即可。</div>
+    </div>
+  </div>
+
+  <div class="health-card" data-cat="屏幕时间" data-text="屏幕时间 手机 平板 电视 游戏 近视">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">📱 控制屏幕时间</span>
+          <span class="cat-tag">屏幕时间</span>
+        </div>
+        <div class="card-brief">娱乐屏幕每天不超过2小时</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>过多屏幕时间与儿童近视、睡眠问题、注意力下降直接相关。每天娱乐屏幕时间建议不超过2小时（不含学习用途）。</p>
+        <ul>
+          <li>每使用屏幕40-50分钟，远眺窗外绿色或远处10分钟</li>
+          <li>保持屏幕与眼睛距离：手机40cm，平板50cm，电视3m以上</li>
+          <li>光线充足时使用设备，避免在黑暗中看屏幕</li>
+          <li>不在餐桌和床上使用屏幕</li>
+        </ul>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>与孩子共同制定屏幕使用规则，并签订"家庭协议"比单纯限制更有效。规则要清晰：几点前完成作业才能用设备，每次用多久，什么内容不能看。</div>
+    </div>
+  </div>
+
+  <div class="empty-state">没有匹配的内容，试试其他关键词或切换分类</div>
+</div>
+```
+
+- [ ] **Step 2: Verify in browser**
+
+Refresh. Expect 7 cards visible in grid layout.
+
+---
+
+### Task 5: Add 预防疾病 tab content (6 cards)
+
+**Files:**
+- Modify: `children_health_guide.html` — replace `<!-- PREVENTION -->` inside `#panel-prevention`
+
+- [ ] **Step 1: Replace `<!-- PREVENTION -->` with the 6 cards**
+
+```html
+<div class="cards-grid" id="grid-prevention">
+
+  <div class="health-card" data-cat="增强免疫" data-text="免疫力 抵抗力 睡眠 营养 运动 增强免疫">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">💪 增强免疫力</span>
+          <span class="cat-tag">增强免疫</span>
+        </div>
+        <div class="card-brief">睡眠+营养+运动——免疫力三角</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>儿童免疫系统尚未发育完全，但通过良好生活习惯可以显著提升抵抗力：</p>
+        <ul>
+          <li><strong>充足睡眠：</strong>睡眠期间免疫细胞大量产生，减少睡眠会直接降低免疫力</li>
+          <li><strong>均衡营养：</strong>维生素C（柑橘类）、锌（肉类坚果）、维生素D（阳光+鱼类）是免疫关键营养素</li>
+          <li><strong>规律运动：</strong>每天60分钟户外活动可使感冒风险降低约30%</li>
+          <li><strong>减少压力：</strong>长期焦虑会抑制免疫系统，关注孩子情绪健康</li>
+        </ul>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>不需要额外购买"增强免疫力"保健品——均衡饮食+充足睡眠+规律运动的效果远超任何补充剂。如果孩子频繁生病（每年超过8次），建议咨询儿科医生排查原因。</div>
+    </div>
+  </div>
+
+  <div class="health-card" data-cat="感冒预防" data-text="感冒 预防 传染 病毒 鼻涕 咳嗽 发烧">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">🤧 预防感冒</span>
+          <span class="cat-tag">感冒预防</span>
+        </div>
+        <div class="card-brief">切断传播途径，不共用餐具，及时增减衣物</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>感冒病毒主要通过飞沫和接触传播。预防的核心是切断传播途径：</p>
+        <ul>
+          <li>勤洗手，特别是摸鼻子、眼睛之前</li>
+          <li>不与他人共用水杯、筷子、毛巾</li>
+          <li>咳嗽、打喷嚏用肘部遮挡，不用手捂</li>
+          <li>流感高峰期（冬春季）避免去人群密集、通风差的场所</li>
+          <li>根据天气及时增减衣物，出汗后及时更换湿衣服</li>
+        </ul>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>8岁儿童每年感冒6-8次属于正常范围，是免疫系统建立的必要过程。"吹风会感冒"是误解——感冒是病毒感染，不是着凉。但疲劳和睡眠不足确实会降低抵抗力。</div>
+    </div>
+  </div>
+
+  <div class="health-card" data-cat="感冒预防" data-text="咳嗽礼仪 打喷嚏 飞沫 遮挡 卫生习惯">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">🤲 咳嗽礼仪</span>
+          <span class="cat-tag">感冒预防</span>
+        </div>
+        <div class="card-brief">用肘部遮挡，不对着人咳嗽打喷嚏</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>正确的咳嗽和打喷嚏方式，既保护自己也保护他人：</p>
+        <ul>
+          <li>用肘弯（不是手掌）遮挡口鼻——手掌遮挡后还会触摸物品传播病毒</li>
+          <li>如果来得及，用纸巾遮挡，用后立刻丢入垃圾桶</li>
+          <li>遮挡后立即洗手</li>
+          <li>与生病的人保持1米以上距离</li>
+        </ul>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>可以用"吸血鬼遮挡法"（用肘弯遮住口鼻，像吸血鬼用斗篷遮脸）来教孩子记住正确姿势，形象有趣容易记住。</div>
+    </div>
+  </div>
+
+  <div class="health-card" data-cat="季节注意" data-text="换季 保暖 季节 春秋 温差 添衣">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">🍂 换季保暖</span>
+          <span class="cat-tag">季节注意</span>
+        </div>
+        <div class="card-brief">春秋温差大，早晚注意增减衣物</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>换季是儿童感冒高发期，主要因为早晚温差大，儿童体温调节能力尚弱。</p>
+        <ul>
+          <li><strong>春季：</strong>"春捂"有一定道理——不要过早脱掉厚衣，早晚多备一件</li>
+          <li><strong>夏季：</strong>出汗后及时更换衣物，空调房与室外温差不超过8°C</li>
+          <li><strong>秋季：</strong>早晚温差常超过10°C，出门背包里备薄外套</li>
+          <li><strong>冬季：</strong>重点保暖部位：脖子、腹部、脚，而不是一味穿多</li>
+        </ul>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>判断孩子冷不冷，摸后颈部（不是手）——后颈温暖说明穿衣合适。很多孩子因为穿太多出汗后更容易着凉。</div>
+    </div>
+  </div>
+
+  <div class="health-card" data-cat="季节注意" data-text="疫苗 预防接种 免疫规划 流感疫苗">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">💉 按时接种疫苗</span>
+          <span class="cat-tag">季节注意</span>
+        </div>
+        <div class="card-brief">按国家免疫规划按时接种，保管好接种记录</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>疫苗是预防传染病最有效的手段。8岁需要关注：</p>
+        <ul>
+          <li>检查国家免疫规划疫苗是否全部完成（查阅接种记录本）</li>
+          <li>每年10-11月接种流感疫苗（流感高峰前2周生效）</li>
+          <li>如有漏种，及时到社区卫生服务中心补种</li>
+          <li>接种后留观30分钟，观察是否有过敏反应</li>
+        </ul>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>流感疫苗不是免疫规划疫苗，需要自费，但强烈推荐——儿童是流感高危人群，每年接种是最划算的健康投资之一。接种后若出现发热、红肿，通常1-2天自行消退，属正常反应。</div>
+    </div>
+  </div>
+
+  <div class="health-card" data-cat="生病处理" data-text="发烧 退烧 就医 物理降温 生病 体温">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">🌡️ 发烧处理</span>
+          <span class="cat-tag">生病处理</span>
+          <span class="warn-tag">⚠️ 重要</span>
+        </div>
+        <div class="card-brief">38.5°C以下物理降温，这些情况立即就医</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p><strong>体温分级：</strong></p>
+        <ul>
+          <li>37.5°C以下：正常或低热，多休息多喝水观察</li>
+          <li>37.5-38.5°C：低热，物理降温（温水擦拭额头、腋下）</li>
+          <li>38.5°C以上：可服用退烧药（布洛芬或对乙酰氨基酚，按体重计算剂量）</li>
+        </ul>
+        <p style="margin-top:8px"><strong>立即就医的情况：</strong></p>
+        <ul>
+          <li>体温超过39.5°C，或发烧超过3天不退</li>
+          <li>精神萎靡、嗜睡、难以唤醒</li>
+          <li>伴有皮疹、呕吐、腹痛剧烈</li>
+          <li>呼吸急促、嘴唇发紫</li>
+          <li>颈部僵硬（脑膜炎信号，需立即就医）</li>
+        </ul>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>退烧药的目的是让孩子舒服，不是把体温降到正常值。布洛芬和对乙酰氨基酚不能同时服用，但可以交替使用（间隔4小时）。家中常备体温计、退烧药和口服补液盐。</div>
+    </div>
+  </div>
+
+  <div class="empty-state">没有匹配的内容，试试其他关键词或切换分类</div>
+</div>
+```
+
+- [ ] **Step 2: Verify in browser**
+
+Switch to "预防疾病" tab (after JS is added in Task 8). For now, temporarily add `class="active"` to `#panel-prevention` to check content. Remove after verification.
+
+---
+
+### Task 6: Add 安全守则 tab content (6 cards)
+
+**Files:**
+- Modify: `children_health_guide.html` — replace `<!-- SAFETY -->` inside `#panel-safety`
+
+- [ ] **Step 1: Replace `<!-- SAFETY -->` with the 6 cards**
+
+```html
+<div class="cards-grid" id="grid-safety">
+
+  <div class="health-card" data-cat="居家安全" data-text="用电安全 插座 触电 电器 安全用电">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">⚡ 用电安全</span>
+          <span class="cat-tag">居家安全</span>
+          <span class="warn-tag">⚠️ 危险</span>
+        </div>
+        <div class="card-brief">不湿手触摸插座，不随意拆卸电器</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>触电是儿童居家伤亡的重要原因之一。必须记住的规则：</p>
+        <ul>
+          <li>不用湿手触摸插座、开关、电器</li>
+          <li>不用金属物品（筷子、钥匙）插入插座</li>
+          <li>充电器充完电及时拔掉，不长期插着</li>
+          <li>不自己修理电器，发现电线破损告诉大人</li>
+          <li>雷雨天不在大树下、高处或空旷地带停留</li>
+        </ul>
+        <p style="margin-top:8px"><strong>如果发生触电：</strong>不要直接用手拉触电者，先切断电源或用木棍等绝缘物移开，再拨打120。</p>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>为家中插座安装安全盖（防触电保护罩），特别是低位插座。检查家中电线是否有破损或老化。与孩子一起演练触电急救流程。</div>
+    </div>
+  </div>
+
+  <div class="health-card" data-cat="居家安全" data-text="防火 烫伤 热水 明火 燃气 防烫">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">🔥 防火防烫</span>
+          <span class="cat-tag">居家安全</span>
+          <span class="warn-tag">⚠️ 危险</span>
+        </div>
+        <div class="card-brief">不独自使用热水壶，远离明火和燃气</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>烫伤是儿童最常见的家庭意外伤害之一。预防规则：</p>
+        <ul>
+          <li>不独自使用热水壶、微波炉、烤箱</li>
+          <li>打开锅盖时让蒸汽先散开，避免面部直接对着蒸汽</li>
+          <li>不玩打火机、火柴</li>
+          <li>发现燃气泄漏（臭鸡蛋味）立刻告诉大人，不开灯不按电器</li>
+          <li>记住家庭逃生路线，知道灭火器位置</li>
+        </ul>
+        <p style="margin-top:8px"><strong>烫伤急救（冲脱泡盖送）：</strong>冲凉水15-20分钟→脱衣服→用保鲜膜包覆→送医院。不要涂牙膏、酱油。</p>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>与孩子演练家庭火灾逃生路线，约定集合点。安装烟雾报警器（每层楼一个），定期检查电池。教孩子记住火警电话119。</div>
+    </div>
+  </div>
+
+  <div class="health-card" data-cat="交通安全" data-text="交通安全 过马路 信号灯 骑车 头盔 行人">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">🚦 交通安全</span>
+          <span class="cat-tag">交通安全</span>
+          <span class="warn-tag">⚠️ 危险</span>
+        </div>
+        <div class="card-brief">过马路看信号灯，骑车必须戴头盔</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>道路交通意外是儿童意外死亡的首要原因。行人安全规则：</p>
+        <ul>
+          <li>过马路走斑马线，等绿灯，左右看清无车再走</li>
+          <li>过马路时不低头看手机</li>
+          <li>走人行道，不在马路上玩耍</li>
+          <li>骑自行车/电动车必须戴头盔</li>
+          <li>乘车系好安全带，不把手头伸出车窗</li>
+          <li>夜间骑车或步行穿亮色或反光衣物</li>
+        </ul>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>头盔能减少自行车事故头部受伤风险约70%。给孩子选择符合国标的头盔，尺寸合适（两指宽度放入额头和头盔边缘之间）。家长骑车戴头盔是最好的示范。</div>
+    </div>
+  </div>
+
+  <div class="health-card" data-cat="水上安全" data-text="游泳 溺水 水上安全 泳池 河边 湖边">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">🏊 水上安全</span>
+          <span class="cat-tag">水上安全</span>
+          <span class="warn-tag">⚠️ 危险</span>
+        </div>
+        <div class="card-brief">不独自游泳，无成人监护不靠近水边</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>溺水是1-14岁儿童意外死亡的第一原因。无论会不会游泳，都必须遵守：</p>
+        <ul>
+          <li>不独自游泳，不去无救生员的野外水域</li>
+          <li>在水边玩耍必须有成年人在旁监护</li>
+          <li>不向水中推人，不在泳池边奔跑</li>
+          <li>游泳前做热身运动，饭后1小时再游泳</li>
+          <li>看到有人溺水：大声呼救，拨打120，扔救生圈/绳子，不要自己跳下去救</li>
+        </ul>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>学会游泳≠水上安全——大多数溺水儿童会游泳。关键是"在没有监护的情况下不靠近水"的意识。建议7岁以上儿童系统学习游泳课程，同时学习基本水上自救技能。</div>
+    </div>
+  </div>
+
+  <div class="health-card" data-cat="网络安全" data-text="网络安全 陌生人 个人信息 隐私 网络 手机">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">🔐 网络安全</span>
+          <span class="cat-tag">网络安全</span>
+        </div>
+        <div class="card-brief">不与陌生人分享个人信息，遇到问题告诉父母</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>8岁儿童已开始接触网络，需要建立基本的网络安全意识：</p>
+        <ul>
+          <li>不告诉网上陌生人自己的真实姓名、学校、地址、电话</li>
+          <li>不接受陌生人发来的文件或链接</li>
+          <li>如果网上有人让你保守秘密，立刻告诉父母</li>
+          <li>不在网上分享自己或家人的照片给陌生人</li>
+          <li>遇到让你不舒服的内容或对话，关掉页面并告诉大人</li>
+        </ul>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>与孩子保持开放的沟通比监控更重要——让孩子知道无论遇到什么都可以告诉你，不会被责怪。可以使用家长控制功能限制内容，但不要秘密监控，会破坏信任。</div>
+    </div>
+  </div>
+
+  <div class="health-card" data-cat="居家安全" data-text="紧急联系 急救电话 地址 求助 110 120 119">
+    <div class="card-head" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title-row">
+          <span class="card-title">📞 紧急联系</span>
+          <span class="cat-tag">居家安全</span>
+          <span class="freq-tag">必须记住</span>
+        </div>
+        <div class="card-brief">记住三个紧急号码和家庭地址</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="card-body">
+      <div class="card-detail">
+        <p>每个孩子必须记住的紧急信息：</p>
+        <ul>
+          <li><strong>110</strong> — 匪警（遇到危险、有人威胁）</li>
+          <li><strong>120</strong> — 急救（有人受伤或突然生病）</li>
+          <li><strong>119</strong> — 火警（发现火灾或燃气泄漏）</li>
+          <li>家庭住址（省/市/区/街道/门牌号）</li>
+          <li>父母手机号码（至少记住一个）</li>
+        </ul>
+        <p style="margin-top:8px">打急救电话时要说清楚：在哪里（地址）、发生了什么事、伤者状况，然后等待指示。</p>
+      </div>
+      <div class="parent-tip">📌 <strong>父母贴士：</strong>把紧急联系方式写在孩子书包里，同时让孩子背诵。定期演练报警流程，问孩子"如果爸爸妈妈昏倒了你怎么办"，检验孩子是否真的掌握。</div>
+    </div>
+  </div>
+
+  <div class="empty-state">没有匹配的内容，试试其他关键词或切换分类</div>
+</div>
+```
+
+- [ ] **Step 2: Verify in browser**
+
+Temporarily add `class="active"` to `#panel-safety` to check content. Remove after verification.
+
+---
+
+### Task 7: Add 每日打卡 tab content
+
+**Files:**
+- Modify: `children_health_guide.html` — replace `<!-- CHECKLIST -->` inside `#panel-checklist`
+
+- [ ] **Step 1: Replace `<!-- CHECKLIST -->` with checklist HTML**
+
+```html
+<div class="checklist-wrap">
+
+  <div class="progress-bar-wrap">
+    <div class="progress-label" id="progressText">今日完成 0 / 15 项</div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <div class="check-segment">
+    <div class="segment-title">🌅 早晨</div>
+    <label class="check-item"><input type="checkbox" data-key="m1"><span>喝一杯温水</span></label>
+    <label class="check-item"><input type="checkbox" data-key="m2"><span>刷牙2分钟（含氟牙膏）</span></label>
+    <label class="check-item"><input type="checkbox" data-key="m3"><span>洗脸</span></label>
+    <label class="check-item"><input type="checkbox" data-key="m4"><span>吃早饭（不跳过早餐）</span></label>
+    <label class="check-item"><input type="checkbox" data-key="m5"><span>检查书包和作业</span></label>
+    <label class="check-item"><input type="checkbox" data-key="m6"><span>根据天气增减衣物</span></label>
+  </div>
+
+  <div class="check-segment">
+    <div class="segment-title">☀️ 白天</div>
+    <label class="check-item"><input type="checkbox" data-key="d1"><span>饭前洗手（7步洗手法）</span></label>
+    <label class="check-item"><input type="checkbox" data-key="d2"><span>课间去户外活动10分钟</span></label>
+    <label class="check-item"><input type="checkbox" data-key="d3"><span>喝够6杯水</span></label>
+    <label class="check-item"><input type="checkbox" data-key="d4"><span>午休或闭目休息20分钟</span></label>
+  </div>
+
+  <div class="check-segment">
+    <div class="segment-title">🌙 晚间</div>
+    <label class="check-item"><input type="checkbox" data-key="e1"><span>完成60分钟运动（户外或室内）</span></label>
+    <label class="check-item"><input type="checkbox" data-key="e2"><span>洗澡或洗手洗脸</span></label>
+    <label class="check-item"><input type="checkbox" data-key="e3"><span>睡前刷牙（晚间最重要）</span></label>
+    <label class="check-item"><input type="checkbox" data-key="e4"><span>阅读15分钟（纸质书）</span></label>
+    <label class="check-item"><input type="checkbox" data-key="e5"><span>21:00前上床，关灯睡觉</span></label>
+  </div>
+
+</div>
+```
+
+- [ ] **Step 2: Verify in browser**
+
+Temporarily add `class="active"` to `#panel-checklist` to see checklist. Remove after verification.
+
+---
+
+### Task 8: Add JavaScript (all interactivity)
+
+**Files:**
+- Modify: `children_health_guide.html` — replace `// JS GOES HERE` inside `<script>` tag
+
+- [ ] **Step 1: Replace `// JS GOES HERE` with the complete JavaScript**
+
+```javascript
+// Tab category definitions
+const TAB_CATS = {
+  habits:     ['全部','口腔卫生','饮食营养','运动睡眠','个人卫生','屏幕时间'],
+  prevention: ['全部','增强免疫','感冒预防','季节注意','生病处理'],
+  safety:     ['全部','居家安全','交通安全','水上安全','网络安全'],
+  checklist:  []
+};
+
+const state = { tab: 'habits', cats: {}, query: '' };
+
+function qs(sel, ctx) { return (ctx || document).querySelector(sel); }
+function qsa(sel, ctx) { return [...(ctx || document).querySelectorAll(sel)]; }
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── Tab switching ──────────────────────────────────────────────
+function switchTab(tab) {
+  state.tab = tab;
+  if (!state.cats[tab]) state.cats[tab] = '全部';
+  qsa('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  qsa('.tab-panel').forEach(p => p.classList.toggle('active', p.dataset.panel === tab));
+  renderCatRow();
+  applyFilters();
+}
+
+function renderCatRow() {
+  const cats = TAB_CATS[state.tab] || [];
+  const row = qs('#catRow');
+  if (!cats.length) { row.innerHTML = ''; return; }
+  const active = state.cats[state.tab] || '全部';
+  row.innerHTML = cats.map(c =>
+    `<button class="cat-btn${active === c ? ' active' : ''}" onclick="switchCat('${c}')">${c}</button>`
+  ).join('');
+}
+
+function switchCat(cat) {
+  state.cats[state.tab] = cat;
+  renderCatRow();
+  applyFilters();
+}
+
+// ── Filtering + search ─────────────────────────────────────────
+function applyFilters() {
+  const panel = qs(`.tab-panel[data-panel="${state.tab}"]`);
+  if (!panel) return;
+  const cat = state.cats[state.tab] || '全部';
+  const q = state.query.toLowerCase();
+
+  qsa('.health-card', panel).forEach(card => {
+    const catOk = cat === '全部' || card.dataset.cat === cat;
+    const text = (card.dataset.text || '') + ' ' + card.textContent;
+    const qOk = !q || text.toLowerCase().includes(q);
+    card.toggleAttribute('data-hidden', !(catOk && qOk));
+    if (q && catOk && qOk) {
+      highlightCard(card, q);
+    } else {
+      clearHighlights(card);
+    }
+  });
+
+  const empty = qs('.empty-state', panel);
+  if (empty) {
+    const visible = qsa('.health-card:not([data-hidden])', panel).length;
+    empty.style.display = visible ? 'none' : 'block';
+  }
+}
+
+function highlightCard(card, q) {
+  clearHighlights(card);
+  [qs('.card-title', card), qs('.card-brief', card)].forEach(el => {
+    if (!el) return;
+    const t = el.textContent;
+    const i = t.toLowerCase().indexOf(q);
+    if (i >= 0) {
+      el.innerHTML = escHtml(t.slice(0,i)) +
+        '<mark>' + escHtml(t.slice(i, i+q.length)) + '</mark>' +
+        escHtml(t.slice(i+q.length));
+    }
+  });
+}
+
+function clearHighlights(card) {
+  card.querySelectorAll('mark').forEach(m => m.replaceWith(document.createTextNode(m.textContent)));
+}
+
+// ── Card expand/collapse ───────────────────────────────────────
+function toggleCard(head) {
+  head.closest('.health-card').classList.toggle('open');
+}
+
+// ── Search ─────────────────────────────────────────────────────
+qs('#search').addEventListener('input', function() {
+  state.query = this.value.trim();
+  applyFilters();
+});
+
+qs('#clearBtn').addEventListener('click', function() {
+  state.query = '';
+  state.cats = {};
+  qs('#search').value = '';
+  renderCatRow();
+  applyFilters();
+});
+
+// Tab button click delegation
+qsa('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+
+// ── Checklist with localStorage daily reset ─────────────────────
+const STORE_KEY = 'children_health_checklist';
+
+function todayStr() {
+  return new Date().toISOString().slice(0,10);
+}
+
+function loadItems() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return {};
+    const d = JSON.parse(raw);
+    return d.date === todayStr() ? (d.items || {}) : {};
+  } catch { return {}; }
+}
+
+function saveItems(items) {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify({ date: todayStr(), items }));
+  } catch {}
+}
+
+function updateProgress() {
+  const all = qsa('[data-key]');
+  const done = all.filter(cb => cb.checked).length;
+  const pct = all.length ? (done / all.length * 100) : 0;
+  qs('#progressText').textContent = `今日完成 ${done} / ${all.length} 项`;
+  qs('#progressFill').style.width = pct + '%';
+}
+
+function initChecklist() {
+  const items = loadItems();
+  qsa('[data-key]').forEach(cb => {
+    cb.checked = !!items[cb.dataset.key];
+    cb.closest('.check-item').classList.toggle('done', cb.checked);
+    cb.addEventListener('change', function() {
+      const current = loadItems();
+      current[this.dataset.key] = this.checked;
+      saveItems(current);
+      this.closest('.check-item').classList.toggle('done', this.checked);
+      updateProgress();
+    });
+  });
+  updateProgress();
+}
+
+// ── Init ───────────────────────────────────────────────────────
+switchTab('habits');
+initChecklist();
+```
+
+- [ ] **Step 2: Verify tab switching works**
+
+Refresh page. Click each of the 4 tabs. Expected: content switches correctly, category filter row updates for each tab.
+
+- [ ] **Step 3: Verify search works**
+
+Type "刷牙" in the search box. Expected: only cards containing "刷牙" remain visible, with the term highlighted in yellow.
+
+- [ ] **Step 4: Verify category filter works**
+
+On 日常习惯 tab, click "饮食营养". Expected: only 均衡饮食 and 足量饮水 cards visible.
+
+- [ ] **Step 5: Verify card expand works**
+
+Click any card. Expected: card body expands showing detail and parent tip. Click again to collapse.
+
+- [ ] **Step 6: Verify checklist and localStorage**
+
+Switch to 每日打卡 tab. Check several items. Refresh the page. Expected: checked items remain checked.
+
+Open DevTools → Application → Local Storage → verify `children_health_checklist` entry with today's date.
+
+---
+
+### Task 9: Final commit
+
+**Files:**
+- `children_health_guide.html` (completed)
+- `docs/superpowers/specs/2026-05-09-children-health-guide-design.md`
+- `docs/superpowers/plans/2026-05-09-children-health-guide.md`
+
+- [ ] **Step 1: Final visual review**
+
+Open the page and check:
+- [ ] All 4 tabs switch correctly
+- [ ] Search filters cards and highlights matches
+- [ ] Category filter works per tab
+- [ ] All cards expand to show detail + parent tip
+- [ ] Checklist persists across refresh
+- [ ] Page looks correct on narrow window (mobile responsive)
+
+- [ ] **Step 2: Commit**
+
+```bash
+git add children_health_guide.html docs/superpowers/specs/2026-05-09-children-health-guide-design.md docs/superpowers/plans/2026-05-09-children-health-guide.md
+git commit -m "feat: 添加8岁男孩日常保健指南HTML页面"
+```
