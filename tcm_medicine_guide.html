@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>常用中成药使用指南</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --guide-bg:var(--color-background-primary,#fff);
+  --guide-soft:#f6f8f6;
+  --guide-text:var(--color-text-primary,#17201b);
+  --guide-muted:var(--color-text-secondary,#68736d);
+  --guide-faint:var(--color-text-tertiary,#8b9690);
+  --guide-border:var(--color-border-tertiary,#dfe6e1);
+  --guide-border-strong:var(--color-border-secondary,#bdc9c1);
+  --guide-green:#0f6e56;
+  --guide-green-bg:#e7f5ef;
+  --guide-amber:#89520b;
+  --guide-amber-bg:#fff3dc;
+  --guide-red:#a32d2d;
+  --guide-red-bg:#fff0ed;
+  --guide-blue:#185fa5;
+  --guide-blue-bg:#e8f2fb;
+}
+body{font-family:var(--font-sans,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif);color:var(--guide-text);background:var(--guide-bg);letter-spacing:0}
+button,input{font:inherit}
+button{border:0;background:none;color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 16px 36px}
+.top{display:grid;gap:16px;margin-bottom:18px}
+.eyebrow{font-size:12px;color:var(--guide-muted);font-weight:600}
+h1{font-size:28px;line-height:1.18;font-weight:700;color:var(--guide-text);max-width:720px}
+.sub{font-size:14px;line-height:1.65;color:var(--guide-muted);max-width:860px}
+.decision-board{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:12px;padding:14px;border:1px solid var(--guide-border);border-radius:8px;background:var(--guide-soft)}
+.decision-step{min-width:0;padding:3px 8px 3px 12px;border-left:3px solid var(--guide-border-strong)}
+.decision-step.is-danger{border-left-color:var(--guide-red)}
+.decision-step.is-match{border-left-color:var(--guide-green)}
+.decision-step.is-stop{border-left-color:var(--guide-amber)}
+.step-title{font-size:13px;font-weight:700;margin-bottom:5px;color:var(--guide-text)}
+.step-copy{font-size:13px;line-height:1.55;color:var(--guide-muted)}
+.alert-band{border:1px solid #f2b8ab;background:var(--guide-red-bg);border-radius:8px;padding:12px 14px;display:grid;gap:8px}
+.alert-title{font-size:14px;font-weight:700;color:var(--guide-red)}
+.red-flags{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 16px;list-style:none}
+.red-flags li{font-size:13px;line-height:1.5;color:#6f2424;position:relative;padding-left:14px}
+.red-flags li::before{content:"";width:5px;height:5px;border-radius:50%;background:#cf5b45;position:absolute;left:0;top:.65em}
+.quick-wrap{display:grid;gap:8px;margin-top:2px}
+.block-title{font-size:13px;font-weight:700;color:var(--guide-text)}
+.quick-grid{display:flex;flex-wrap:wrap;gap:8px}
+.quick-btn{display:inline-flex;align-items:center;min-height:34px;padding:6px 11px;border:1px solid var(--guide-border);border-radius:999px;background:var(--guide-bg);font-size:13px;line-height:1;cursor:pointer;color:var(--guide-text);transition:border-color .15s,background-color .15s,color .15s}
+.quick-btn:hover{border-color:var(--guide-border-strong);background:#f7faf8}
+.quick-btn.active{border-color:var(--guide-green);background:var(--guide-green-bg);color:var(--guide-green);font-weight:700}
+.toolbar{position:sticky;top:0;z-index:3;background:var(--guide-bg);background:color-mix(in srgb,var(--guide-bg) 92%,transparent);backdrop-filter:blur(8px);padding:12px 0 10px;border-bottom:1px solid var(--guide-border);margin-bottom:14px}
+.search-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;margin-bottom:10px}
+.search-box{position:relative}
+#search{width:100%;min-height:42px;font-size:14px;padding:9px 12px 9px 38px;border:1px solid var(--guide-border-strong);border-radius:8px;background:var(--guide-bg);color:var(--guide-text)}
+#search:focus{outline:2px solid rgba(15,110,86,.22);outline:2px solid color-mix(in srgb,var(--guide-green) 26%,transparent);border-color:var(--guide-green)}
+.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--guide-faint);line-height:1}
+.clear-btn{height:42px;padding:0 14px;border:1px solid var(--guide-border);border-radius:8px;background:var(--guide-bg);font-size:13px;color:var(--guide-muted);cursor:pointer}
+.clear-btn:hover{border-color:var(--guide-border-strong);color:var(--guide-text)}
+.cats{display:flex;flex-wrap:wrap;gap:7px}
+.cat-btn{display:inline-flex;align-items:center;gap:6px;min-height:32px;font-size:13px;padding:6px 11px;border:1px solid var(--guide-border);border-radius:999px;background:transparent;color:var(--guide-muted);cursor:pointer;transition:border-color .15s,background-color .15s,color .15s}
+.cat-btn:hover{border-color:var(--guide-border-strong);color:var(--guide-text)}
+.cat-btn.active{background:var(--guide-text);color:var(--guide-bg);border-color:var(--guide-text);font-weight:700}
+.cat-count{font-size:11px;opacity:.75}
+.results-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:0 0 10px}
+.count{font-size:13px;color:var(--guide-muted);line-height:1.5}
+.legend{display:flex;flex-wrap:wrap;gap:8px;color:var(--guide-muted);font-size:12px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.dot.use{background:var(--guide-green)}
+.dot.stop{background:var(--guide-amber)}
+.dot.warn{background:var(--guide-red)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(292px,1fr));gap:12px}
+.medicine-card{min-width:0;background:var(--guide-bg);border:1px solid var(--guide-border);border-radius:8px;padding:14px;transition:border-color .15s,box-shadow .15s;cursor:pointer}
+.medicine-card:hover{border-color:var(--guide-border-strong)}
+.medicine-card.open{border-color:var(--guide-text);box-shadow:0 8px 24px rgba(24,34,28,.07)}
+.card-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start}
+.name-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.card-name{font-size:16px;font-weight:700;color:var(--guide-text);line-height:1.35}
+.cat-tag,.note-tag{font-size:11px;padding:3px 8px;border-radius:999px;font-weight:700;line-height:1.2;flex-shrink:0}
+.note-tag{background:#f2f3f1;color:#59635d}
+.card-brief{font-size:13px;color:var(--guide-muted);line-height:1.45}
+.open-state{display:inline-flex;align-items:center;gap:5px;color:var(--guide-muted);font-size:12px;white-space:nowrap;margin-top:2px}
+.chevron{display:inline-block;font-size:15px;line-height:1;transition:transform .2s}
+.medicine-card.open .chevron{transform:rotate(180deg)}
+.summary-line{display:grid;gap:6px;margin-top:12px}
+.summary-pill{display:grid;grid-template-columns:58px minmax(0,1fr);gap:8px;align-items:start;font-size:13px;line-height:1.45;color:var(--guide-muted)}
+.summary-pill strong{font-size:12px;color:var(--guide-text)}
+.card-body{display:none;margin-top:13px;border-top:1px solid var(--guide-border);padding-top:13px}
+.medicine-card.open .card-body{display:grid;gap:12px}
+.section{display:grid;gap:7px}
+.section-title{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--guide-text)}
+.section-title::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--guide-border-strong);flex:0 0 auto}
+.section-title.use::before{background:var(--guide-green)}
+.section-title.stop::before{background:var(--guide-amber)}
+.section-title.warn::before{background:var(--guide-red)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12px;padding:5px 9px;border-radius:999px;line-height:1.35}
+.tag.use{background:var(--guide-green-bg);color:#0b5544}
+.tag.stop{background:var(--guide-amber-bg);color:#6f4208}
+.warn-list{display:grid;gap:6px;list-style:none}
+.warn-list li{font-size:13px;color:#75302a;background:var(--guide-red-bg);border:1px solid #ffd5cd;border-radius:8px;padding:8px 10px;line-height:1.5}
+.empty{grid-column:1/-1;text-align:center;color:var(--guide-muted);font-size:14px;padding:46px 0;border:1px dashed var(--guide-border);border-radius:8px;background:#fafbf9}
+.rules{margin-top:18px;display:grid;gap:9px;padding:14px;border:1px solid var(--guide-border);border-radius:8px;background:var(--guide-soft)}
+.rules-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px;list-style:none}
+.rules-list li{font-size:13px;line-height:1.55;color:var(--guide-muted);position:relative;padding-left:14px}
+.rules-list li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--guide-green);position:absolute;left:0;top:.7em}
+.source-note{margin-top:14px;font-size:12px;line-height:1.6;color:var(--guide-faint)}
+.source-note a{color:var(--guide-muted);text-decoration:underline;text-underline-offset:2px}
+@media (max-width:820px){
+  .wrap{padding:18px 12px 30px}
+  h1{font-size:24px}
+  .decision-board{grid-template-columns:1fr}
+  .red-flags,.rules-list{grid-template-columns:1fr}
+  .toolbar{position:static}
+  .results-head{align-items:flex-start;flex-direction:column}
+}
+@media (max-width:560px){
+  h1{font-size:22px}
+  .search-row{grid-template-columns:1fr}
+  .clear-btn{width:100%}
+  .grid{grid-template-columns:1fr}
+  .summary-pill{grid-template-columns:50px minmax(0,1fr)}
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">家庭初筛用药参考</div>
+      <h1>常用中成药：什么时候用，什么时候停</h1>
+      <p class="sub">先排除急症，再看症状是否匹配。中成药不是保健品，也不负责“预防一下”：症状消失就停，不匹配就别硬吃，特殊人群先问医生或药师。</p>
+    </div>
+
+    <section class="decision-board" aria-label="用药判断步骤">
+      <div class="decision-step is-danger">
+        <div class="step-title">1. 先看能不能在家处理</div>
+        <p class="step-copy">胸痛、呼吸困难、高热不退、血便脱水、意识异常等先就医，不要用家庭常备药拖时间。</p>
+      </div>
+      <div class="decision-step is-match">
+        <div class="step-title">2. 再看症状是否对上</div>
+        <p class="step-copy">怕冷清涕、发热咽痛、咳黄痰、食积胃胀、虚弱乏力是不同方向，对错药比不用更麻烦。</p>
+      </div>
+      <div class="decision-step is-stop">
+        <div class="step-title">3. 设好停止线</div>
+        <p class="step-copy">症状消失即停；用药 2-3 天无改善、加重或出现过敏/明显不适，停药并就医。</p>
+      </div>
+    </section>
+
+    <section class="alert-band" aria-label="先就医的危险信号">
+      <div class="alert-title">这些情况先去医院或拨打 120</div>
+      <ul class="red-flags">
+        <li>胸痛胸闷伴冷汗、气短、恶心，或含服急救药 15 分钟仍不缓解</li>
+        <li>体温超过 38.5°C，或发热 3 天仍不退，或精神很差</li>
+        <li>咳血、喘憋、嘴唇发紫，咳嗽越来越重</li>
+        <li>腹泻伴血便、明显脱水、持续剧烈腹痛或高热</li>
+        <li>突发口眼歪斜、说话含糊、一侧肢体无力</li>
+        <li>孕妇、婴幼儿、老人或慢性病患者症状明显时</li>
+      </ul>
+    </section>
+
+    <section class="quick-wrap" aria-label="按症状快速查找">
+      <div class="block-title">按症状快速找</div>
+      <div class="quick-grid" id="quickGrid"></div>
+    </section>
+  </header>
+
+  <section class="toolbar" aria-label="筛选药物">
+    <div class="search-row">
+      <label class="search-box" for="search">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input id="search" type="text" placeholder="搜索药名或症状，如：发热 咽痛、胃胀、月经量少" oninput="clearQuick();render()">
+      </label>
+      <button class="clear-btn" type="button" onclick="resetFilters()">清空筛选</button>
+    </div>
+    <div class="cats" id="cats"></div>
+  </section>
+
+  <div class="results-head">
+    <div id="count" class="count"></div>
+    <div class="legend" aria-label="卡片颜色说明">
+      <span><i class="dot use"></i>适合用</span>
+      <span><i class="dot stop"></i>停药线</span>
+      <span><i class="dot warn"></i>禁忌警示</span>
+    </div>
+  </div>
+  <div class="grid" id="grid"></div>
+
+  <section class="rules" aria-label="通用用药原则">
+    <div class="block-title">通用原则</div>
+    <ul class="rules-list">
+      <li>感冒发烧期间，补益类药物先暂停，包括六味地黄丸、金匮肾气丸、补中益气丸、参苓白术丸、乌鸡白凤丸等。</li>
+      <li>不要把多种感冒药、退烧止痛药叠加吃；含对乙酰氨基酚的复方药尤其要避免重复。</li>
+      <li>孕妇、哺乳期、儿童、老人，以及肝肾病、心脏病、糖尿病、高血压患者，用药前先问医生或药师。</li>
+      <li>皮疹、瘙痒、胸闷、呼吸困难、严重腹泻/呕吐、出血倾向，都是停药并就医的信号。</li>
+    </ul>
+  </section>
+
+  <p class="source-note">资料口径：参考药品说明书、国家药监局说明书修订公告和药监科普。不同厂家、剂型和个人病情可能不同，本页不替代医生诊断，实际用药以手头说明书和医师/药师建议为准。</p>
+</div>
+
+<script>
+const CATS = [
+  {id:'all',label:'全部'},
+  {id:'cold',label:'感冒'},
+  {id:'cough',label:'咳嗽'},
+  {id:'digest',label:'消化'},
+  {id:'heat',label:'清热'},
+  {id:'tonic',label:'补益'},
+  {id:'women',label:'妇科'},
+  {id:'heart',label:'心脑血管'},
+];
+
+const CAT_STYLE = {
+  cold:   {bg:'#E8F2FB',color:'#185FA5'},
+  cough:  {bg:'#E7F5EF',color:'#0F6E56'},
+  digest: {bg:'#FFF3DC',color:'#89520B'},
+  heat:   {bg:'#FFF0ED',color:'#A32D2D'},
+  tonic:  {bg:'#F0EEFF',color:'#3C3489'},
+  women:  {bg:'#FBEAF0',color:'#72243E'},
+  heart:  {bg:'#FAECE7',color:'#993C1D'},
+};
+
+const QUICK_SYMPTOMS = [
+  {id:'fever_sore',label:'发热咽痛',cat:'cold',query:'发热 咽痛'},
+  {id:'cold_clear',label:'怕冷清涕',cat:'cold',query:'怕冷 清涕'},
+  {id:'stomach_cold',label:'恶心腹泻',cat:'cold',query:'恶心 腹泻'},
+  {id:'yellow_cough',label:'咳嗽黄痰',cat:'cough',query:'咳嗽 黄痰'},
+  {id:'dry_cough',label:'干咳咽干',cat:'cough',query:'干咳 咽干'},
+  {id:'food_stasis',label:'吃多胃胀',cat:'digest',query:'暴饮暴食 胃胀'},
+  {id:'acute_diarrhea',label:'急性腹泻',cat:'digest',query:'急性 腹泻'},
+  {id:'heat_constipation',label:'上火便秘',cat:'heat',query:'上火 便秘'},
+  {id:'deficiency',label:'乏力虚弱',cat:'tonic',query:'乏力 气虚'},
+  {id:'period',label:'月经不调',cat:'women',query:'月经 不调'},
+  {id:'chest',label:'胸痛胸闷',cat:'heart',query:'胸痛 胸闷'},
+];
+
+const MEDICINES = [
+{cat:'cold',name:'感冒灵颗粒',brief:'普通感冒症状缓解，不是“风寒首选”',
+ use:['感冒引起头痛、发热、鼻塞、流涕','咽痛不重、全身酸痛，需要短期缓解','已确认没有严重高热、喘憋等危险信号'],
+ stop:['症状消退即停，一般不连续超过3天自行使用','发热超过38.5°C或3天无改善，停药就医','出现皮疹、嗜睡明显、心慌或胃部不适，停药'],
+ warn:['常含对乙酰氨基酚、马来酸氯苯那敏等，别和退烧止痛药或其他复方感冒药叠加','服后可能困倦，驾驶和高空/机械操作要谨慎','肝病、饮酒较多、孕妇、儿童、老人先问医生或药师'],
+ search:'普通感冒 头痛 发热 鼻塞 流涕 咽痛 对乙酰氨基酚 氯苯那敏'},
+
+{cat:'cold',name:'连花清瘟胶囊',brief:'风热/热毒感冒：发热、咽痛、痰黄更匹配',
+ use:['发热或高热，伴咽干咽痛、肌肉酸痛','鼻涕黄、痰黄，口渴，舌苔偏黄','流感样症状且表现为热象时，可按说明书短期使用'],
+ stop:['体温恢复、咽痛明显减轻后即可停，不作长期调理','服药3天症状无缓解或体温超过38.5°C，应就医','由热象转为怕冷、清涕、腹泻时停用并重新判断'],
+ warn:['风寒感冒不适用：明显怕冷、清鼻涕、咽痛不明显者别硬用','脾虚便溏、孕妇、哺乳期、儿童、老人及慢性病患者应在医生指导下使用','服药期间不宜同时服用滋补性中药'],
+ search:'流感 风热 热毒 发热 高热 咽痛 痰黄 口渴 肌肉酸痛'},
+
+{cat:'cold',name:'板蓝根颗粒',brief:'热象轻症的咽喉不适，别当日常预防药',
+ use:['咽喉轻微肿痛、口干，伴轻度发热','流感或感冒初起，表现偏热而不偏寒','短期缓解咽喉热痛，不用于“没病先吃”'],
+ stop:['咽喉不适消失即停','连续2-3天无改善，或发热加重，应就医','出现腹泻、胃痛、畏寒明显时停用'],
+ warn:['脾胃虚寒、容易腹泻者慎用','不能替代疫苗、休息、补液或医生治疗','孕妇、儿童和慢性病患者先问医生或药师'],
+ search:'板蓝根 咽喉 咽痛 口干 轻度发热 热象 预防'},
+
+{cat:'cold',name:'藿香正气水',brief:'暑湿或胃肠型感冒：恶心、呕吐、腹泻',
+ use:['夏季暑湿，头重、胸闷、没胃口','受凉或饮食不洁后恶心、呕吐、腹泻','感冒同时伴脘腹胀痛、胃肠不适'],
+ stop:['恶心、腹泻、胸闷缓解后即停，一般短期使用','吐泻严重、脱水、血便或发热明显，应就医','口干明显、手足心热、便秘等阴虚火旺表现时停用'],
+ warn:['藿香正气水通常含酒精，服后不要驾车或操作机械','不要与头孢类、甲硝唑、替硝唑等易发生双硫仑样反应的药物同用','孕妇、儿童、酒精过敏者，优先咨询医生并考虑无酒精剂型'],
+ search:'藿香正气 暑湿 胃肠型感冒 恶心 呕吐 腹泻 头重 胸闷 酒精 头孢'},
+
+{cat:'cough',name:'止咳橘红丸',brief:'痰多、痰黏、痰黄的咳嗽',
+ use:['咳嗽痰多，痰黄或白黏，不易咳出','胸闷、气喘，咽喉有痰堵感','上呼吸道感染后咳嗽，表现为痰热或痰湿偏重'],
+ stop:['咳嗽和痰量明显减少后再用1-2天即可停','服药5-7天无改善，或咳嗽加重，应就医','出现腹泻、胃部不适、皮疹时停用'],
+ warn:['寒性咳嗽不匹配：痰清稀、怕冷、流清涕者慎用','干咳无痰、咳血、喘憋者不要自行拖延','儿童、孕妇和慢性肺病患者先问医生'],
+ search:'止咳橘红 痰多 痰黄 痰黏 胸闷 气喘 咳嗽'},
+
+{cat:'cough',name:'急支糖浆',brief:'急性支气管炎样咳嗽：咳嗽急、痰黄',
+ use:['急性咳嗽，痰多色黄或黏稠','咽喉红肿疼痛伴咳嗽','发热后咳嗽持续，热象较明显'],
+ stop:['急性期症状控制后停用，不作长期止咳保养','用药3天无改善，或5-7天仍明显咳嗽，应就医','出现皮疹、过敏、胃肠不适时停用'],
+ warn:['糖尿病患者注意含糖剂型，选药前先问药师','孕妇、儿童、老人慎用或遵医嘱','咳血、喘憋、胸痛、反复高热时先就医'],
+ search:'急支糖浆 急性咳嗽 黄痰 支气管炎 咽喉红肿 发热'},
+
+{cat:'cough',name:'蛇胆川贝液',brief:'热咳、痰黏或咽干的咳嗽',
+ use:['干咳或痰少黏稠，咽干口燥','咳声较高，痰不易咳出','秋冬燥咳或热咳，症状不重时短期使用'],
+ stop:['咳嗽明显减轻、咽干改善后停用','痰量变多、痰清稀、怕冷时停用并重新判断','用药3-5天无改善，应就医'],
+ warn:['寒咳不适用：痰清稀、怕冷、鼻涕清者慎用','脾胃虚寒、容易腹泻者慎用','孕妇、儿童和慢性肺病患者先问医生'],
+ search:'蛇胆川贝 热咳 燥咳 干咳 咽干 痰少 痰黏'},
+
+{cat:'digest',name:'参苓白术丸',brief:'脾虚便溏、食欲差，偏调理不是急救药',
+ use:['长期大便溏稀、容易腹泻，伴食欲差','饭后腹胀、消化吸收差，乏力倦怠','病后体虚、脾胃虚弱，需在辨证明确后调理'],
+ stop:['大便成形、食欲恢复后逐步减量停药','服药2-4周无明显改善，应重新辨证或就医','出现口腔溃疡、便秘、上火或胃胀加重时停用'],
+ warn:['急性腹泻、湿热腹泻不适用：大便黏臭、肛门灼热、发热者先就医','感冒发烧期间暂停','糖尿病、儿童、孕妇、老人应先问医生或药师'],
+ search:'参苓白术 脾虚 腹泻 便溏 食欲不振 饭后腹胀 乏力'},
+
+{cat:'digest',name:'香砂养胃丸',brief:'胃寒胃痛：喜暖、受凉后加重',
+ use:['胃痛喜温喜按，喝热水或热敷后缓解','胃部受凉后胀痛、恶心、嗳气','慢性胃炎样不适，表现偏寒而不偏热'],
+ stop:['胃痛缓解、食欲恢复后停用','用药3-7天仍反复疼痛，或夜间痛/黑便，应就医','反酸、烧心、口臭、便秘等热象加重时停用'],
+ warn:['胃热型不匹配：口臭、口渴、舌苔黄、胃灼热者慎用','孕妇慎用，儿童和老人先问医生','剧烈腹痛、呕血黑便、体重下降不要自行用药'],
+ search:'香砂养胃 胃寒 胃痛 喜温 嗳气 恶心 受凉 胃胀'},
+
+{cat:'digest',name:'保和丸',brief:'吃多积食：胃胀、嗳腐、大便酸臭',
+ use:['暴饮暴食后胃胀、嗳腐、口中有酸腐味','大便酸臭、舌苔厚腻、消化不良','小儿积食可作为线索，但儿童用药需先问医生或药师'],
+ stop:['胃胀、嗳腐缓解后即停，常为1-3天短期使用','没有积食表现时不要长期吃','腹痛明显、呕吐频繁、发热或便血，应就医'],
+ warn:['脾虚体质、长期食欲差者不宜单独久用','孕妇慎用','儿童剂量和剂型差异大，不要按成人经验折算'],
+ search:'保和丸 积食 暴饮暴食 胃胀 嗳腐 大便酸臭 舌苔厚腻'},
+
+{cat:'digest',name:'盐酸小檗碱（黄连素）',brief:'常见止泻药；严格说不是中成药',note:'非中成药',
+ use:['进食不洁后急性腹泻、腹痛肠鸣','大便带黏液或水样便，疑似肠道感染时短期使用','没有脱水、血便、高热等危险信号的轻中度腹泻'],
+ stop:['腹泻停止后再观察，通常不需继续多日服用','一般自行使用不超过3-5天；无改善应就医','出现恶心、呕吐、皮疹或其他不适时停用'],
+ warn:['病毒性腹泻、轮状病毒等效果有限，重点是补液和观察','孕妇、婴幼儿、溶血性贫血或严重肝肾病患者先问医生','血便、高热、脱水、持续剧痛时先就医'],
+ search:'黄连素 盐酸小檗碱 急性腹泻 腹痛 肠鸣 水样便 黏液 细菌性腹泻'},
+
+{cat:'digest',name:'气滞胃痛颗粒',brief:'情绪相关胃痛：胀痛、嗳气、两胁不舒',
+ use:['胃痛连及两胁，情绪波动后加重','嗳气频繁、打嗝、胸闷、胃胀','功能性消化不良样不适，表现为气滞胀痛'],
+ stop:['疼痛缓解后继续短期巩固即可停','服药1-2周无效，应就医排查胃炎、溃疡等','胃痛变为剧烈、固定、夜间痛，或黑便呕血，应立即就医'],
+ warn:['虚寒胃痛单用可能不匹配：喜暖、怕冷、腹泻者需辨证','孕妇慎用','长期反复胃痛不要只靠止痛或理气药'],
+ search:'气滞胃痛 胃痛 两胁 情绪 嗳气 打嗝 胸闷 胃胀'},
+
+{cat:'heat',name:'牛黄解毒片',brief:'实热上火短期用，重点是不能久吃',
+ use:['口腔溃疡、牙龈肿痛、咽喉肿痛','大便干结、小便黄赤，表现为实热','短期热毒症状明显，且没有禁忌人群'],
+ stop:['症状消失后立即停药','不要超剂量或长期服用，连续自行使用不超过3-5天','出现腹泻、腹痛、皮疹、头晕或其他不适时停用'],
+ warn:['含雄黄的品种不可长期或超量服用，有砷相关风险','孕妇、哺乳期妇女、婴幼儿禁用；过敏者禁用','脾虚便溏、肝肾功能异常或正在用多种药者先问医生'],
+ search:'牛黄解毒 上火 热毒 口腔溃疡 牙龈肿痛 咽喉肿痛 便秘 雄黄 砷 孕妇禁用'},
+
+{cat:'heat',name:'三黄片',brief:'实热便秘、口苦口臭，得便即止',
+ use:['口苦口臭、大便干结、小便黄','目赤肿痛、心烦、咽痛牙痛','明确是实热便秘，而非虚寒腹泻体质'],
+ stop:['大便通畅后即停，不追求每天吃','自行使用不超过3天；便秘持续或腹痛明显应就医','出现腹泻、腹痛、乏力明显时立即停用'],
+ warn:['虚寒体质禁用或慎用：怕冷、便溏、胃寒者不匹配','孕妇禁用或遵说明书禁忌执行','老人、儿童、慢性病患者不要长期依赖泻火通便药'],
+ search:'三黄片 实热 便秘 口苦 口臭 目赤 咽痛 牙痛 上火'},
+
+{cat:'tonic',name:'六味地黄丸',brief:'肾阴虚调理：潮热盗汗、腰膝酸软',
+ use:['腰膝酸软、头晕耳鸣，伴口燥咽干','潮热盗汗、手足心热、睡眠不安','辨证为肾阴虚后，按说明书或医嘱阶段性调理'],
+ stop:['症状明显改善后逐步减量或停用','服药2-4周症状无缓解，应就医或重新辨证','感冒发热、腹泻、胃胀、食欲下降时暂停或停用'],
+ warn:['肾阳虚不适用：怕冷、手脚冰凉、夜尿多者别自行补','感冒患者慎用，发烧期间暂停','儿童、孕妇、哺乳期、慢性病严重者应在医生指导下服用'],
+ search:'六味地黄 肾阴虚 腰膝酸软 头晕 耳鸣 潮热 盗汗 手足心热 感冒慎用'},
+
+{cat:'tonic',name:'金匮肾气丸',brief:'肾阳虚调理：怕冷、腰膝冷痛、夜尿多',
+ use:['腰膝冷痛、怕冷肢凉','夜尿频多、尿频，或下肢轻度水肿','辨证为肾阳虚后按说明书或医嘱调理'],
+ stop:['怕冷、夜尿等改善后逐步减量停用','出现口干便秘、烦热、手心热等阴虚火旺表现时停用','感冒发热、咽痛上火期间暂停'],
+ warn:['阴虚火旺、实热证不适用：潮热、便秘、口干明显者慎用','孕妇慎用或按说明书禁忌执行','高血压、心脏病、肾病患者先问医生'],
+ search:'金匮肾气 肾阳虚 怕冷 手脚冰凉 腰膝冷痛 夜尿 水肿'},
+
+{cat:'tonic',name:'补中益气丸',brief:'气虚、中气下陷：乏力、气短、久泻',
+ use:['气短懒言、体倦乏力、饭后困倦','久泻久痢、脱肛或内脏下垂等中气下陷表现','辨证为气虚后，作为阶段性调理'],
+ stop:['乏力、久泻等改善后逐步减量，不长期自行吃','服药2-4周无改善，应就医或重新辨证','感冒发热、咽痛、上火或阴虚火旺表现时停用'],
+ warn:['外感发热期间禁用或暂停','阴虚火旺、实热便秘、高热者不适用','高血压、心脏病、肝肾病、孕妇和儿童先问医生'],
+ search:'补中益气 气虚 乏力 气短 久泻 脱肛 胃下垂 饭后困倦 感冒发烧'},
+
+{cat:'women',name:'逍遥丸',brief:'肝郁气滞：经前胀痛、情绪烦躁',
+ use:['月经不调，经前乳房胀痛','情绪抑郁、烦躁易怒、叹气频繁','两胁胀满，更年期情绪和躯体不适偏肝郁者'],
+ stop:['症状消失后逐步减量','月经规律恢复后可再观察1-2个月经周期后停','用药2-4周无改善，或异常出血/腹痛明显，应就医'],
+ warn:['月经过多、经期延长或不明原因阴道出血者先就医','孕妇慎用或遵说明书禁忌执行','阴虚火旺明显者不要自行加量或混用其他疏肝清热药'],
+ search:'逍遥丸 肝郁 气滞 月经不调 经前 乳房胀痛 情绪 烦躁 更年期'},
+
+{cat:'women',name:'乌鸡白凤丸',brief:'气血两虚：月经量少、色淡、体虚',
+ use:['月经量少、色淡、经期延迟','面色苍白、头晕心悸、疲乏','产后或病后体虚调理，但需排除贫血等明确疾病'],
+ stop:['月经和体力恢复后逐步减量停用','服药1-2个月经周期无改善，应就医查因','感冒发烧、咽痛上火或月经量突然增多时暂停'],
+ warn:['月经量多、血块多、异常出血者慎用并先就医','糖尿病患者注意含糖剂型','孕妇、哺乳期和贫血明显者先问医生'],
+ search:'乌鸡白凤 气血两虚 月经量少 色淡 经期延迟 头晕 心悸 体虚 产后'},
+
+{cat:'heart',name:'复方丹参片',brief:'胸闷胸痛辅助调理，不能当急救药',
+ use:['确诊冠心病或血瘀型胸闷者，在医生建议下辅助使用','轻度胸闷、心悸，非急性发作时调理','舌质偏暗、有瘀斑等血瘀线索，但仍需正规评估'],
+ stop:['急性胸痛发作不要等它起效，应按急救流程处理','出现牙龈出血、皮下瘀斑、黑便等出血倾向时停用并就医','用药后胸闷胸痛加重或频繁发作，应就医'],
+ warn:['孕妇禁用或遵说明书禁忌执行','正在服阿司匹林、氯吡格雷、华法林等抗栓/抗凝药者先问医生','不能替代硝酸甘油、介入治疗或医生开的心血管药'],
+ search:'复方丹参 胸闷 心悸 冠心病 心绞痛 血瘀 阿司匹林 出血'},
+
+{cat:'heart',name:'速效救心丸',brief:'已知稳定型心绞痛急性发作时的急救备用',
+ use:['已确诊冠心病/稳定型心绞痛，突然胸痛胸闷时按医嘱含服','劳累、情绪激动诱发的熟悉胸痛，先停止活动并坐下','医生曾明确交代可作为备用急救药时'],
+ stop:['胸痛缓解后停止追加，继续安静休息并观察','含服后15分钟仍无缓解，立即拨打120，不要等待','首次胸痛、持续加重、伴冷汗气短恶心，应直接按急症处理'],
+ warn:['低血压者慎用；孕妇禁用或遵说明书禁忌执行','不可替代正规冠心病治疗，也不能替代急救呼叫','不确定是不是心绞痛时，宁可先拨打120'],
+ search:'速效救心 心绞痛 急救 胸痛 胸闷 含服 15分钟 120 冠心病 低血压'},
+];
+
+let activeCat = 'all';
+let activeQuick = '';
+const openCards = new Set();
+
+function catStyle(cat){
+  const s = CAT_STYLE[cat];
+  return s ? `background:${s.bg};color:${s.color}` : '';
+}
+
+function catLabel(cat){
+  const c = CATS.find(x=>x.id===cat);
+  return c ? c.label : cat;
+}
+
+function catCount(cat){
+  return cat === 'all' ? MEDICINES.length : MEDICINES.filter(m=>m.cat===cat).length;
+}
+
+function normalizeText(text){
+  return String(text || '').normalize('NFKC').toLowerCase();
+}
+
+function escapeHtml(value){
+  return String(value).replace(/[&<>"']/g, ch => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[ch]));
+}
+
+function medText(m){
+  return normalizeText([
+    m.cat, m.name, m.brief, m.note, m.search,
+    ...(m.use || []), ...(m.stop || []), ...(m.warn || [])
+  ].join(' '));
+}
+
+function queryTokens(){
+  const q = normalizeText(document.getElementById('search').value).trim();
+  return q ? q.split(/[\s,，、/|]+/).filter(Boolean) : [];
+}
+
+function filteredList(){
+  const tokens = queryTokens();
+  return MEDICINES.filter(m => {
+    if(activeCat !== 'all' && m.cat !== activeCat) return false;
+    if(!tokens.length) return true;
+    const text = medText(m);
+    return tokens.every(token => text.includes(token));
+  });
+}
+
+function renderQuick(){
+  const box = document.getElementById('quickGrid');
+  box.innerHTML = QUICK_SYMPTOMS.map(item => `
+    <button type="button" class="quick-btn${item.id===activeQuick?' active':''}" onclick="chooseQuick('${item.id}')">${escapeHtml(item.label)}</button>
+  `).join('');
+}
+
+function initCats(){
+  const div = document.getElementById('cats');
+  div.innerHTML = CATS.map(c=>`
+    <button type="button" class="cat-btn${c.id===activeCat?' active':''}" onclick="setCat('${c.id}')">
+      <span>${escapeHtml(c.label)}</span><span class="cat-count">${catCount(c.id)}</span>
+    </button>
+  `).join('');
+}
+
+function render(){
+  const list = filteredList();
+  const q = document.getElementById('search').value.trim();
+  const catText = catLabel(activeCat);
+  const filterText = activeCat === 'all' ? '全部分类' : `${catText}类`;
+  document.getElementById('count').textContent = `显示 ${list.length} / ${MEDICINES.length} 种药物 · ${filterText}${q ? ` · 搜索：${q}` : ''}`;
+
+  const grid = document.getElementById('grid');
+  if(!list.length){
+    grid.innerHTML = '<div class="empty">没有找到匹配项。可以减少关键词，例如只搜“咳嗽”或“胃胀”。</div>';
+    return;
+  }
+
+  grid.innerHTML = list.map(m => {
+    const idx = MEDICINES.indexOf(m);
+    const isOpen = openCards.has(idx);
+    return `
+      <article class="medicine-card${isOpen?' open':''}" id="card-${idx}" role="button" tabindex="0" aria-expanded="${isOpen}" onclick="toggleCard(${idx})" onkeydown="cardKey(event,${idx})">
+        <div class="card-head">
+          <div>
+            <div class="name-row">
+              <span class="card-name">${escapeHtml(m.name)}</span>
+              <span class="cat-tag" style="${catStyle(m.cat)}">${escapeHtml(catLabel(m.cat))}</span>
+              ${m.note ? `<span class="note-tag">${escapeHtml(m.note)}</span>` : ''}
+            </div>
+            <div class="card-brief">${escapeHtml(m.brief)}</div>
+          </div>
+          <span class="open-state"><span>${isOpen ? '收起' : '查看'}</span><span class="chevron">⌄</span></span>
+        </div>
+        <div class="summary-line">
+          <div class="summary-pill"><strong>先看</strong><span>${escapeHtml(m.use[0])}</span></div>
+          <div class="summary-pill"><strong>停药</strong><span>${escapeHtml(m.stop[0])}</span></div>
+        </div>
+        <div class="card-body">
+          <section class="section">
+            <div class="section-title use">什么时候可以考虑</div>
+            <div class="tags">${m.use.map(t=>`<span class="tag use">${escapeHtml(t)}</span>`).join('')}</div>
+          </section>
+          <section class="section">
+            <div class="section-title stop">什么时候减量、停药或就医</div>
+            <div class="tags">${m.stop.map(t=>`<span class="tag stop">${escapeHtml(t)}</span>`).join('')}</div>
+          </section>
+          <section class="section">
+            <div class="section-title warn">不要用，或先问医生</div>
+            <ul class="warn-list">${m.warn.map(t=>`<li>${escapeHtml(t)}</li>`).join('')}</ul>
+          </section>
+        </div>
+      </article>`;
+  }).join('');
+}
+
+function toggleCard(idx){
+  if(openCards.has(idx)) openCards.delete(idx);
+  else openCards.add(idx);
+  render();
+}
+
+function cardKey(event, idx){
+  if(event.key === 'Enter' || event.key === ' '){
+    event.preventDefault();
+    toggleCard(idx);
+  }
+}
+
+function setCat(id){
+  activeCat = id;
+  activeQuick = '';
+  initCats();
+  renderQuick();
+  render();
+}
+
+function chooseQuick(id){
+  const item = QUICK_SYMPTOMS.find(x=>x.id===id);
+  if(!item) return;
+  activeQuick = id;
+  activeCat = item.cat || 'all';
+  document.getElementById('search').value = item.query;
+  initCats();
+  renderQuick();
+  render();
+  document.getElementById('grid').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function clearQuick(){
+  activeQuick = '';
+  renderQuick();
+}
+
+function resetFilters(){
+  activeCat = 'all';
+  activeQuick = '';
+  openCards.clear();
+  document.getElementById('search').value = '';
+  initCats();
+  renderQuick();
+  render();
+}
+
+initCats();
+renderQuick();
+render();
+</script>
+</body>
+</html>
