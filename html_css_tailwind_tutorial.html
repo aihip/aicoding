@@ -1,0 +1,2778 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web 前端完整教程：HTML、CSS、Tailwind、Vue3 Template</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3.4.27/dist/vue.global.prod.js"></script>
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", "Microsoft YaHei", sans-serif;
+      }
+
+      code,
+      pre {
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", monospace;
+      }
+
+      /* Vue3 字典：指令徽章、示例双栏、活动指示 */
+      .vue-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.15rem 0.55rem;
+        border-radius: 9999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+        color: white;
+        letter-spacing: 0.02em;
+      }
+
+      .vue-badge::before {
+        content: "▲";
+        font-size: 0.6rem;
+        opacity: 0.85;
+      }
+
+      .vue-tag {
+        display: inline-block;
+        padding: 0.1rem 0.5rem;
+        border-radius: 0.35rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        background: #ecfeff;
+        color: #0e7490;
+        border: 1px solid #67e8f9;
+      }
+
+      .vue-live {
+        position: relative;
+        background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+        border: 1px solid #e2e8f0;
+        border-radius: 0.5rem;
+        padding: 1rem;
+      }
+
+      .vue-live::before {
+        content: "实时运行";
+        position: absolute;
+        top: -10px;
+        left: 14px;
+        background: #10b981;
+        color: white;
+        font-size: 0.65rem;
+        font-weight: 700;
+        padding: 0.15rem 0.55rem;
+        border-radius: 9999px;
+        letter-spacing: 0.05em;
+      }
+
+      .vue-pulse {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 9999px;
+        background: #22c55e;
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+        animation: vue-pulse-dot 1.6s ease-out infinite;
+        vertical-align: middle;
+      }
+
+      @keyframes vue-pulse-dot {
+        0% {
+          box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+        }
+      }
+
+      .vue-code-block {
+        background: #0f172a;
+        color: #e2e8f0;
+        border-radius: 0.5rem;
+        padding: 0.85rem 1rem;
+        font-size: 0.82rem;
+        line-height: 1.55;
+        overflow-x: auto;
+        max-height: 360px;
+      }
+
+      .vue-code-block .v-dir {
+        color: #22d3ee;
+        font-weight: 600;
+      }
+
+      .vue-code-block .v-attr {
+        color: #fb923c;
+      }
+
+      .vue-code-block .v-str {
+        color: #a7f3d0;
+      }
+
+      .vue-code-block .v-mus {
+        color: #fde68a;
+      }
+
+      .vue-code-block .v-tag {
+        color: #93c5fd;
+      }
+
+      .vue-code-block .v-com {
+        color: #64748b;
+        font-style: italic;
+      }
+
+      .dict-card {
+        border: 1px solid #e2e8f0;
+        border-radius: 0.6rem;
+        background: white;
+        transition: all 0.2s;
+      }
+
+      .dict-card:hover {
+        border-color: #06b6d4;
+        box-shadow: 0 6px 18px -8px rgba(6, 182, 212, 0.35);
+      }
+
+      .lifecycle-flow {
+        position: relative;
+      }
+
+      .lifecycle-flow .step {
+        position: relative;
+        padding-left: 2.2rem;
+      }
+
+      .lifecycle-flow .step::before {
+        content: "";
+        position: absolute;
+        left: 0.85rem;
+        top: 0.4rem;
+        bottom: -1.2rem;
+        width: 2px;
+        background: linear-gradient(180deg, #06b6d4 0%, #a78bfa 100%);
+      }
+
+      .lifecycle-flow .step:last-child::before {
+        display: none;
+      }
+
+      .lifecycle-flow .step .dot {
+        position: absolute;
+        left: 0.3rem;
+        top: 0.15rem;
+        width: 1.15rem;
+        height: 1.15rem;
+        border-radius: 9999px;
+        background: white;
+        border: 3px solid #06b6d4;
+      }
+
+      .box-demo-margin {
+        background: #fff7ed;
+        border: 2px dashed #fb923c;
+      }
+
+      .box-demo-border {
+        background: #eff6ff;
+        border: 6px solid #2563eb;
+      }
+
+      .box-demo-padding {
+        background: #ecfdf5;
+        border: 2px dashed #10b981;
+      }
+
+      .box-demo-content {
+        background: #111827;
+        color: white;
+      }
+
+      .selector-demo-card {
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 16px;
+        background: white;
+      }
+
+      #selector-demo-title {
+        color: #2563eb;
+      }
+
+      .float-demo {
+        animation: float-card 3s ease-in-out infinite;
+      }
+
+      .pulse-ring {
+        animation: pulse-ring 1.8s ease-out infinite;
+      }
+
+      @keyframes float-card {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      @keyframes pulse-ring {
+        0% {
+          transform: scale(0.85);
+          opacity: 0.75;
+        }
+
+        100% {
+          transform: scale(1.55);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="bg-slate-950 text-slate-900">
+    <!-- fixed 是 position 的一种：固定在浏览器窗口顶部 -->
+    <header class="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-slate-950/85 backdrop-blur">
+      <nav class="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 text-sm text-white">
+        <a href="#top" class="font-bold">Web 基础教程</a>
+        <div class="hidden flex-wrap items-center justify-end gap-x-4 gap-y-2 sm:flex">
+          <a href="#roadmap" class="text-slate-300 hover:text-white">路线</a>
+          <a href="#html" class="text-slate-300 hover:text-white">HTML</a>
+          <a href="#selectors" class="text-slate-300 hover:text-white">CSS</a>
+          <a href="#box" class="text-slate-300 hover:text-white">盒子模型</a>
+          <a href="#flex" class="text-slate-300 hover:text-white">Flex</a>
+          <a href="#grid" class="text-slate-300 hover:text-white">Grid</a>
+          <a href="#tailwind" class="text-slate-300 hover:text-white">Tailwind</a>
+          <a href="#vue" class="font-bold text-cyan-300 hover:text-cyan-200">Vue3 字典</a>
+          <a href="#vue-cheatsheet" class="text-slate-300 hover:text-white">速查表</a>
+          <a href="#practice" class="text-slate-300 hover:text-white">练习</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="top" class="pt-16">
+      <section class="bg-slate-950 text-white">
+        <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-14">
+          <div>
+            <p class="mb-3 text-sm font-semibold text-cyan-300">写 Vue3 template 前，先看懂页面骨架</p>
+            <h1 class="text-3xl font-bold leading-tight sm:text-4xl">
+              用一个完整 HTML 页面理解 Web 前端基础到进阶
+            </h1>
+            <p class="mt-4 max-w-2xl text-base leading-7 text-slate-300">
+              Vue3 的 <code class="rounded bg-white/10 px-1.5 py-0.5">&lt;template&gt;</code>
+              本质上就是 HTML 结构、CSS 布局、Tailwind class，再加上一些 Vue 指令。这个页面会从标签、盒子、布局讲到响应式、状态、无障碍、调试和常见组件，让你能读懂项目代码，也能开始自己写页面。
+            </p>
+
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a href="#html" class="rounded bg-cyan-400 px-4 py-2 text-sm font-bold text-slate-950 hover:bg-cyan-300">开始看示例</a>
+              <a href="#vue" class="rounded border border-white/20 px-4 py-2 text-sm font-bold text-white hover:bg-white/10">看 Vue3 对照</a>
+            </div>
+          </div>
+
+          <div class="relative overflow-hidden rounded-lg border border-white/10 bg-white/5 p-3">
+            <!-- img 是 HTML 图片标签；src 是图片地址，alt 是图片说明 -->
+            <img
+              class="h-72 w-full rounded object-cover"
+              src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80"
+              alt="电脑屏幕上的前端代码"
+            />
+            <div class="absolute bottom-6 left-6 rounded bg-slate-950/85 px-4 py-3 text-sm shadow-xl">
+              <p class="font-bold text-white">这张图本身也是一个 HTML 元素</p>
+              <p class="mt-1 text-slate-300">&lt;img src="..." alt="..."&gt;</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="roadmap" class="bg-white">
+        <div class="mx-auto max-w-6xl px-5 py-10">
+          <div class="grid gap-4 md:grid-cols-4">
+            <article class="rounded-lg border border-slate-200 p-4">
+              <p class="text-sm font-bold text-slate-500">HTML</p>
+              <h2 class="mt-1 text-xl font-bold">负责内容</h2>
+              <p class="mt-2 text-sm leading-6 text-slate-600">比如标题、段落、图片、按钮、输入框。</p>
+            </article>
+            <article class="rounded-lg border border-slate-200 p-4">
+              <p class="text-sm font-bold text-slate-500">CSS</p>
+              <h2 class="mt-1 text-xl font-bold">负责样式</h2>
+              <p class="mt-2 text-sm leading-6 text-slate-600">比如颜色、字体、间距、边框、布局。</p>
+            </article>
+            <article class="rounded-lg border border-slate-200 p-4">
+              <p class="text-sm font-bold text-slate-500">Tailwind</p>
+              <h2 class="mt-1 text-xl font-bold">把 CSS 写成 class</h2>
+              <p class="mt-2 text-sm leading-6 text-slate-600">比如 p-4、flex、items-center、rounded。</p>
+            </article>
+            <article class="rounded-lg border border-slate-200 p-4">
+              <p class="text-sm font-bold text-slate-500">Vue3</p>
+              <h2 class="mt-1 text-xl font-bold">负责数据和交互</h2>
+              <p class="mt-2 text-sm leading-6 text-slate-600">比如 v-if、v-for、v-model、@click。</p>
+            </article>
+          </div>
+
+          <div class="mt-8 rounded-lg border border-slate-200 bg-slate-50 p-5">
+            <h2 class="text-xl font-bold">建议学习顺序</h2>
+            <div class="mt-4 grid gap-3 text-sm md:grid-cols-6">
+              <div class="rounded bg-white p-3 shadow-sm">
+                <p class="font-bold text-blue-600">1. 结构</p>
+                <p class="mt-1 text-slate-600">先看标签嵌套：谁包着谁。</p>
+              </div>
+              <div class="rounded bg-white p-3 shadow-sm">
+                <p class="font-bold text-blue-600">2. 盒子</p>
+                <p class="mt-1 text-slate-600">再看宽高、内外边距、边框。</p>
+              </div>
+              <div class="rounded bg-white p-3 shadow-sm">
+                <p class="font-bold text-blue-600">3. 布局</p>
+                <p class="mt-1 text-slate-600">重点读 Flex 和 Grid。</p>
+              </div>
+              <div class="rounded bg-white p-3 shadow-sm">
+                <p class="font-bold text-blue-600">4. 规则</p>
+                <p class="mt-1 text-slate-600">理解选择器、层叠、继承。</p>
+              </div>
+              <div class="rounded bg-white p-3 shadow-sm">
+                <p class="font-bold text-blue-600">5. 状态</p>
+                <p class="mt-1 text-slate-600">看 hover、focus、动画。</p>
+              </div>
+              <div class="rounded bg-white p-3 shadow-sm">
+                <p class="font-bold text-blue-600">6. Vue</p>
+                <p class="mt-1 text-slate-600">最后看 v-if、v-for、@click。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 rounded-lg border border-slate-200 bg-white p-5">
+            <h2 class="text-xl font-bold">完整目录</h2>
+            <p class="mt-1 text-sm text-slate-500">第 15-26 节是 <span class="vue-badge">Vue3 字典</span>，可作为速查手册随用随翻</p>
+            <div class="mt-4 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+              <a href="#html" class="rounded bg-slate-50 p-3 font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700">01 HTML 基本结构</a>
+              <a href="#forms" class="rounded bg-slate-50 p-3 font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700">02 表单、列表、表格、媒体</a>
+              <a href="#selectors" class="rounded bg-slate-50 p-3 font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700">03 选择器、颜色、字体</a>
+              <a href="#cascade" class="rounded bg-slate-50 p-3 font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700">04 层叠、继承、伪类</a>
+              <a href="#box" class="rounded bg-slate-50 p-3 font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700">05 盒子模型</a>
+              <a href="#display-units" class="rounded bg-slate-50 p-3 font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700">06 display、单位、溢出</a>
+              <a href="#flex" class="rounded bg-slate-50 p-3 font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700">07 Flex 布局</a>
+              <a href="#grid" class="rounded bg-slate-50 p-3 font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700">08 Grid 布局</a>
+              <a href="#position" class="rounded bg-slate-50 p-3 font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700">09 position 定位</a>
+              <a href="#responsive" class="rounded bg-slate-50 p-3 font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700">10 响应式布局</a>
+              <a href="#tailwind" class="rounded bg-slate-50 p-3 font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700">11 Tailwind 常用 class</a>
+              <a href="#tailwind-advanced" class="rounded bg-slate-50 p-3 font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700">12 Tailwind 进阶</a>
+              <a href="#animation" class="rounded bg-slate-50 p-3 font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700">13 动画和过渡</a>
+              <a href="#accessibility" class="rounded bg-slate-50 p-3 font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700">14 无障碍和语义化</a>
+              <a href="#vue" class="rounded bg-cyan-50 p-3 font-bold text-cyan-800 hover:bg-cyan-100">15 Vue3 入门</a>
+              <a href="#vue-reactivity" class="rounded bg-cyan-50 p-3 font-bold text-cyan-800 hover:bg-cyan-100">16 响应式数据</a>
+              <a href="#vue-interp" class="rounded bg-cyan-50 p-3 font-bold text-cyan-800 hover:bg-cyan-100">17 模板插值</a>
+              <a href="#vue-if" class="rounded bg-cyan-50 p-3 font-bold text-cyan-800 hover:bg-cyan-100">18 条件渲染 v-if</a>
+              <a href="#vue-for" class="rounded bg-cyan-50 p-3 font-bold text-cyan-800 hover:bg-cyan-100">19 列表渲染 v-for</a>
+              <a href="#vue-bind" class="rounded bg-cyan-50 p-3 font-bold text-cyan-800 hover:bg-cyan-100">20 属性绑定 v-bind</a>
+              <a href="#vue-on" class="rounded bg-cyan-50 p-3 font-bold text-cyan-800 hover:bg-cyan-100">21 事件处理 v-on</a>
+              <a href="#vue-model" class="rounded bg-cyan-50 p-3 font-bold text-cyan-800 hover:bg-cyan-100">22 双向绑定 v-model</a>
+              <a href="#vue-computed" class="rounded bg-cyan-50 p-3 font-bold text-cyan-800 hover:bg-cyan-100">23 计算与侦听</a>
+              <a href="#vue-lifecycle" class="rounded bg-cyan-50 p-3 font-bold text-cyan-800 hover:bg-cyan-100">24 生命周期钩子</a>
+              <a href="#vue-component" class="rounded bg-cyan-50 p-3 font-bold text-cyan-800 hover:bg-cyan-100">25 组件与插槽</a>
+              <a href="#vue-cheatsheet" class="rounded bg-cyan-50 p-3 font-bold text-cyan-800 hover:bg-cyan-100">26 Vue3 速查表</a>
+              <a href="#debugging" class="rounded bg-slate-50 p-3 font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700">27 DevTools 调试</a>
+              <a href="#practice" class="rounded bg-slate-50 p-3 font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700">28 进阶练习路线</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="html" class="bg-slate-100">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7">
+            <p class="text-sm font-bold text-blue-600">01</p>
+            <h2 class="mt-1 text-2xl font-bold">HTML 基本结构：页面的骨架</h2>
+            <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+              HTML 负责描述页面上有什么。你可以把一个页面想成一棵树：最外层是
+              <code class="rounded bg-white px-1.5 py-0.5">&lt;html&gt;</code>，
+              里面分成 <code class="rounded bg-white px-1.5 py-0.5">&lt;head&gt;</code>
+              和 <code class="rounded bg-white px-1.5 py-0.5">&lt;body&gt;</code>。
+              Vue3 里的 <code class="rounded bg-white px-1.5 py-0.5">&lt;template&gt;</code>
+              通常就对应 body 里面的一块页面结构。
+            </p>
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">一个完整 HTML 文件</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;我的页面&lt;/title&gt;
+  &lt;/head&gt;
+
+  &lt;body&gt;
+    &lt;h1&gt;页面标题&lt;/h1&gt;
+    &lt;p&gt;一段正文内容。&lt;/p&gt;
+    &lt;img src="cover.jpg" alt="封面图"&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+              <div class="mt-5 rounded border border-white/10 p-4 text-sm leading-6 text-slate-300">
+                <p><strong class="text-white">doctype：</strong>告诉浏览器这是现代 HTML。</p>
+                <p><strong class="text-white">head：</strong>页面配置，不直接显示在页面正文里。</p>
+                <p><strong class="text-white">body：</strong>用户真正能看到的内容。</p>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+                <h3 class="text-lg font-bold">常用内容标签</h3>
+                <div class="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+                  <p class="rounded bg-slate-50 p-3"><code>&lt;h1&gt;</code> 到 <code>&lt;h6&gt;</code>：标题</p>
+                  <p class="rounded bg-slate-50 p-3"><code>&lt;p&gt;</code>：段落</p>
+                  <p class="rounded bg-slate-50 p-3"><code>&lt;span&gt;</code>：一小段行内文字</p>
+                  <p class="rounded bg-slate-50 p-3"><code>&lt;strong&gt;</code>：重要文字</p>
+                  <p class="rounded bg-slate-50 p-3"><code>&lt;img&gt;</code>：图片</p>
+                  <p class="rounded bg-slate-50 p-3"><code>&lt;button&gt;</code>：按钮</p>
+                </div>
+              </article>
+
+              <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+                <h3 class="text-lg font-bold">常用语义化布局标签</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-600">
+                  语义化标签让你一眼看出页面区域的作用，也更利于搜索引擎和无障碍阅读。
+                </p>
+                <div class="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+                  <p class="rounded bg-slate-50 p-3"><code>&lt;header&gt;</code>：头部</p>
+                  <p class="rounded bg-slate-50 p-3"><code>&lt;nav&gt;</code>：导航</p>
+                  <p class="rounded bg-slate-50 p-3"><code>&lt;main&gt;</code>：主要内容</p>
+                  <p class="rounded bg-slate-50 p-3"><code>&lt;section&gt;</code>：一个内容区块</p>
+                  <p class="rounded bg-slate-50 p-3"><code>&lt;article&gt;</code>：独立文章或卡片</p>
+                  <p class="rounded bg-slate-50 p-3"><code>&lt;footer&gt;</code>：底部</p>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+            <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 class="text-lg font-bold">属性：写在开始标签里的额外信息</h3>
+              <p class="mt-2 leading-7 text-slate-600">
+                例如图片的地址、链接的跳转地址、输入框的类型、元素的 class，都是属性。
+              </p>
+              <div class="mt-4 overflow-hidden rounded border border-slate-200">
+                <table class="w-full border-collapse text-left text-sm">
+                  <thead class="bg-slate-950 text-white">
+                    <tr>
+                      <th class="px-4 py-3">属性</th>
+                      <th class="px-4 py-3">常见位置</th>
+                      <th class="px-4 py-3">作用</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200">
+                    <tr>
+                      <td class="px-4 py-3 font-bold">class</td>
+                      <td class="px-4 py-3">所有标签</td>
+                      <td class="px-4 py-3 text-slate-600">给 CSS 或 Tailwind 使用</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-bold">id</td>
+                      <td class="px-4 py-3">所有标签</td>
+                      <td class="px-4 py-3 text-slate-600">页面里唯一的标识</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-bold">src</td>
+                      <td class="px-4 py-3">img、script</td>
+                      <td class="px-4 py-3 text-slate-600">资源地址</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-bold">href</td>
+                      <td class="px-4 py-3">a、link</td>
+                      <td class="px-4 py-3 text-slate-600">跳转地址或资源地址</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-bold">alt</td>
+                      <td class="px-4 py-3">img</td>
+                      <td class="px-4 py-3 text-slate-600">图片说明，图片失败时也能显示含义</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">属性示例</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>&lt;a href="https://example.com" class="text-blue-600"&gt;
+  打开网站
+&lt;/a&gt;
+
+&lt;img
+  src="/avatar.png"
+  alt="用户头像"
+  class="h-12 w-12 rounded-full"
+&gt;
+
+&lt;input
+  type="text"
+  placeholder="请输入用户名"
+  class="border px-3 py-2"
+&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="forms" class="bg-white">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7">
+            <p class="text-sm font-bold text-blue-600">02</p>
+            <h2 class="mt-1 text-2xl font-bold">表单、列表、表格和媒体：真实页面最常见的内容</h2>
+            <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+              学会基本结构后，下一步要熟悉真实业务页面里最常见的内容：登录表单、搜索框、商品列表、数据表格、图片和视频。Vue3 项目里这些标签经常和
+              <code class="rounded bg-slate-100 px-1.5 py-0.5">v-model</code>、
+              <code class="rounded bg-slate-100 px-1.5 py-0.5">v-for</code>
+              一起出现。
+            </p>
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+            <div class="rounded-lg border border-slate-200 p-5 shadow-sm">
+              <h3 class="text-lg font-bold">表单：label、input、select、textarea、button</h3>
+              <form class="mt-4 space-y-4">
+                <label class="block">
+                  <span class="text-sm font-bold text-slate-700">用户名</span>
+                  <input
+                    class="mt-1 w-full rounded border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                    type="text"
+                    placeholder="请输入用户名"
+                  />
+                </label>
+
+                <label class="block">
+                  <span class="text-sm font-bold text-slate-700">学习方向</span>
+                  <select class="mt-1 w-full rounded border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+                    <option>Vue3 项目开发</option>
+                    <option>页面布局</option>
+                    <option>Tailwind CSS</option>
+                  </select>
+                </label>
+
+                <label class="block">
+                  <span class="text-sm font-bold text-slate-700">备注</span>
+                  <textarea
+                    class="mt-1 min-h-24 w-full rounded border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                    placeholder="写下你现在最看不懂的代码"
+                  ></textarea>
+                </label>
+
+                <button type="button" class="rounded bg-blue-600 px-4 py-2 text-sm font-bold text-white hover:bg-blue-700">
+                  提交
+                </button>
+              </form>
+            </div>
+
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">表单代码</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>&lt;form&gt;
+  &lt;label&gt;
+    用户名
+    &lt;input type="text" placeholder="请输入用户名"&gt;
+  &lt;/label&gt;
+
+  &lt;select&gt;
+    &lt;option&gt;Vue3 项目开发&lt;/option&gt;
+  &lt;/select&gt;
+
+  &lt;textarea placeholder="备注"&gt;&lt;/textarea&gt;
+
+  &lt;button type="submit"&gt;提交&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+
+              <div class="mt-5 rounded border border-white/10 p-4 text-sm leading-6 text-slate-300">
+                <p><strong class="text-white">关键：</strong><code>label</code> 让输入项有名字，用户点击文字也能聚焦输入框。</p>
+                <p><strong class="text-white">Vue3：</strong>输入框经常写成 <code>v-model="username"</code>。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-6 lg:grid-cols-3">
+            <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 class="text-lg font-bold">列表</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">菜单、标签、消息流、商品列表都可以先理解成列表。</p>
+              <ul class="mt-4 space-y-2 text-sm">
+                <li class="rounded bg-slate-50 p-3">无序列表：<code>&lt;ul&gt;</code> + <code>&lt;li&gt;</code></li>
+                <li class="rounded bg-slate-50 p-3">有序列表：<code>&lt;ol&gt;</code> + <code>&lt;li&gt;</code></li>
+                <li class="rounded bg-slate-50 p-3">Vue 循环：<code>v-for="item in list"</code></li>
+              </ul>
+            </article>
+
+            <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 class="text-lg font-bold">表格</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">后台管理、订单、用户列表里很常见。</p>
+              <div class="mt-4 overflow-hidden rounded border border-slate-200 text-sm">
+                <table class="w-full text-left">
+                  <thead class="bg-slate-100">
+                    <tr>
+                      <th class="px-3 py-2">标签</th>
+                      <th class="px-3 py-2">作用</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200">
+                    <tr>
+                      <td class="px-3 py-2 font-bold">thead</td>
+                      <td class="px-3 py-2 text-slate-600">表头</td>
+                    </tr>
+                    <tr>
+                      <td class="px-3 py-2 font-bold">tbody</td>
+                      <td class="px-3 py-2 text-slate-600">表格主体</td>
+                    </tr>
+                    <tr>
+                      <td class="px-3 py-2 font-bold">tr / th / td</td>
+                      <td class="px-3 py-2 text-slate-600">行、表头格、普通格</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 class="text-lg font-bold">媒体</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">图片用 <code>img</code>，视频用 <code>video</code>。图片一定要写有意义的 <code>alt</code>。</p>
+              <pre class="mt-4 overflow-x-auto rounded bg-slate-950 p-4 text-sm leading-6 text-slate-100"><code>&lt;img src="/cover.jpg" alt="课程封面"&gt;
+
+&lt;video controls src="/demo.mp4"&gt;&lt;/video&gt;</code></pre>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="selectors" class="bg-white">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7">
+            <p class="text-sm font-bold text-blue-600">03</p>
+            <h2 class="mt-1 text-2xl font-bold">CSS 选择器、颜色和字体：找到元素并改变样子</h2>
+            <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+              CSS 的第一步是“选中元素”。标签选择器选一类标签，class 选择器选一组元素，
+              id 选择器选唯一元素。Tailwind 项目里你写得少，但读旧代码或组件库时很常见。
+            </p>
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[1fr_1fr]">
+            <div class="rounded-lg border border-slate-200 p-5">
+              <p class="mb-4 text-sm font-bold text-slate-500">效果：同一个卡片被不同选择器影响</p>
+              <div class="selector-demo-card">
+                <h3 id="selector-demo-title" class="text-xl font-bold">选择器演示卡片</h3>
+                <p class="mt-2 text-slate-600">
+                  外层卡片用 class 选择器设置边框和内边距，标题用 id 选择器设置蓝色。
+                </p>
+                <button class="mt-4 rounded bg-blue-600 px-4 py-2 text-sm font-bold text-white hover:bg-blue-700">
+                  一个按钮
+                </button>
+              </div>
+            </div>
+
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">对应 CSS</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>/* 标签选择器：选中所有 p */
+p {
+  line-height: 1.7;
+}
+
+/* class 选择器：选中 class="card" 的元素 */
+.card {
+  padding: 16px;
+  border: 1px solid #cbd5e1;
+}
+
+/* id 选择器：选中 id="title" 的唯一元素 */
+#title {
+  color: #2563eb;
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-6 lg:grid-cols-3">
+            <article class="rounded-lg border border-slate-200 p-5">
+              <h3 class="text-lg font-bold">颜色</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">普通 CSS 可以写颜色名、十六进制、rgb、rgba。Tailwind 用 bg-* 和 text-*。</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <span class="rounded bg-red-500 px-3 py-1 text-sm font-bold text-white">red</span>
+                <span class="rounded bg-blue-500 px-3 py-1 text-sm font-bold text-white">blue</span>
+                <span class="rounded bg-emerald-500 px-3 py-1 text-sm font-bold text-white">emerald</span>
+                <span class="rounded bg-slate-900 px-3 py-1 text-sm font-bold text-white">slate</span>
+              </div>
+            </article>
+
+            <article class="rounded-lg border border-slate-200 p-5">
+              <h3 class="text-lg font-bold">字体大小</h3>
+              <div class="mt-4 space-y-2">
+                <p class="text-sm text-slate-500">text-sm：辅助说明文字</p>
+                <p class="text-base text-slate-700">text-base：正文默认大小</p>
+                <p class="text-xl font-bold text-slate-900">text-xl：小标题</p>
+              </div>
+            </article>
+
+            <article class="rounded-lg border border-slate-200 p-5">
+              <h3 class="text-lg font-bold">字体粗细和对齐</h3>
+              <div class="mt-4 space-y-2">
+                <p class="font-normal text-slate-600">font-normal：普通</p>
+                <p class="font-semibold text-slate-700">font-semibold：半粗</p>
+                <p class="text-center font-bold text-slate-900">text-center + font-bold</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="cascade" class="bg-slate-100">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7">
+            <p class="text-sm font-bold text-blue-600">04</p>
+            <h2 class="mt-1 text-2xl font-bold">层叠、继承、优先级和伪类：为什么样式会被覆盖</h2>
+            <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+              CSS 的难点不只是“怎么写样式”，还有“为什么这个样式生效，另一个不生效”。看懂层叠、继承和优先级后，你调样式会快很多。
+            </p>
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[1fr_1fr]">
+            <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 class="text-lg font-bold">优先级从低到高</h3>
+              <div class="mt-4 space-y-3 text-sm">
+                <div class="rounded bg-slate-50 p-3">
+                  <p class="font-bold">标签选择器：<code>button</code></p>
+                  <p class="mt-1 text-slate-600">范围大，优先级低。</p>
+                </div>
+                <div class="rounded bg-slate-50 p-3">
+                  <p class="font-bold">class 选择器：<code>.primary</code></p>
+                  <p class="mt-1 text-slate-600">项目里最常用。</p>
+                </div>
+                <div class="rounded bg-slate-50 p-3">
+                  <p class="font-bold">id 选择器：<code>#submit</code></p>
+                  <p class="mt-1 text-slate-600">更强，但不建议滥用。</p>
+                </div>
+                <div class="rounded bg-slate-50 p-3">
+                  <p class="font-bold">行内样式：<code>style="..."</code></p>
+                  <p class="mt-1 text-slate-600">非常强，维护起来不如 class 清楚。</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">伪类和伪元素</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>button:hover {
+  background: #1d4ed8;
+}
+
+input:focus {
+  border-color: #2563eb;
+}
+
+li:first-child {
+  font-weight: 700;
+}
+
+.title::after {
+  content: "new";
+}</code></pre>
+              <div class="mt-5 rounded border border-white/10 p-4 text-sm leading-6 text-slate-300">
+                <p><strong class="text-white">继承：</strong>文字颜色、字体通常会从父元素传给子元素。</p>
+                <p><strong class="text-white">不继承：</strong>边框、背景、宽高、margin、padding 通常不会自动继承。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-4 md:grid-cols-3">
+            <article class="rounded-lg border border-slate-200 bg-white p-5">
+              <h3 class="text-lg font-bold">后写的会覆盖先写的</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">选择器优先级相同时，CSS 文件里后面的规则会覆盖前面的规则。</p>
+            </article>
+            <article class="rounded-lg border border-slate-200 bg-white p-5">
+              <h3 class="text-lg font-bold">Tailwind 的冲突</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600"><code>p-2 p-6</code> 同时出现时，最终效果取决于 Tailwind 生成规则，不建议写冲突 class。</p>
+            </article>
+            <article class="rounded-lg border border-slate-200 bg-white p-5">
+              <h3 class="text-lg font-bold">别急着用 !important</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600"><code>!important</code> 会让维护变难。先检查选择器、顺序、组件样式来源。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="box" class="bg-white">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7">
+            <p class="text-sm font-bold text-blue-600">05</p>
+            <h2 class="mt-1 text-2xl font-bold">盒子模型：每个元素都是一个盒子</h2>
+            <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+              一个盒子从里到外是 content、padding、border、margin。你看到 Tailwind 里的
+              <code class="rounded bg-white px-1.5 py-0.5">w-64</code>、
+              <code class="rounded bg-white px-1.5 py-0.5">p-4</code>、
+              <code class="rounded bg-white px-1.5 py-0.5">border</code>、
+              <code class="rounded bg-white px-1.5 py-0.5">m-6</code>，基本都在控制盒子。
+            </p>
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+            <div class="rounded-lg bg-white p-6 shadow-sm">
+              <div class="box-demo-margin p-6">
+                <p class="mb-2 text-sm font-bold text-orange-700">margin 外边距：盒子和外面元素的距离</p>
+                <div class="box-demo-border p-5">
+                  <p class="mb-2 text-sm font-bold text-blue-700">border 边框</p>
+                  <div class="box-demo-padding p-5">
+                    <p class="mb-2 text-sm font-bold text-emerald-700">padding 内边距：内容和边框之间的距离</p>
+                    <div class="box-demo-content rounded p-5 text-center font-bold">
+                      content 内容区域
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">HTML + Tailwind 写法</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>&lt;div class="m-6 border border-blue-500 p-4"&gt;
+  &lt;p&gt;我是内容&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+
+              <div class="mt-5 grid gap-3 text-sm sm:grid-cols-2">
+                <div class="rounded border border-white/10 p-3">
+                  <p class="font-bold text-white">p-4</p>
+                  <p class="mt-1 text-slate-300">padding: 1rem，内边距</p>
+                </div>
+                <div class="rounded border border-white/10 p-3">
+                  <p class="font-bold text-white">m-6</p>
+                  <p class="mt-1 text-slate-300">margin: 1.5rem，外边距</p>
+                </div>
+                <div class="rounded border border-white/10 p-3">
+                  <p class="font-bold text-white">w-64</p>
+                  <p class="mt-1 text-slate-300">width: 16rem，宽度</p>
+                </div>
+                <div class="rounded border border-white/10 p-3">
+                  <p class="font-bold text-white">border</p>
+                  <p class="mt-1 text-slate-300">添加边框</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-4 md:grid-cols-3">
+            <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 class="text-lg font-bold">width 和 max-width</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">
+                <code>w-full</code> 表示占满父容器宽度，<code>max-w-md</code> 表示最大宽度。很多页面会用
+                <code>mx-auto max-w-6xl</code> 让内容居中并限制最大宽度。
+              </p>
+            </article>
+
+            <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 class="text-lg font-bold">box-sizing</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">
+                现代项目常用 <code>border-box</code>：元素最终宽度包含 content、padding、border。
+                Tailwind 默认已经帮你处理好了。
+              </p>
+            </article>
+
+            <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 class="text-lg font-bold">margin 合并</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">
+                普通 CSS 里上下相邻的 margin 有时会合并。Tailwind 项目常用
+                <code>space-y-4</code> 或 <code>gap-4</code> 来更稳定地控制间距。
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="display-units" class="bg-slate-100">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7">
+            <p class="text-sm font-bold text-blue-600">06</p>
+            <h2 class="mt-1 text-2xl font-bold">display、常用单位和溢出：布局前必须补上的底层知识</h2>
+            <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+              很多布局问题不是 Flex 或 Grid 写错了，而是元素本身的 display、宽度单位、内容溢出没有理解。先把这些补齐，后面的布局会顺很多。
+            </p>
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[1fr_1fr]">
+            <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 class="text-lg font-bold">display 的几个常见值</h3>
+              <div class="mt-4 space-y-4 text-sm">
+                <div class="rounded bg-slate-50 p-4">
+                  <p class="font-bold">block：独占一行</p>
+                  <div class="mt-2 space-y-2">
+                    <span class="block rounded bg-blue-100 p-2">我是 block</span>
+                    <span class="block rounded bg-blue-100 p-2">我也会换到下一行</span>
+                  </div>
+                </div>
+                <div class="rounded bg-slate-50 p-4">
+                  <p class="font-bold">inline：像文字一样排在一行</p>
+                  <p class="mt-2">
+                    <span class="rounded bg-emerald-100 px-2 py-1">inline A</span>
+                    <span class="rounded bg-emerald-100 px-2 py-1">inline B</span>
+                  </p>
+                </div>
+                <div class="rounded bg-slate-50 p-4">
+                  <p class="font-bold">hidden：不显示</p>
+                  <p class="mt-2 text-slate-600">Tailwind 的 <code>hidden</code> 等于 <code>display: none</code>。</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">单位怎么选</p>
+              <div class="overflow-hidden rounded border border-white/10 text-sm">
+                <table class="w-full text-left">
+                  <thead class="bg-white/10 text-white">
+                    <tr>
+                      <th class="px-4 py-3">单位</th>
+                      <th class="px-4 py-3">适合场景</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-white/10 text-slate-300">
+                    <tr>
+                      <td class="px-4 py-3 font-bold text-white">px</td>
+                      <td class="px-4 py-3">边框、图标、小尺寸细节</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-bold text-white">rem</td>
+                      <td class="px-4 py-3">字体、间距，Tailwind 默认间距多用 rem</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-bold text-white">%</td>
+                      <td class="px-4 py-3">相对于父元素的宽度或高度</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-bold text-white">vw / vh</td>
+                      <td class="px-4 py-3">相对于浏览器窗口，常见于全屏页面</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p class="mb-3 mt-5 text-sm font-bold text-cyan-300">溢出处理</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>&lt;div class="overflow-hidden truncate"&gt;
+  一段很长很长很长的文字
+&lt;/div&gt;</code></pre>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-4 md:grid-cols-4">
+            <article class="rounded-lg border border-slate-200 bg-white p-4">
+              <p class="font-bold">w-full</p>
+              <p class="mt-2 text-sm text-slate-600">宽度占满父元素。</p>
+            </article>
+            <article class="rounded-lg border border-slate-200 bg-white p-4">
+              <p class="font-bold">min-h-screen</p>
+              <p class="mt-2 text-sm text-slate-600">最小高度为一屏。</p>
+            </article>
+            <article class="rounded-lg border border-slate-200 bg-white p-4">
+              <p class="font-bold">overflow-auto</p>
+              <p class="mt-2 text-sm text-slate-600">内容超出时显示滚动。</p>
+            </article>
+            <article class="rounded-lg border border-slate-200 bg-white p-4">
+              <p class="font-bold">truncate</p>
+              <p class="mt-2 truncate text-sm text-slate-600">单行文字太长时显示省略号。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="flex" class="bg-white">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7">
+            <p class="text-sm font-bold text-blue-600">07</p>
+            <h2 class="mt-1 text-2xl font-bold">Flex：控制子元素横排、竖排、居中和间距</h2>
+            <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+              Flex 主要看父元素。父元素写了 <code class="rounded bg-slate-100 px-1.5 py-0.5">flex</code>，
+              它的直接子元素就可以横向排列；再用
+              <code class="rounded bg-slate-100 px-1.5 py-0.5">items-center</code>、
+              <code class="rounded bg-slate-100 px-1.5 py-0.5">justify-between</code>、
+              <code class="rounded bg-slate-100 px-1.5 py-0.5">gap-4</code>
+              控制位置。
+            </p>
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[1fr_1fr]">
+            <div class="rounded-lg border border-slate-200 p-5">
+              <p class="mb-4 text-sm font-bold text-slate-500">效果：一张用户卡片</p>
+
+              <!-- 这个 div 是 flex 父元素，里面的 img、div、button 是 flex 子元素 -->
+              <div class="flex items-center gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
+                <img
+                  class="h-14 w-14 rounded-full object-cover"
+                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80"
+                  alt="用户头像"
+                />
+
+                <div class="flex-1">
+                  <h3 class="text-lg font-bold">Victor</h3>
+                  <p class="text-sm text-slate-500">正在学习 Vue3 和 Tailwind</p>
+                </div>
+
+                <button class="rounded bg-blue-600 px-4 py-2 text-sm font-bold text-white hover:bg-blue-700">
+                  关注
+                </button>
+              </div>
+
+              <div class="mt-5 rounded bg-cyan-50 p-4 text-sm leading-6 text-cyan-950">
+                <p><strong>读法：</strong>头像、文字、按钮在同一行。</p>
+                <p><strong>关键：</strong>父元素用了 flex；中间文字用了 flex-1，所以它会占满剩余空间。</p>
+              </div>
+            </div>
+
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">对应代码</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>&lt;div class="flex items-center gap-4 p-4"&gt;
+  &lt;img class="h-14 w-14 rounded-full" src="avatar.jpg"&gt;
+
+  &lt;div class="flex-1"&gt;
+    &lt;h3&gt;Victor&lt;/h3&gt;
+    &lt;p&gt;正在学习 Vue3&lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;button class="px-4 py-2"&gt;关注&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+
+              <div class="mt-5 space-y-3 text-sm">
+                <p><code class="rounded bg-white/10 px-1.5 py-0.5">flex</code>：开启 Flex 布局</p>
+                <p><code class="rounded bg-white/10 px-1.5 py-0.5">items-center</code>：垂直居中</p>
+                <p><code class="rounded bg-white/10 px-1.5 py-0.5">gap-4</code>：子元素之间的间距</p>
+                <p><code class="rounded bg-white/10 px-1.5 py-0.5">flex-1</code>：占满剩余空间</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-4 md:grid-cols-4">
+            <article class="rounded-lg border border-slate-200 p-4">
+              <p class="text-sm font-bold text-blue-600">flex-row</p>
+              <div class="mt-3 flex gap-2">
+                <span class="rounded bg-blue-100 px-3 py-2 text-sm font-bold">A</span>
+                <span class="rounded bg-blue-100 px-3 py-2 text-sm font-bold">B</span>
+                <span class="rounded bg-blue-100 px-3 py-2 text-sm font-bold">C</span>
+              </div>
+              <p class="mt-3 text-sm text-slate-600">默认横向排列。</p>
+            </article>
+
+            <article class="rounded-lg border border-slate-200 p-4">
+              <p class="text-sm font-bold text-blue-600">flex-col</p>
+              <div class="mt-3 flex flex-col gap-2">
+                <span class="rounded bg-emerald-100 px-3 py-2 text-sm font-bold">A</span>
+                <span class="rounded bg-emerald-100 px-3 py-2 text-sm font-bold">B</span>
+                <span class="rounded bg-emerald-100 px-3 py-2 text-sm font-bold">C</span>
+              </div>
+              <p class="mt-3 text-sm text-slate-600">纵向排列。</p>
+            </article>
+
+            <article class="rounded-lg border border-slate-200 p-4">
+              <p class="text-sm font-bold text-blue-600">justify-between</p>
+              <div class="mt-3 flex justify-between gap-2 rounded bg-slate-50 p-2">
+                <span class="rounded bg-orange-100 px-3 py-2 text-sm font-bold">左</span>
+                <span class="rounded bg-orange-100 px-3 py-2 text-sm font-bold">右</span>
+              </div>
+              <p class="mt-3 text-sm text-slate-600">主轴两端分散。</p>
+            </article>
+
+            <article class="rounded-lg border border-slate-200 p-4">
+              <p class="text-sm font-bold text-blue-600">flex-wrap</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <span class="rounded bg-purple-100 px-3 py-2 text-sm font-bold">标签1</span>
+                <span class="rounded bg-purple-100 px-3 py-2 text-sm font-bold">标签2</span>
+                <span class="rounded bg-purple-100 px-3 py-2 text-sm font-bold">标签3</span>
+                <span class="rounded bg-purple-100 px-3 py-2 text-sm font-bold">标签4</span>
+              </div>
+              <p class="mt-3 text-sm text-slate-600">空间不够时换行。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="grid" class="bg-slate-100">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7">
+            <p class="text-sm font-bold text-blue-600">08</p>
+            <h2 class="mt-1 text-2xl font-bold">Grid：更适合二维布局</h2>
+            <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+              Flex 更像一条线，适合一行或一列；Grid 更像表格，适合同时控制行和列。
+              商品列表、图片墙、仪表盘卡片区，经常会用 Grid。
+            </p>
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+            <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <p class="mb-4 text-sm font-bold text-slate-500">效果：响应式卡片网格</p>
+              <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <article class="rounded-lg bg-blue-50 p-4">
+                  <p class="text-sm font-bold text-blue-700">HTML</p>
+                  <p class="mt-2 text-sm text-slate-600">页面结构</p>
+                </article>
+                <article class="rounded-lg bg-emerald-50 p-4">
+                  <p class="text-sm font-bold text-emerald-700">CSS</p>
+                  <p class="mt-2 text-sm text-slate-600">页面样式</p>
+                </article>
+                <article class="rounded-lg bg-orange-50 p-4">
+                  <p class="text-sm font-bold text-orange-700">Flex</p>
+                  <p class="mt-2 text-sm text-slate-600">一维布局</p>
+                </article>
+                <article class="rounded-lg bg-cyan-50 p-4">
+                  <p class="text-sm font-bold text-cyan-700">Grid</p>
+                  <p class="mt-2 text-sm text-slate-600">二维布局</p>
+                </article>
+                <article class="rounded-lg bg-rose-50 p-4">
+                  <p class="text-sm font-bold text-rose-700">Tailwind</p>
+                  <p class="mt-2 text-sm text-slate-600">工具类</p>
+                </article>
+                <article class="rounded-lg bg-violet-50 p-4">
+                  <p class="text-sm font-bold text-violet-700">Vue3</p>
+                  <p class="mt-2 text-sm text-slate-600">交互逻辑</p>
+                </article>
+              </div>
+            </div>
+
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">对应代码</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>&lt;div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"&gt;
+  &lt;article class="rounded-lg bg-blue-50 p-4"&gt;HTML&lt;/article&gt;
+  &lt;article class="rounded-lg bg-emerald-50 p-4"&gt;CSS&lt;/article&gt;
+  &lt;article class="rounded-lg bg-orange-50 p-4"&gt;Flex&lt;/article&gt;
+&lt;/div&gt;</code></pre>
+
+              <div class="mt-5 grid gap-3 text-sm sm:grid-cols-2">
+                <div class="rounded border border-white/10 p-3">
+                  <p class="font-bold text-white">grid</p>
+                  <p class="mt-1 text-slate-300">开启 Grid 布局。</p>
+                </div>
+                <div class="rounded border border-white/10 p-3">
+                  <p class="font-bold text-white">grid-cols-3</p>
+                  <p class="mt-1 text-slate-300">分成三列。</p>
+                </div>
+                <div class="rounded border border-white/10 p-3">
+                  <p class="font-bold text-white">col-span-2</p>
+                  <p class="mt-1 text-slate-300">某个元素横跨两列。</p>
+                </div>
+                <div class="rounded border border-white/10 p-3">
+                  <p class="font-bold text-white">gap-4</p>
+                  <p class="mt-1 text-slate-300">行和列之间的间距。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="position" class="bg-white">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7">
+            <p class="text-sm font-bold text-blue-600">09</p>
+            <h2 class="mt-1 text-2xl font-bold">position：把元素放到指定位置</h2>
+            <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+              最常见组合是父元素 <code class="rounded bg-white px-1.5 py-0.5">relative</code>，
+              子元素 <code class="rounded bg-white px-1.5 py-0.5">absolute</code>。
+              这样子元素就可以贴到父盒子的右上角、左下角、居中位置。
+            </p>
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+            <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <p class="mb-4 text-sm font-bold text-slate-500">效果：图片上的角标</p>
+
+              <!-- relative 是定位参考，absolute 子元素会参考这个盒子定位 -->
+              <div class="relative overflow-hidden rounded-lg">
+                <img
+                  class="h-72 w-full object-cover"
+                  src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=80"
+                  alt="桌面上的电脑"
+                />
+
+                <span class="absolute left-4 top-4 rounded bg-emerald-400 px-3 py-1 text-sm font-bold text-emerald-950">
+                  新课程
+                </span>
+
+                <button class="absolute right-4 top-4 rounded bg-slate-950/80 px-3 py-1 text-sm font-bold text-white hover:bg-slate-950">
+                  收藏
+                </button>
+
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950 to-transparent p-4 pt-16 text-white">
+                  <h3 class="text-lg font-bold">relative + absolute</h3>
+                  <p class="text-sm text-slate-200">父盒子定参考，子元素定位置。</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">对应代码</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>&lt;div class="relative overflow-hidden rounded-lg"&gt;
+  &lt;img class="h-72 w-full object-cover" src="cover.jpg"&gt;
+
+  &lt;span class="absolute left-4 top-4"&gt;
+    新课程
+  &lt;/span&gt;
+
+  &lt;button class="absolute right-4 top-4"&gt;
+    收藏
+  &lt;/button&gt;
+&lt;/div&gt;</code></pre>
+
+              <div class="mt-5 grid gap-3 text-sm sm:grid-cols-2">
+                <div class="rounded border border-white/10 p-3">
+                  <p class="font-bold text-white">relative</p>
+                  <p class="mt-1 text-slate-300">自己还在原位置，也给 absolute 子元素当参考点。</p>
+                </div>
+                <div class="rounded border border-white/10 p-3">
+                  <p class="font-bold text-white">absolute</p>
+                  <p class="mt-1 text-slate-300">脱离普通文档流，按 top/right/bottom/left 定位。</p>
+                </div>
+                <div class="rounded border border-white/10 p-3">
+                  <p class="font-bold text-white">fixed</p>
+                  <p class="mt-1 text-slate-300">固定在浏览器窗口，比如顶部导航。</p>
+                </div>
+                <div class="rounded border border-white/10 p-3">
+                  <p class="font-bold text-white">z-50</p>
+                  <p class="mt-1 text-slate-300">层级更高，常用于弹窗、导航。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-4 md:grid-cols-3">
+            <article class="rounded-lg border border-slate-200 p-5">
+              <h3 class="text-lg font-bold">static</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">
+                默认值。元素按照 HTML 顺序自然排列，不能用 top/right/bottom/left 移动。
+              </p>
+            </article>
+            <article class="rounded-lg border border-slate-200 p-5">
+              <h3 class="text-lg font-bold">sticky</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">
+                滚动到指定位置后吸住，常用于表格头部、侧边目录。Tailwind 写法：
+                <code>sticky top-0</code>。
+              </p>
+            </article>
+            <article class="rounded-lg border border-slate-200 p-5">
+              <h3 class="text-lg font-bold">inset-0</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">
+                等于 top/right/bottom/left 全部为 0，常用于遮罩层：
+                <code>fixed inset-0 bg-black/50</code>。
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="responsive" class="bg-slate-100">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7">
+            <p class="text-sm font-bold text-blue-600">10</p>
+            <h2 class="mt-1 text-2xl font-bold">响应式布局：不同屏幕用不同样式</h2>
+            <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+              响应式的核心是：手机上先保证能看、能点；屏幕变大后再把布局展开。
+              Tailwind 用 <code class="rounded bg-white px-1.5 py-0.5">sm:</code>、
+              <code class="rounded bg-white px-1.5 py-0.5">md:</code>、
+              <code class="rounded bg-white px-1.5 py-0.5">lg:</code>
+              这样的前缀表示“到这个屏幕宽度后才生效”。
+            </p>
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[1fr_1fr]">
+            <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <p class="mb-4 text-sm font-bold text-slate-500">效果：手机上下排，电脑左右排</p>
+              <div class="flex flex-col gap-4 rounded-lg bg-slate-50 p-4 md:flex-row md:items-center">
+                <img
+                  class="h-40 w-full rounded object-cover md:h-32 md:w-48"
+                  src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80"
+                  alt="代码编辑器"
+                />
+                <div class="flex-1">
+                  <h3 class="text-xl font-bold">响应式课程卡片</h3>
+                  <p class="mt-2 text-sm leading-6 text-slate-600">
+                    当前盒子默认是 <code>flex-col</code>，到 md 屏幕后变成 <code>md:flex-row</code>。
+                    图片也从满宽变成固定宽度。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">对应代码</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>&lt;div class="flex flex-col gap-4 md:flex-row md:items-center"&gt;
+  &lt;img class="h-40 w-full md:h-32 md:w-48" src="code.jpg"&gt;
+
+  &lt;div class="flex-1"&gt;
+    &lt;h3&gt;响应式课程卡片&lt;/h3&gt;
+    &lt;p&gt;手机上下排，电脑左右排。&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+              <div class="mt-5 overflow-hidden rounded border border-white/10">
+                <table class="w-full border-collapse text-left text-sm">
+                  <thead class="bg-white/10 text-white">
+                    <tr>
+                      <th class="px-4 py-3">前缀</th>
+                      <th class="px-4 py-3">大概含义</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-white/10 text-slate-300">
+                    <tr>
+                      <td class="px-4 py-3 font-bold text-white">sm:</td>
+                      <td class="px-4 py-3">小平板及以上</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-bold text-white">md:</td>
+                      <td class="px-4 py-3">平板及以上</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-bold text-white">lg:</td>
+                      <td class="px-4 py-3">普通电脑屏幕及以上</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-bold text-white">xl:</td>
+                      <td class="px-4 py-3">更宽的桌面屏幕</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tailwind" class="bg-white">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7">
+            <p class="text-sm font-bold text-blue-600">11</p>
+            <h2 class="mt-1 text-2xl font-bold">Tailwind class：把 CSS 拆成小工具</h2>
+            <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+              Tailwind 不是新的 HTML 标签，它只是很多已经写好的 CSS class。你在 Vue3
+              里看到很长的 <code class="rounded bg-slate-100 px-1.5 py-0.5">class="..."</code>，
+              可以按“尺寸、间距、颜色、布局、状态”分组读。
+            </p>
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+            <div class="overflow-hidden rounded-lg border border-slate-200">
+              <table class="w-full border-collapse text-left text-sm">
+                <thead class="bg-slate-950 text-white">
+                  <tr>
+                    <th class="px-4 py-3">类型</th>
+                    <th class="px-4 py-3">常见 class</th>
+                    <th class="px-4 py-3">意思</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                  <tr>
+                    <td class="px-4 py-3 font-bold">尺寸</td>
+                    <td class="px-4 py-3">w-full、h-12、max-w-6xl</td>
+                    <td class="px-4 py-3 text-slate-600">宽度、高度、最大宽度</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 font-bold">间距</td>
+                    <td class="px-4 py-3">p-4、px-5、mt-6、gap-4</td>
+                    <td class="px-4 py-3 text-slate-600">内边距、外边距、子元素间距</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 font-bold">颜色</td>
+                    <td class="px-4 py-3">bg-white、text-slate-600</td>
+                    <td class="px-4 py-3 text-slate-600">背景色、文字颜色</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 font-bold">布局</td>
+                    <td class="px-4 py-3">flex、grid、items-center</td>
+                    <td class="px-4 py-3 text-slate-600">排列方式和对齐方式</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 font-bold">状态</td>
+                    <td class="px-4 py-3">hover:bg-blue-700</td>
+                    <td class="px-4 py-3 text-slate-600">鼠标移上去时改变样式</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 font-bold">响应式</td>
+                    <td class="px-4 py-3">md:flex-row、lg:grid-cols-2</td>
+                    <td class="px-4 py-3 text-slate-600">屏幕变大后切换布局</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 font-bold">定位</td>
+                    <td class="px-4 py-3">relative、absolute、top-4、z-50</td>
+                    <td class="px-4 py-3 text-slate-600">控制元素叠放和位置</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 font-bold">图片</td>
+                    <td class="px-4 py-3">object-cover、object-center</td>
+                    <td class="px-4 py-3 text-slate-600">控制图片裁剪和对齐</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 font-bold">溢出</td>
+                    <td class="px-4 py-3">overflow-hidden、truncate</td>
+                    <td class="px-4 py-3 text-slate-600">隐藏超出内容或单行省略</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 font-bold">动画</td>
+                    <td class="px-4 py-3">transition、duration-300、hover:scale-105</td>
+                    <td class="px-4 py-3 text-slate-600">控制状态变化和动效</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">普通 CSS 和 Tailwind 对比</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>/* 普通 CSS */
+.card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 8px;
+  background: white;
+}</code></pre>
+
+              <pre class="mt-4 overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>&lt;!-- Tailwind --&gt;
+&lt;div class="flex items-center gap-4 rounded-lg bg-white p-4"&gt;
+  ...
+&lt;/div&gt;</code></pre>
+
+              <div class="mt-5 rounded border border-white/10 p-4 text-sm leading-6 text-slate-300">
+                <p class="font-bold text-white">读 Tailwind class 的方法</p>
+                <p class="mt-2">先找布局：<code>flex</code>、<code>grid</code>、<code>absolute</code>。</p>
+                <p>再找尺寸和间距：<code>w-full</code>、<code>p-4</code>、<code>gap-4</code>。</p>
+                <p>最后看颜色和状态：<code>bg-white</code>、<code>text-slate-600</code>、<code>hover:bg-blue-700</code>。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tailwind-advanced" class="bg-slate-100">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7">
+            <p class="text-sm font-bold text-blue-600">12</p>
+            <h2 class="mt-1 text-2xl font-bold">Tailwind 进阶：状态、组合、任意值和 Vue 动态 class</h2>
+            <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+              看真实项目时，Tailwind class 往往不只是 <code class="rounded bg-white px-1.5 py-0.5">p-4</code> 这种基础写法，还会有状态前缀、父子联动、任意值和条件 class。
+            </p>
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[1fr_1fr]">
+            <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 class="text-lg font-bold">状态前缀</h3>
+              <div class="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+                <button class="rounded bg-blue-600 px-4 py-2 font-bold text-white hover:bg-blue-700">hover:bg-blue-700</button>
+                <button class="rounded border border-slate-300 px-4 py-2 font-bold text-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-100">focus:ring-2</button>
+                <button class="rounded bg-slate-300 px-4 py-2 font-bold text-slate-500" disabled>disabled 状态</button>
+                <div class="group rounded border border-slate-200 p-3">
+                  <p class="font-bold group-hover:text-blue-600">group-hover:text-blue-600</p>
+                  <p class="mt-1 text-slate-500">鼠标移到父元素，子元素变色。</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">进阶写法示例</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>&lt;button class="hover:bg-blue-700 focus:ring-2 disabled:opacity-50"&gt;
+  保存
+&lt;/button&gt;
+
+&lt;div class="group"&gt;
+  &lt;p class="group-hover:text-blue-600"&gt;父元素 hover 时变色&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class="w-[320px] grid-cols-[220px_1fr]"&gt;
+  任意值写法
+&lt;/div&gt;</code></pre>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">Vue3 动态 class</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>&lt;button
+  class="rounded px-4 py-2 font-bold"
+  :class="isActive ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600'"
+&gt;
+  {{ isActive ? '已选中' : '未选中' }}
+&lt;/button&gt;
+
+&lt;div :class="{ 'opacity-50 pointer-events-none': loading }"&gt;
+  加载时禁用
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 class="text-lg font-bold">项目里常见的 Tailwind 读法</h3>
+              <ul class="mt-4 space-y-3 text-sm leading-6 text-slate-700">
+                <li><strong>冒号前面是条件：</strong><code>md:</code>、<code>hover:</code>、<code>focus:</code>、<code>disabled:</code>。</li>
+                <li><strong>方括号是任意值：</strong><code>w-[320px]</code>、<code>grid-cols-[220px_1fr]</code>。</li>
+                <li><strong>斜杠常表示透明度：</strong><code>bg-black/50</code> 是半透明黑色。</li>
+                <li><strong>复杂 class 要分组读：</strong>布局、尺寸、间距、颜色、状态、响应式。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="animation" class="bg-white">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7">
+            <p class="text-sm font-bold text-blue-600">13</p>
+            <h2 class="mt-1 text-2xl font-bold">动画和过渡：让状态变化更自然</h2>
+            <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+              过渡 transition 用于“从一个状态平滑变到另一个状态”，比如 hover 时按钮变色。
+              动画 animation 用于持续播放一段关键帧，比如卡片轻微上下浮动。
+            </p>
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+            <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <p class="mb-4 text-sm font-bold text-slate-500">效果：hover 过渡 + keyframes 动画</p>
+
+              <div class="grid gap-5 md:grid-cols-2">
+                <div class="rounded-lg bg-slate-50 p-5">
+                  <button class="rounded bg-blue-600 px-5 py-3 text-sm font-bold text-white transition duration-300 hover:-translate-y-1 hover:bg-blue-700 hover:shadow-lg">
+                    鼠标移上来
+                  </button>
+                  <p class="mt-4 text-sm leading-6 text-slate-600">
+                    <code>transition</code> 让 hover 的颜色、阴影、位移变化更柔和。
+                  </p>
+                </div>
+
+                <div class="relative rounded-lg bg-slate-950 p-5 text-white">
+                  <span class="pulse-ring absolute right-8 top-8 h-8 w-8 rounded-full bg-cyan-300"></span>
+                  <span class="absolute right-8 top-8 h-8 w-8 rounded-full bg-cyan-300"></span>
+                  <div class="float-demo mt-12 rounded-lg bg-white p-4 text-slate-950 shadow-xl">
+                    <p class="font-bold">浮动卡片</p>
+                    <p class="mt-1 text-sm text-slate-600">使用 @keyframes 控制上下移动。</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">过渡写法</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>&lt;button class="transition duration-300 hover:bg-blue-700 hover:shadow-lg"&gt;
+  鼠标移上来
+&lt;/button&gt;</code></pre>
+
+              <p class="mb-3 mt-5 text-sm font-bold text-cyan-300">动画写法</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>.float-demo {
+  animation: float-card 3s ease-in-out infinite;
+}
+
+@keyframes float-card {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="accessibility" class="bg-slate-100">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7">
+            <p class="text-sm font-bold text-blue-600">14</p>
+            <h2 class="mt-1 text-2xl font-bold">无障碍和语义化：让页面更专业，也更容易维护</h2>
+            <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+              无障碍不是额外负担，很多时候就是写正确的 HTML：按钮用 button，输入框配 label，图片写 alt，交互元素能用键盘操作。
+            </p>
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[1fr_1fr]">
+            <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 class="text-lg font-bold">应该这样写</h3>
+              <div class="mt-4 space-y-4">
+                <label class="block text-sm">
+                  <span class="font-bold text-slate-700">邮箱</span>
+                  <input class="mt-1 w-full rounded border border-slate-300 px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" type="email" placeholder="name@example.com" />
+                </label>
+
+                <button class="rounded bg-blue-600 px-4 py-2 text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-blue-300">
+                  真正的按钮
+                </button>
+
+                <img
+                  class="h-28 w-full rounded object-cover"
+                  src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80"
+                  alt="打开的代码编辑器界面"
+                />
+              </div>
+            </div>
+
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">常见错误和正确写法</p>
+              <pre class="overflow-x-auto rounded bg-black/40 p-4 text-sm leading-6"><code>&lt;!-- 不推荐：div 假装按钮 --&gt;
+&lt;div @click="submit"&gt;提交&lt;/div&gt;
+
+&lt;!-- 推荐：button 天然支持键盘和语义 --&gt;
+&lt;button type="button" @click="submit"&gt;提交&lt;/button&gt;
+
+&lt;!-- 不推荐：没有说明的图片 --&gt;
+&lt;img src="/chart.png"&gt;
+
+&lt;!-- 推荐：有含义的 alt --&gt;
+&lt;img src="/chart.png" alt="本月销售趋势图"&gt;</code></pre>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-4 md:grid-cols-4">
+            <article class="rounded-lg border border-slate-200 bg-white p-4">
+              <p class="font-bold">颜色对比</p>
+              <p class="mt-2 text-sm text-slate-600">浅灰字放在白底上容易看不清，正文尽量有足够对比。</p>
+            </article>
+            <article class="rounded-lg border border-slate-200 bg-white p-4">
+              <p class="font-bold">键盘焦点</p>
+              <p class="mt-2 text-sm text-slate-600">输入框、按钮、链接应该能 Tab 访问，并有 focus 样式。</p>
+            </article>
+            <article class="rounded-lg border border-slate-200 bg-white p-4">
+              <p class="font-bold">标题层级</p>
+              <p class="mt-2 text-sm text-slate-600">不要为了字号乱用 h1/h2，标题层级应该表达内容结构。</p>
+            </article>
+            <article class="rounded-lg border border-slate-200 bg-white p-4">
+              <p class="font-bold">ARIA</p>
+              <p class="mt-2 text-sm text-slate-600">优先用原生标签；原生标签不够时再补 aria-label、role。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============== Vue3 字典专区 开始 ============== -->
+      <section id="vue" class="bg-gradient-to-b from-cyan-50 via-white to-white">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7 flex flex-wrap items-center gap-3">
+            <span class="vue-badge">Vue3 字典</span>
+            <p class="text-sm font-bold text-cyan-700">15 — 26 节</p>
+          </div>
+          <h2 class="text-3xl font-bold">Vue3 字典：从指令到组件，一翻就懂</h2>
+          <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+            下面这一整块都是 Vue3 的"指令字典"。每个小节都包含：<strong>源码示例</strong> + <strong>实时运行的真实 Vue3 实例</strong> + <strong>解释 & 常见场景</strong>。
+            页面已经引入了 Vue3 CDN，你看到的每个绿色"实时运行"框里都是一个独立的 Vue 应用。
+          </p>
+
+          <div class="mt-6 grid gap-3 sm:grid-cols-3 lg:grid-cols-6 text-xs">
+            <a href="#vue-reactivity" class="dict-card p-3 text-center"><div class="vue-tag">16</div><p class="mt-1 font-bold">响应式</p></a>
+            <a href="#vue-interp" class="dict-card p-3 text-center"><div class="vue-tag">17</div><p class="mt-1 font-bold">插值</p></a>
+            <a href="#vue-if" class="dict-card p-3 text-center"><div class="vue-tag">18</div><p class="mt-1 font-bold">v-if</p></a>
+            <a href="#vue-for" class="dict-card p-3 text-center"><div class="vue-tag">19</div><p class="mt-1 font-bold">v-for</p></a>
+            <a href="#vue-bind" class="dict-card p-3 text-center"><div class="vue-tag">20</div><p class="mt-1 font-bold">v-bind</p></a>
+            <a href="#vue-on" class="dict-card p-3 text-center"><div class="vue-tag">21</div><p class="mt-1 font-bold">v-on</p></a>
+            <a href="#vue-model" class="dict-card p-3 text-center"><div class="vue-tag">22</div><p class="mt-1 font-bold">v-model</p></a>
+            <a href="#vue-computed" class="dict-card p-3 text-center"><div class="vue-tag">23</div><p class="mt-1 font-bold">computed/watch</p></a>
+            <a href="#vue-lifecycle" class="dict-card p-3 text-center"><div class="vue-tag">24</div><p class="mt-1 font-bold">生命周期</p></a>
+            <a href="#vue-component" class="dict-card p-3 text-center"><div class="vue-tag">25</div><p class="mt-1 font-bold">组件/插槽</p></a>
+            <a href="#vue-cheatsheet" class="dict-card p-3 text-center"><div class="vue-tag">26</div><p class="mt-1 font-bold">速查表</p></a>
+            <a href="#vue" class="dict-card p-3 text-center bg-cyan-100"><div class="vue-tag">15</div><p class="mt-1 font-bold">入门</p></a>
+          </div>
+
+          <!-- ===== 15 入门 ===== -->
+          <div class="mt-10">
+            <div class="mb-5 flex items-baseline gap-3">
+              <p class="text-sm font-bold text-cyan-600">15</p>
+              <h3 class="text-xl font-bold">Vue3 入门：3 行代码就能在 HTML 里跑起来</h3>
+            </div>
+            <p class="text-sm leading-7 text-slate-600">Vue3 不一定要 webpack。只要引入一个 CDN，就能在普通 HTML 里写响应式应用。本页 26 个示例就是这样实现的。</p>
+
+            <div class="mt-5 grid gap-5 lg:grid-cols-2">
+              <div>
+                <p class="mb-2 text-xs font-bold text-slate-500">源码</p>
+<pre class="vue-code-block"><span class="v-com">&lt;!-- 1. 引入 Vue3 --&gt;</span>
+&lt;<span class="v-tag">script</span> <span class="v-attr">src</span>=<span class="v-str">"https://unpkg.com/vue@3/dist/vue.global.prod.js"</span>&gt;&lt;/<span class="v-tag">script</span>&gt;
+
+<span class="v-com">&lt;!-- 2. 写模板 --&gt;</span>
+&lt;<span class="v-tag">div</span> <span class="v-attr">id</span>=<span class="v-str">"app"</span>&gt;
+  &lt;<span class="v-tag">h1</span>&gt;<span class="v-mus">{{ message }}</span>&lt;/<span class="v-tag">h1</span>&gt;
+  &lt;<span class="v-tag">button</span> <span class="v-dir">@click</span>=<span class="v-str">"count++"</span>&gt;点击 {{ count }} 次&lt;/<span class="v-tag">button</span>&gt;
+&lt;/<span class="v-tag">div</span>&gt;
+
+<span class="v-com">&lt;!-- 3. 创建应用并挂载 --&gt;</span>
+&lt;<span class="v-tag">script</span>&gt;
+  <span class="v-dir">const</span> { createApp, ref } = Vue
+  createApp({
+    setup() {
+      <span class="v-dir">const</span> message = ref(<span class="v-str">'你好 Vue3！'</span>)
+      <span class="v-dir">const</span> count = ref(0)
+      <span class="v-dir">return</span> { message, count }
+    }
+  }).mount(<span class="v-str">'#app'</span>)
+&lt;/<span class="v-tag">script</span>&gt;</pre>
+              </div>
+              <div>
+                <p class="mb-2 text-xs font-bold text-slate-500">运行结果<span class="vue-pulse ml-2"></span></p>
+                <div class="vue-live mt-2">
+                  <div id="demo-hello">
+                    <h4 class="text-2xl font-bold text-cyan-700">{{ message }}</h4>
+                    <button class="mt-3 rounded bg-cyan-600 px-4 py-2 text-white hover:bg-cyan-500" @click="count++">点击 <span class="font-bold">{{ count }}</span> 次</button>
+                    <p class="mt-3 text-xs text-slate-500">点按钮，数字会变。这就是响应式。</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-5 grid gap-3 sm:grid-cols-3 text-sm">
+              <div class="rounded-lg bg-cyan-50 p-3 border border-cyan-100"><p class="font-bold text-cyan-800">createApp</p><p class="mt-1 text-slate-700">创建一个 Vue 应用实例</p></div>
+              <div class="rounded-lg bg-cyan-50 p-3 border border-cyan-100"><p class="font-bold text-cyan-800">setup()</p><p class="mt-1 text-slate-700">写数据和函数的地方（组合式 API）</p></div>
+              <div class="rounded-lg bg-cyan-50 p-3 border border-cyan-100"><p class="font-bold text-cyan-800">.mount('#app')</p><p class="mt-1 text-slate-700">把应用挂到某个 DOM 节点上</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 16 响应式数据 ===== -->
+      <section id="vue-reactivity" class="bg-white">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-5 flex items-baseline gap-3">
+            <p class="text-sm font-bold text-cyan-600">16</p>
+            <h3 class="text-xl font-bold">响应式数据：ref 还是 reactive？</h3>
+          </div>
+          <p class="text-sm leading-7 text-slate-600">"响应式"就是：数据一变，页面跟着变。Vue3 提供两种写法：<code class="rounded bg-slate-100 px-1.5 py-0.5">ref</code> 包装单个值（包括对象），<code class="rounded bg-slate-100 px-1.5 py-0.5">reactive</code> 只能包装对象。新手建议：<strong class="text-cyan-700">全部用 ref，不会错</strong>。</p>
+
+          <div class="mt-5 grid gap-5 lg:grid-cols-2">
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">源码</p>
+<pre class="vue-code-block"><span class="v-dir">import</span> { ref, reactive } <span class="v-dir">from</span> <span class="v-str">'vue'</span>
+
+<span class="v-com">// ref：包装任意值（数字、字符串、对象、数组）</span>
+<span class="v-dir">const</span> count = ref(0)
+count.value++  <span class="v-com">// JS 里要写 .value</span>
+
+<span class="v-com">// 模板里不用写 .value，Vue 自动解包</span>
+<span class="v-com">// &lt;p&gt;{{ count }}&lt;/p&gt;</span>
+
+<span class="v-com">// reactive：只能包装对象/数组</span>
+<span class="v-dir">const</span> user = reactive({
+  name: <span class="v-str">'小明'</span>,
+  age: 18
+})
+user.age++  <span class="v-com">// 直接改，不用 .value</span></pre>
+            </div>
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">运行结果<span class="vue-pulse ml-2"></span></p>
+              <div class="vue-live">
+                <div id="demo-reactive">
+                  <div class="grid gap-3 sm:grid-cols-2">
+                    <div class="rounded border border-cyan-200 bg-cyan-50 p-3">
+                      <p class="text-xs font-bold text-cyan-700">ref 计数器</p>
+                      <p class="mt-1 text-3xl font-bold text-cyan-800">{{ count }}</p>
+                      <button class="mt-2 rounded bg-cyan-600 px-3 py-1 text-sm text-white" @click="count++">+1</button>
+                    </div>
+                    <div class="rounded border border-violet-200 bg-violet-50 p-3">
+                      <p class="text-xs font-bold text-violet-700">reactive 用户对象</p>
+                      <p class="mt-1 text-sm text-violet-900">姓名：<strong>{{ user.name }}</strong></p>
+                      <p class="text-sm text-violet-900">年龄：<strong>{{ user.age }}</strong></p>
+                      <button class="mt-2 rounded bg-violet-600 px-3 py-1 text-sm text-white" @click="user.age++">长大一岁</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 overflow-hidden rounded-lg border border-slate-200">
+            <table class="w-full border-collapse text-left text-sm">
+              <thead class="bg-slate-100 text-slate-700">
+                <tr><th class="px-4 py-2">对比项</th><th class="px-4 py-2">ref</th><th class="px-4 py-2">reactive</th></tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr><td class="px-4 py-2 font-bold">能包什么</td><td class="px-4 py-2 text-slate-700">任意值</td><td class="px-4 py-2 text-slate-700">仅对象 / 数组 / Map / Set</td></tr>
+                <tr><td class="px-4 py-2 font-bold">JS 里访问</td><td class="px-4 py-2 text-slate-700"><code>count.value</code></td><td class="px-4 py-2 text-slate-700"><code>user.name</code></td></tr>
+                <tr><td class="px-4 py-2 font-bold">模板里访问</td><td class="px-4 py-2 text-slate-700"><code>{{ count }}</code></td><td class="px-4 py-2 text-slate-700"><code>{{ user.name }}</code></td></tr>
+                <tr><td class="px-4 py-2 font-bold">能整个替换</td><td class="px-4 py-2 text-emerald-700">能（<code>count.value = newVal</code>）</td><td class="px-4 py-2 text-rose-700">不能直接 user = newObj</td></tr>
+                <tr><td class="px-4 py-2 font-bold">能解构</td><td class="px-4 py-2 text-rose-700">不能（失去响应性，需 <code>toRefs</code>）</td><td class="px-4 py-2 text-rose-700">不能直接解构</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 17 模板插值 ===== -->
+      <section id="vue-interp" class="bg-slate-50">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-5 flex items-baseline gap-3">
+            <p class="text-sm font-bold text-cyan-600">17</p>
+            <h3 class="text-xl font-bold">模板插值：把数据变成页面文字</h3>
+          </div>
+          <p class="text-sm leading-7 text-slate-600">最常用的就是双花括号 <code class="rounded bg-white px-1.5 py-0.5">{{ }}</code>。中间可以放变量、表达式、三元运算、方法调用，<strong>不能放 if/for 语句</strong>。</p>
+
+          <div class="mt-5 grid gap-5 lg:grid-cols-2">
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">源码</p>
+<pre class="vue-code-block"><span class="v-com">&lt;!-- 1. 直接插变量 --&gt;</span>
+&lt;<span class="v-tag">p</span>&gt;<span class="v-mus">{{ name }}</span>&lt;/<span class="v-tag">p</span>&gt;
+
+<span class="v-com">&lt;!-- 2. JS 表达式 --&gt;</span>
+&lt;<span class="v-tag">p</span>&gt;<span class="v-mus">{{ name.toUpperCase() }}</span>&lt;/<span class="v-tag">p</span>&gt;
+&lt;<span class="v-tag">p</span>&gt;<span class="v-mus">{{ count * 2 + 1 }}</span>&lt;/<span class="v-tag">p</span>&gt;
+
+<span class="v-com">&lt;!-- 3. 三元判断 --&gt;</span>
+&lt;<span class="v-tag">p</span>&gt;<span class="v-mus">{{ count &gt; 5 ? '多' : '少' }}</span>&lt;/<span class="v-tag">p</span>&gt;
+
+<span class="v-com">&lt;!-- 4. v-text 同效果（覆盖整个元素） --&gt;</span>
+&lt;<span class="v-tag">p</span> <span class="v-dir">v-text</span>=<span class="v-str">"name"</span>&gt;&lt;/<span class="v-tag">p</span>&gt;
+
+<span class="v-com">&lt;!-- 5. v-html 渲染 HTML（小心 XSS） --&gt;</span>
+&lt;<span class="v-tag">div</span> <span class="v-dir">v-html</span>=<span class="v-str">"&lt;b&gt;粗体&lt;/b&gt;"</span>&gt;&lt;/<span class="v-tag">div</span>&gt;
+
+<span class="v-com">&lt;!-- 6. v-pre：跳过编译，原样输出 --&gt;</span>
+&lt;<span class="v-tag">p</span> <span class="v-dir">v-pre</span>&gt;<span class="v-mus">{{ 这串不会被解析 }}</span>&lt;/<span class="v-tag">p</span>&gt;</pre>
+            </div>
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">运行结果<span class="vue-pulse ml-2"></span></p>
+              <div class="vue-live">
+                <div id="demo-interp" class="space-y-2 text-sm">
+                  <div class="rounded bg-cyan-50 p-2"><span v-pre class="text-cyan-700 font-bold">{{ name }}</span> → <span class="font-mono text-slate-800">{{ name }}</span></div>
+                  <div class="rounded bg-cyan-50 p-2"><span class="text-cyan-700 font-bold">表达式</span> → <span class="font-mono text-slate-800">{{ name.toUpperCase() }}</span> / <span class="font-mono text-slate-800">{{ count * 2 + 1 }}</span></div>
+                  <div class="rounded bg-cyan-50 p-2"><span class="text-cyan-700 font-bold">三元</span> → 数量是 <span class="font-mono text-slate-800">{{ count > 5 ? '多' : '少' }}</span> <button class="ml-2 rounded bg-cyan-600 px-2 py-0.5 text-xs text-white" @click="count++">+1（当前 {{ count }}）</button></div>
+                  <div class="rounded bg-cyan-50 p-2"><span class="text-cyan-700 font-bold">v-html</span> → <span v-html="rawHtml"></span></div>
+                  <div class="rounded bg-amber-50 p-2"><span class="text-amber-700 font-bold">v-pre</span> → <span v-pre>{{ 这串不解析 }}</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 18 条件渲染 ===== -->
+      <section id="vue-if" class="bg-white">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-5 flex items-baseline gap-3">
+            <p class="text-sm font-bold text-cyan-600">18</p>
+            <h3 class="text-xl font-bold">条件渲染 v-if / v-show：什么时候出现</h3>
+          </div>
+          <p class="text-sm leading-7 text-slate-600"><code class="rounded bg-slate-100 px-1.5 py-0.5">v-if</code> 是真正"删除/插入" DOM；<code class="rounded bg-slate-100 px-1.5 py-0.5">v-show</code> 只是 <code>display:none</code> 切换。频繁切换用 v-show，偶尔切换用 v-if。</p>
+
+          <div class="mt-5 grid gap-5 lg:grid-cols-2">
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">源码</p>
+<pre class="vue-code-block">&lt;<span class="v-tag">div</span> <span class="v-dir">v-if</span>=<span class="v-str">"score &gt;= 90"</span>&gt;A 等级&lt;/<span class="v-tag">div</span>&gt;
+&lt;<span class="v-tag">div</span> <span class="v-dir">v-else-if</span>=<span class="v-str">"score &gt;= 60"</span>&gt;及格&lt;/<span class="v-tag">div</span>&gt;
+&lt;<span class="v-tag">div</span> <span class="v-dir">v-else</span>&gt;不及格&lt;/<span class="v-tag">div</span>&gt;
+
+<span class="v-com">&lt;!-- v-show 永远渲染，只切换显示 --&gt;</span>
+&lt;<span class="v-tag">div</span> <span class="v-dir">v-show</span>=<span class="v-str">"isOpen"</span>&gt;弹窗内容&lt;/<span class="v-tag">div</span>&gt;
+
+<span class="v-com">&lt;!-- 多个元素一起切换：用 template 包起来 --&gt;</span>
+&lt;<span class="v-tag">template</span> <span class="v-dir">v-if</span>=<span class="v-str">"isLogin"</span>&gt;
+  &lt;<span class="v-tag">h1</span>&gt;欢迎&lt;/<span class="v-tag">h1</span>&gt;
+  &lt;<span class="v-tag">p</span>&gt;你已登录&lt;/<span class="v-tag">p</span>&gt;
+&lt;/<span class="v-tag">template</span>&gt;</pre>
+            </div>
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">运行结果<span class="vue-pulse ml-2"></span></p>
+              <div class="vue-live">
+                <div id="demo-if">
+                  <div class="flex items-center gap-2 text-sm">
+                    <label class="font-bold">分数：</label>
+                    <input type="range" min="0" max="100" v-model.number="score" class="flex-1">
+                    <span class="w-10 text-right font-mono">{{ score }}</span>
+                  </div>
+                  <div class="mt-3 rounded p-3 text-center font-bold text-white"
+                       :class="score >= 90 ? 'bg-emerald-500' : score >= 60 ? 'bg-amber-500' : 'bg-rose-500'">
+                    <span v-if="score >= 90">🏆 A 等级（优秀）</span>
+                    <span v-else-if="score >= 60">✅ 及格</span>
+                    <span v-else>❌ 不及格</span>
+                  </div>
+                  <div class="mt-4 flex items-center gap-2 text-sm">
+                    <button class="rounded bg-cyan-600 px-3 py-1 text-white" @click="isOpen = !isOpen">切换弹窗</button>
+                    <span class="text-xs text-slate-500">用 v-show 控制，DOM 一直存在</span>
+                  </div>
+                  <div v-show="isOpen" class="mt-2 rounded border border-cyan-300 bg-cyan-50 p-3 text-sm">
+                    💬 这是一个 v-show 控制的弹窗，频繁切换时性能好。
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 19 列表渲染 ===== -->
+      <section id="vue-for" class="bg-slate-50">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-5 flex items-baseline gap-3">
+            <p class="text-sm font-bold text-cyan-600">19</p>
+            <h3 class="text-xl font-bold">列表渲染 v-for：一份模板，渲染多次</h3>
+          </div>
+          <p class="text-sm leading-7 text-slate-600">商品列表、消息列表、表格行——只要看到重复结构，几乎都是 <code class="rounded bg-white px-1.5 py-0.5">v-for</code>。务必加 <code class="rounded bg-white px-1.5 py-0.5">:key</code>，否则 Vue 会警告你。</p>
+
+          <div class="mt-5 grid gap-5 lg:grid-cols-2">
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">源码</p>
+<pre class="vue-code-block"><span class="v-com">&lt;!-- 1. 遍历数组 --&gt;</span>
+&lt;<span class="v-tag">li</span> <span class="v-dir">v-for</span>=<span class="v-str">"item in list"</span> <span class="v-dir">:key</span>=<span class="v-str">"item.id"</span>&gt;
+  <span class="v-mus">{{ item.name }}</span> - <span class="v-mus">{{ item.price }}</span> 元
+&lt;/<span class="v-tag">li</span>&gt;
+
+<span class="v-com">&lt;!-- 2. 带索引 --&gt;</span>
+&lt;<span class="v-tag">li</span> <span class="v-dir">v-for</span>=<span class="v-str">"(item, i) in list"</span> <span class="v-dir">:key</span>=<span class="v-str">"item.id"</span>&gt;
+  第 <span class="v-mus">{{ i + 1 }}</span> 个：<span class="v-mus">{{ item.name }}</span>
+&lt;/<span class="v-tag">li</span>&gt;
+
+<span class="v-com">&lt;!-- 3. 遍历对象 --&gt;</span>
+&lt;<span class="v-tag">div</span> <span class="v-dir">v-for</span>=<span class="v-str">"(val, key) in obj"</span> <span class="v-dir">:key</span>=<span class="v-str">"key"</span>&gt;
+  <span class="v-mus">{{ key }}</span>: <span class="v-mus">{{ val }}</span>
+&lt;/<span class="v-tag">div</span>&gt;
+
+<span class="v-com">&lt;!-- 4. 遍历数字（1 到 5） --&gt;</span>
+&lt;<span class="v-tag">span</span> <span class="v-dir">v-for</span>=<span class="v-str">"n in 5"</span> <span class="v-dir">:key</span>=<span class="v-str">"n"</span>&gt;⭐&lt;/<span class="v-tag">span</span>&gt;</pre>
+            </div>
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">运行结果<span class="vue-pulse ml-2"></span></p>
+              <div class="vue-live">
+                <div id="demo-for">
+                  <div class="flex gap-2 text-sm">
+                    <input v-model="newItem" placeholder="输入名称，回车添加" @keyup.enter="add" class="flex-1 rounded border border-slate-300 px-3 py-1.5 focus:border-cyan-500 focus:outline-none">
+                    <button class="rounded bg-cyan-600 px-3 text-white" @click="add">+ 添加</button>
+                  </div>
+                  <ul class="mt-3 space-y-1.5 text-sm">
+                    <li v-for="(item, i) in list" :key="item.id" class="flex items-center justify-between rounded border border-cyan-100 bg-cyan-50 px-3 py-2">
+                      <span><span class="font-mono text-cyan-700">#{{ i + 1 }}</span> {{ item.name }}</span>
+                      <button class="text-rose-500 hover:text-rose-700" @click="remove(item.id)">删除</button>
+                    </li>
+                  </ul>
+                  <p v-if="list.length === 0" class="mt-3 text-center text-sm text-slate-400">列表是空的</p>
+                  <p class="mt-3 text-xs text-slate-500">⭐ 重复 5 次：<span v-for="n in 5" :key="n">⭐</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm">
+            <p class="font-bold text-amber-800">⚠️ 为什么要 :key？</p>
+            <p class="mt-1 text-slate-700">Vue 用 key 来识别"哪个元素是哪个"。没有 key 时，删除中间一项可能造成"复用了错位置的 DOM"——比如输入框里的值跑到了别人那里。<strong>key 要唯一且稳定，最好用 id，不要用数组索引 i</strong>。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 20 v-bind ===== -->
+      <section id="vue-bind" class="bg-white">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-5 flex items-baseline gap-3">
+            <p class="text-sm font-bold text-cyan-600">20</p>
+            <h3 class="text-xl font-bold">属性绑定 v-bind：让属性"活"起来</h3>
+          </div>
+          <p class="text-sm leading-7 text-slate-600"><code class="rounded bg-slate-100 px-1.5 py-0.5">v-bind:src</code> 可简写成 <code class="rounded bg-slate-100 px-1.5 py-0.5">:src</code>。最强大的是 <code class="rounded bg-slate-100 px-1.5 py-0.5">:class</code> 和 <code class="rounded bg-slate-100 px-1.5 py-0.5">:style</code>，支持对象和数组语法。</p>
+
+          <div class="mt-5 grid gap-5 lg:grid-cols-2">
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">源码</p>
+<pre class="vue-code-block"><span class="v-com">&lt;!-- 1. 绑定普通属性 --&gt;</span>
+&lt;<span class="v-tag">img</span> <span class="v-dir">:src</span>=<span class="v-str">"user.avatar"</span> <span class="v-dir">:alt</span>=<span class="v-str">"user.name"</span>&gt;
+&lt;<span class="v-tag">a</span> <span class="v-dir">:href</span>=<span class="v-str">"`/u/${user.id}`"</span>&gt;主页&lt;/<span class="v-tag">a</span>&gt;
+
+<span class="v-com">&lt;!-- 2. :class 对象语法（推荐） --&gt;</span>
+&lt;<span class="v-tag">div</span> <span class="v-dir">:class</span>=<span class="v-str">"{ active: isActive, disabled: !canClick }"</span>&gt;
+
+<span class="v-com">&lt;!-- 3. :class 数组语法 --&gt;</span>
+&lt;<span class="v-tag">div</span> <span class="v-dir">:class</span>=<span class="v-str">"[base, isActive ? 'on' : 'off']"</span>&gt;
+
+<span class="v-com">&lt;!-- 4. :style 对象语法 --&gt;</span>
+&lt;<span class="v-tag">div</span> <span class="v-dir">:style</span>=<span class="v-str">"{ color: c, fontSize: size + 'px' }"</span>&gt;
+
+<span class="v-com">&lt;!-- 5. disabled 这种布尔属性 --&gt;</span>
+&lt;<span class="v-tag">button</span> <span class="v-dir">:disabled</span>=<span class="v-str">"loading"</span>&gt;提交&lt;/<span class="v-tag">button</span>&gt;</pre>
+            </div>
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">运行结果<span class="vue-pulse ml-2"></span></p>
+              <div class="vue-live">
+                <div id="demo-bind">
+                  <div class="flex flex-wrap items-center gap-3 text-sm">
+                    <label class="flex items-center gap-1"><input type="checkbox" v-model="isActive"> 激活</label>
+                    <label class="flex items-center gap-1"><input type="checkbox" v-model="isBig"> 大字</label>
+                    <label class="flex items-center gap-1">颜色 <input type="color" v-model="color"></label>
+                  </div>
+                  <div class="mt-3 rounded p-4 text-center transition-all"
+                       :class="{ 'ring-4 ring-cyan-400': isActive, 'bg-slate-100': !isActive, 'bg-cyan-100': isActive }"
+                       :style="{ color: color, fontSize: isBig ? '24px' : '14px' }">
+                    我的样式会跟着上面的选项变化
+                  </div>
+                  <pre class="mt-3 rounded bg-slate-900 p-2 text-xs text-emerald-300">:class = <span>{{ JSON.stringify({ 'ring-4 ring-cyan-400': isActive, 'bg-cyan-100': isActive }) }}</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 21 v-on 事件 ===== -->
+      <section id="vue-on" class="bg-slate-50">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-5 flex items-baseline gap-3">
+            <p class="text-sm font-bold text-cyan-600">21</p>
+            <h3 class="text-xl font-bold">事件处理 v-on / @：让页面会"响应"</h3>
+          </div>
+          <p class="text-sm leading-7 text-slate-600"><code class="rounded bg-white px-1.5 py-0.5">@click="fn"</code> 是 <code>v-on:click</code> 的简写。Vue 提供了 <strong>事件修饰符</strong>（处理冒泡/默认行为）和 <strong>按键修饰符</strong>（处理键盘）。</p>
+
+          <div class="mt-5 grid gap-5 lg:grid-cols-2">
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">源码</p>
+<pre class="vue-code-block"><span class="v-com">&lt;!-- 1. 调用函数 --&gt;</span>
+&lt;<span class="v-tag">button</span> <span class="v-dir">@click</span>=<span class="v-str">"add"</span>&gt;+1&lt;/<span class="v-tag">button</span>&gt;
+
+<span class="v-com">&lt;!-- 2. 内联表达式 --&gt;</span>
+&lt;<span class="v-tag">button</span> <span class="v-dir">@click</span>=<span class="v-str">"count++"</span>&gt;+1&lt;/<span class="v-tag">button</span>&gt;
+
+<span class="v-com">&lt;!-- 3. 传参 --&gt;</span>
+&lt;<span class="v-tag">button</span> <span class="v-dir">@click</span>=<span class="v-str">"add(2)"</span>&gt;+2&lt;/<span class="v-tag">button</span>&gt;
+
+<span class="v-com">&lt;!-- 4. 事件修饰符 --&gt;</span>
+&lt;<span class="v-tag">a</span> <span class="v-dir">@click.prevent</span>=<span class="v-str">"go"</span>&gt;不会跳转&lt;/<span class="v-tag">a</span>&gt;
+&lt;<span class="v-tag">div</span> <span class="v-dir">@click.stop</span>=<span class="v-str">"fn"</span>&gt;不冒泡&lt;/<span class="v-tag">div</span>&gt;
+&lt;<span class="v-tag">div</span> <span class="v-dir">@click.self</span>=<span class="v-str">"fn"</span>&gt;只自己触发&lt;/<span class="v-tag">div</span>&gt;
+&lt;<span class="v-tag">div</span> <span class="v-dir">@click.once</span>=<span class="v-str">"fn"</span>&gt;只触发一次&lt;/<span class="v-tag">div</span>&gt;
+
+<span class="v-com">&lt;!-- 5. 按键修饰符 --&gt;</span>
+&lt;<span class="v-tag">input</span> <span class="v-dir">@keyup.enter</span>=<span class="v-str">"submit"</span>&gt;
+&lt;<span class="v-tag">input</span> <span class="v-dir">@keyup.esc</span>=<span class="v-str">"cancel"</span>&gt;
+&lt;<span class="v-tag">input</span> <span class="v-dir">@keyup.ctrl.s</span>=<span class="v-str">"save"</span>&gt;</pre>
+            </div>
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">运行结果<span class="vue-pulse ml-2"></span></p>
+              <div class="vue-live">
+                <div id="demo-on">
+                  <div class="flex flex-wrap gap-2 text-sm">
+                    <button class="rounded bg-cyan-600 px-3 py-1 text-white" @click="count++">@click（{{ count }}）</button>
+                    <button class="rounded bg-violet-600 px-3 py-1 text-white" @click.once="onceCount++">.once（{{ onceCount }}）</button>
+                  </div>
+                  <p class="mt-2 text-xs text-slate-500">"只一次"按钮点多少次都只 +1</p>
+
+                  <div class="mt-4 rounded border-2 border-dashed border-cyan-400 p-3" @click="outerLog++">
+                    <p class="text-xs font-bold text-cyan-700">外层（点这里也会触发，外层计数：{{ outerLog }}）</p>
+                    <button class="mt-2 rounded bg-rose-500 px-3 py-1 text-sm text-white" @click.stop="innerLog++">
+                      .stop 按钮（仅触发内层：{{ innerLog }}）
+                    </button>
+                  </div>
+
+                  <div class="mt-4">
+                    <input v-model="text" @keyup.enter="messages.push(text); text=''" placeholder="输入然后按回车" class="w-full rounded border border-slate-300 px-3 py-1.5 text-sm focus:border-cyan-500 focus:outline-none">
+                    <ul class="mt-2 max-h-20 overflow-y-auto text-xs text-slate-700">
+                      <li v-for="(m, i) in messages" :key="i" class="rounded bg-cyan-50 px-2 py-0.5">{{ m }}</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 text-xs">
+            <div class="dict-card p-3"><p class="font-bold text-cyan-700">.stop</p><p class="mt-1 text-slate-600">阻止冒泡</p></div>
+            <div class="dict-card p-3"><p class="font-bold text-cyan-700">.prevent</p><p class="mt-1 text-slate-600">阻止默认行为</p></div>
+            <div class="dict-card p-3"><p class="font-bold text-cyan-700">.self</p><p class="mt-1 text-slate-600">只自身能触发</p></div>
+            <div class="dict-card p-3"><p class="font-bold text-cyan-700">.once</p><p class="mt-1 text-slate-600">只触发一次</p></div>
+            <div class="dict-card p-3"><p class="font-bold text-cyan-700">.enter / .esc / .tab</p><p class="mt-1 text-slate-600">按键</p></div>
+            <div class="dict-card p-3"><p class="font-bold text-cyan-700">.ctrl / .shift / .alt</p><p class="mt-1 text-slate-600">组合键</p></div>
+            <div class="dict-card p-3"><p class="font-bold text-cyan-700">.left / .right / .middle</p><p class="mt-1 text-slate-600">鼠标按键</p></div>
+            <div class="dict-card p-3"><p class="font-bold text-cyan-700">.passive</p><p class="mt-1 text-slate-600">提高滚动性能</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 22 v-model ===== -->
+      <section id="vue-model" class="bg-white">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-5 flex items-baseline gap-3">
+            <p class="text-sm font-bold text-cyan-600">22</p>
+            <h3 class="text-xl font-bold">双向绑定 v-model：表单的灵魂</h3>
+          </div>
+          <p class="text-sm leading-7 text-slate-600"><code class="rounded bg-slate-100 px-1.5 py-0.5">v-model</code> 等于 <code>:value</code> + <code>@input</code>。改输入框 → 变量自动更新；改变量 → 输入框自动更新。</p>
+
+          <div class="mt-5 grid gap-5 lg:grid-cols-2">
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">源码</p>
+<pre class="vue-code-block"><span class="v-com">&lt;!-- 1. 文本输入 --&gt;</span>
+&lt;<span class="v-tag">input</span> <span class="v-dir">v-model</span>=<span class="v-str">"text"</span>&gt;
+
+<span class="v-com">&lt;!-- 2. 多行 --&gt;</span>
+&lt;<span class="v-tag">textarea</span> <span class="v-dir">v-model</span>=<span class="v-str">"bio"</span>&gt;&lt;/<span class="v-tag">textarea</span>&gt;
+
+<span class="v-com">&lt;!-- 3. 单选 --&gt;</span>
+&lt;<span class="v-tag">input</span> type=<span class="v-str">"radio"</span> value=<span class="v-str">"M"</span> <span class="v-dir">v-model</span>=<span class="v-str">"gender"</span>&gt;
+&lt;<span class="v-tag">input</span> type=<span class="v-str">"radio"</span> value=<span class="v-str">"F"</span> <span class="v-dir">v-model</span>=<span class="v-str">"gender"</span>&gt;
+
+<span class="v-com">&lt;!-- 4. 复选（数组） --&gt;</span>
+&lt;<span class="v-tag">input</span> type=<span class="v-str">"checkbox"</span> value=<span class="v-str">"读书"</span> <span class="v-dir">v-model</span>=<span class="v-str">"hobby"</span>&gt;
+
+<span class="v-com">&lt;!-- 5. 下拉 --&gt;</span>
+&lt;<span class="v-tag">select</span> <span class="v-dir">v-model</span>=<span class="v-str">"city"</span>&gt;
+  &lt;<span class="v-tag">option</span>&gt;北京&lt;/<span class="v-tag">option</span>&gt;
+&lt;/<span class="v-tag">select</span>&gt;
+
+<span class="v-com">&lt;!-- 6. 修饰符 --&gt;</span>
+&lt;<span class="v-tag">input</span> <span class="v-dir">v-model.lazy</span>=<span class="v-str">"x"</span>&gt;    <span class="v-com">// 失焦才同步</span>
+&lt;<span class="v-tag">input</span> <span class="v-dir">v-model.number</span>=<span class="v-str">"age"</span>&gt; <span class="v-com">// 转成数字</span>
+&lt;<span class="v-tag">input</span> <span class="v-dir">v-model.trim</span>=<span class="v-str">"name"</span>&gt;  <span class="v-com">// 去首尾空格</span></pre>
+            </div>
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">运行结果<span class="vue-pulse ml-2"></span></p>
+              <div class="vue-live">
+                <div id="demo-model">
+                  <div class="space-y-3 text-sm">
+                    <div>
+                      <label class="block text-xs font-bold text-slate-600">姓名（.trim 去空格）</label>
+                      <input v-model.trim="name" class="mt-1 w-full rounded border border-slate-300 px-3 py-1.5 focus:border-cyan-500 focus:outline-none" placeholder="试着前后加空格">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-bold text-slate-600">年龄（.number 转数字）</label>
+                      <input v-model.number="age" type="number" class="mt-1 w-full rounded border border-slate-300 px-3 py-1.5 focus:border-cyan-500 focus:outline-none">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-bold text-slate-600">性别</label>
+                      <div class="mt-1 flex gap-3">
+                        <label class="flex items-center gap-1"><input type="radio" value="M" v-model="gender"> 男</label>
+                        <label class="flex items-center gap-1"><input type="radio" value="F" v-model="gender"> 女</label>
+                      </div>
+                    </div>
+                    <div>
+                      <label class="block text-xs font-bold text-slate-600">爱好（数组）</label>
+                      <div class="mt-1 flex flex-wrap gap-3">
+                        <label class="flex items-center gap-1"><input type="checkbox" value="读书" v-model="hobby"> 读书</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" value="运动" v-model="hobby"> 运动</label>
+                        <label class="flex items-center gap-1"><input type="checkbox" value="音乐" v-model="hobby"> 音乐</label>
+                      </div>
+                    </div>
+                    <div>
+                      <label class="block text-xs font-bold text-slate-600">城市</label>
+                      <select v-model="city" class="mt-1 w-full rounded border border-slate-300 px-3 py-1.5">
+                        <option>北京</option><option>上海</option><option>武汉</option><option>深圳</option>
+                      </select>
+                    </div>
+                    <pre class="rounded bg-slate-900 p-3 text-xs text-emerald-300">{{ JSON.stringify({ name, age, gender, hobby, city }, null, 2) }}</pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 23 computed & watch ===== -->
+      <section id="vue-computed" class="bg-slate-50">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-5 flex items-baseline gap-3">
+            <p class="text-sm font-bold text-cyan-600">23</p>
+            <h3 class="text-xl font-bold">计算与侦听：派生数据 & 监听变化</h3>
+          </div>
+          <p class="text-sm leading-7 text-slate-600"><code class="rounded bg-white px-1.5 py-0.5">computed</code> = 自动算出来的值（有缓存）；<code class="rounded bg-white px-1.5 py-0.5">watch</code> = 数据变化时执行副作用（如发请求、写日志）。</p>
+
+          <div class="mt-5 grid gap-5 lg:grid-cols-2">
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">源码</p>
+<pre class="vue-code-block"><span class="v-dir">import</span> { ref, computed, watch } <span class="v-dir">from</span> <span class="v-str">'vue'</span>
+
+<span class="v-dir">const</span> price = ref(10)
+<span class="v-dir">const</span> qty = ref(1)
+
+<span class="v-com">// 自动算出 total，依赖变了就重算</span>
+<span class="v-dir">const</span> total = computed(() =&gt; price.value * qty.value)
+
+<span class="v-com">// 监听 qty 的变化（执行副作用）</span>
+watch(qty, (newVal, oldVal) =&gt; {
+  console.log(<span class="v-str">`数量从 ${oldVal} 改成 ${newVal}`</span>)
+})
+
+<span class="v-com">// 监听多个</span>
+watch([price, qty], ([p, q]) =&gt; {
+  console.log(<span class="v-str">'总价：'</span>, p * q)
+})
+
+<span class="v-com">// watchEffect：自动追踪用到的依赖</span>
+watchEffect(() =&gt; {
+  console.log(<span class="v-str">'price 或 qty 变了'</span>, price.value, qty.value)
+})</pre>
+            </div>
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">运行结果<span class="vue-pulse ml-2"></span></p>
+              <div class="vue-live">
+                <div id="demo-computed">
+                  <div class="grid grid-cols-2 gap-3 text-sm">
+                    <label class="block">
+                      <span class="text-xs font-bold text-slate-600">单价</span>
+                      <input v-model.number="price" type="number" class="mt-1 w-full rounded border border-slate-300 px-3 py-1.5">
+                    </label>
+                    <label class="block">
+                      <span class="text-xs font-bold text-slate-600">数量</span>
+                      <input v-model.number="qty" type="number" class="mt-1 w-full rounded border border-slate-300 px-3 py-1.5">
+                    </label>
+                  </div>
+                  <div class="mt-3 grid grid-cols-2 gap-3 text-sm">
+                    <div class="rounded bg-cyan-50 p-3">
+                      <p class="text-xs text-cyan-700">computed 总价</p>
+                      <p class="text-2xl font-bold text-cyan-900">¥{{ total }}</p>
+                    </div>
+                    <div class="rounded bg-violet-50 p-3">
+                      <p class="text-xs text-violet-700">watch 日志</p>
+                      <ul class="mt-1 max-h-20 overflow-y-auto text-xs text-violet-900">
+                        <li v-for="(log, i) in logs" :key="i">{{ log }}</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 overflow-hidden rounded-lg border border-slate-200">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-100"><tr><th class="px-4 py-2">对比</th><th class="px-4 py-2">computed</th><th class="px-4 py-2">watch</th><th class="px-4 py-2">methods</th></tr></thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr><td class="px-4 py-2 font-bold">用途</td><td class="px-4 py-2">派生值</td><td class="px-4 py-2">副作用（请求/日志）</td><td class="px-4 py-2">事件处理</td></tr>
+                <tr><td class="px-4 py-2 font-bold">缓存</td><td class="px-4 py-2 text-emerald-700">有（依赖不变就不重算）</td><td class="px-4 py-2 text-rose-700">无</td><td class="px-4 py-2 text-rose-700">无（每次都执行）</td></tr>
+                <tr><td class="px-4 py-2 font-bold">模板里调用</td><td class="px-4 py-2"><code>{{ total }}</code></td><td class="px-4 py-2">—</td><td class="px-4 py-2"><code>{{ calcTotal() }}</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 24 生命周期 ===== -->
+      <section id="vue-lifecycle" class="bg-white">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-5 flex items-baseline gap-3">
+            <p class="text-sm font-bold text-cyan-600">24</p>
+            <h3 class="text-xl font-bold">生命周期钩子：组件的"出生 → 更新 → 死亡"</h3>
+          </div>
+          <p class="text-sm leading-7 text-slate-600">Vue 在组件运行的几个关键节点会"敲门"叫你写代码。最常用的就 3 个：<code class="rounded bg-slate-100 px-1.5 py-0.5">onMounted</code>（页面挂好了 → 发请求）、<code class="rounded bg-slate-100 px-1.5 py-0.5">onUpdated</code>（数据变了重新渲染后）、<code class="rounded bg-slate-100 px-1.5 py-0.5">onUnmounted</code>（组件消失 → 清理）。</p>
+
+          <div class="mt-5 grid gap-5 lg:grid-cols-2">
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">源码</p>
+<pre class="vue-code-block"><span class="v-dir">import</span> {
+  onBeforeMount, onMounted,
+  onBeforeUpdate, onUpdated,
+  onBeforeUnmount, onUnmounted
+} <span class="v-dir">from</span> <span class="v-str">'vue'</span>
+
+setup() {
+  <span class="v-com">// 挂载前（DOM 还没出现）</span>
+  onBeforeMount(() =&gt; { ... })
+
+  <span class="v-com">// 挂载后（DOM 已出现，最常用：发请求）</span>
+  onMounted(() =&gt; {
+    fetch(<span class="v-str">'/api/list'</span>)
+  })
+
+  <span class="v-com">// 数据变化引起更新后</span>
+  onUpdated(() =&gt; { ... })
+
+  <span class="v-com">// 卸载前（清理 timer、解绑事件）</span>
+  onBeforeUnmount(() =&gt; {
+    clearInterval(timer)
+  })
+
+  <span class="v-com">// 卸载后</span>
+  onUnmounted(() =&gt; { ... })
+}</pre>
+            </div>
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">运行结果<span class="vue-pulse ml-2"></span></p>
+              <div class="vue-live">
+                <div id="demo-lifecycle">
+                  <div class="flex gap-2 text-sm">
+                    <button class="rounded bg-cyan-600 px-3 py-1 text-white" @click="mounted = !mounted">{{ mounted ? '卸载组件' : '挂载组件' }}</button>
+                    <button class="rounded bg-violet-600 px-3 py-1 text-white" @click="tick++" :disabled="!mounted">触发更新（{{ tick }}）</button>
+                  </div>
+                  <div v-if="mounted" class="mt-3 rounded border-2 border-dashed border-cyan-400 p-3 text-sm">
+                    <p class="font-bold text-cyan-700">子组件已挂载</p>
+                    <p class="text-xs text-slate-600">tick = {{ tick }}</p>
+                  </div>
+                  <ul class="mt-3 max-h-32 overflow-y-auto rounded bg-slate-900 p-3 text-xs text-emerald-300">
+                    <li v-for="(log, i) in logs" :key="i">{{ log }}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 lifecycle-flow space-y-5 text-sm">
+            <div class="step"><span class="dot"></span><p class="font-bold text-cyan-700">setup()</p><p class="text-slate-600">最先执行，定义所有响应式数据</p></div>
+            <div class="step"><span class="dot"></span><p class="font-bold text-cyan-700">onBeforeMount</p><p class="text-slate-600">组件即将挂载到 DOM</p></div>
+            <div class="step"><span class="dot"></span><p class="font-bold text-cyan-700">onMounted ★最常用</p><p class="text-slate-600">DOM 已就绪 → <strong>发起 API 请求、操作 DOM、初始化第三方库</strong></p></div>
+            <div class="step"><span class="dot"></span><p class="font-bold text-cyan-700">onUpdated</p><p class="text-slate-600">数据变化引起的重新渲染完成后</p></div>
+            <div class="step"><span class="dot"></span><p class="font-bold text-cyan-700">onBeforeUnmount</p><p class="text-slate-600">组件即将销毁 → <strong>清理 timer、解绑事件</strong></p></div>
+            <div class="step"><span class="dot"></span><p class="font-bold text-cyan-700">onUnmounted</p><p class="text-slate-600">组件已销毁，引用清空</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 25 组件 & 插槽 ===== -->
+      <section id="vue-component" class="bg-slate-50">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-5 flex items-baseline gap-3">
+            <p class="text-sm font-bold text-cyan-600">25</p>
+            <h3 class="text-xl font-bold">组件与插槽：把页面拆成可复用的积木</h3>
+          </div>
+          <p class="text-sm leading-7 text-slate-600">组件 = 可复用的 Vue 实例。<strong>props</strong> 父传子，<strong>emit</strong> 子传父，<strong>slot</strong> 让父决定子内部长什么样。</p>
+
+          <div class="mt-5 grid gap-5 lg:grid-cols-2">
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">源码</p>
+<pre class="vue-code-block"><span class="v-com">// 子组件 MyCard.vue</span>
+&lt;<span class="v-tag">script</span> setup&gt;
+<span class="v-dir">const</span> props = defineProps({
+  title: String,
+  count: { type: Number, default: 0 }
+})
+<span class="v-dir">const</span> emit = defineEmits([<span class="v-str">'like'</span>])
+&lt;/<span class="v-tag">script</span>&gt;
+
+&lt;<span class="v-tag">template</span>&gt;
+  &lt;<span class="v-tag">div</span> class=<span class="v-str">"card"</span>&gt;
+    &lt;<span class="v-tag">h3</span>&gt;<span class="v-mus">{{ title }}</span>&lt;/<span class="v-tag">h3</span>&gt;
+    <span class="v-com">&lt;!-- 默认插槽 --&gt;</span>
+    &lt;<span class="v-tag">slot</span>&gt;&lt;/<span class="v-tag">slot</span>&gt;
+    <span class="v-com">&lt;!-- 具名插槽 --&gt;</span>
+    &lt;<span class="v-tag">slot</span> name=<span class="v-str">"footer"</span>&gt;&lt;/<span class="v-tag">slot</span>&gt;
+    &lt;<span class="v-tag">button</span> <span class="v-dir">@click</span>=<span class="v-str">"emit('like')"</span>&gt;
+      ❤ <span class="v-mus">{{ count }}</span>
+    &lt;/<span class="v-tag">button</span>&gt;
+  &lt;/<span class="v-tag">div</span>&gt;
+&lt;/<span class="v-tag">template</span>&gt;
+
+<span class="v-com">// 父组件使用</span>
+&lt;<span class="v-tag">MyCard</span> title=<span class="v-str">"标题"</span> <span class="v-dir">:count</span>=<span class="v-str">"likes"</span> <span class="v-dir">@like</span>=<span class="v-str">"likes++"</span>&gt;
+  &lt;<span class="v-tag">p</span>&gt;这是默认插槽的内容&lt;/<span class="v-tag">p</span>&gt;
+  &lt;<span class="v-tag">template</span> <span class="v-dir">#footer</span>&gt;
+    &lt;<span class="v-tag">small</span>&gt;脚注&lt;/<span class="v-tag">small</span>&gt;
+  &lt;/<span class="v-tag">template</span>&gt;
+&lt;/<span class="v-tag">MyCard</span>&gt;</pre>
+            </div>
+            <div>
+              <p class="mb-2 text-xs font-bold text-slate-500">运行结果<span class="vue-pulse ml-2"></span></p>
+              <div class="vue-live">
+                <div id="demo-component">
+                  <div class="space-y-3">
+                    <my-card title="武汉的鸭脖" :count="likes1" @like="likes1++">
+                      <p class="text-sm text-slate-700">户部巷里来一份精武鸭脖，麻辣过瘾。</p>
+                      <template #footer>
+                        <small class="text-xs text-slate-400">— 来自湖北日报</small>
+                      </template>
+                    </my-card>
+                    <my-card title="重庆的小面" :count="likes2" @like="likes2++">
+                      <p class="text-sm text-slate-700">花椒香、辣椒红，是重庆人早晨的钟声。</p>
+                      <template #footer>
+                        <small class="text-xs text-slate-400">— 街头摊主推荐</small>
+                      </template>
+                    </my-card>
+                    <p class="text-center text-xs text-slate-500">总点赞：{{ likes1 + likes2 }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 grid gap-3 sm:grid-cols-3 text-sm">
+            <div class="dict-card p-3">
+              <p class="font-bold text-cyan-700">props（父 → 子）</p>
+              <p class="mt-1 text-xs text-slate-600">父用 <code>:title="x"</code> 传给子，子用 <code>defineProps</code> 接收。子不能改 props。</p>
+            </div>
+            <div class="dict-card p-3">
+              <p class="font-bold text-cyan-700">emit（子 → 父）</p>
+              <p class="mt-1 text-xs text-slate-600">子组件 <code>emit('like')</code>，父用 <code>@like="fn"</code> 监听。像点击事件一样。</p>
+            </div>
+            <div class="dict-card p-3">
+              <p class="font-bold text-cyan-700">slot（父决定内容）</p>
+              <p class="mt-1 text-xs text-slate-600">默认插槽、具名插槽 <code>#footer</code>、作用域插槽传 prop 给父。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 26 Vue3 速查表 ===== -->
+      <section id="vue-cheatsheet" class="bg-gradient-to-b from-slate-50 to-white">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-5 flex items-baseline gap-3">
+            <p class="text-sm font-bold text-cyan-600">26</p>
+            <h3 class="text-xl font-bold">Vue3 速查表：写代码时翻这一节就够</h3>
+          </div>
+          <p class="text-sm leading-7 text-slate-600">把全部 Vue3 高频语法压缩到这一节。建议收藏，写不出来时直接 Ctrl+F 搜。</p>
+
+          <div class="mt-6 grid gap-5 lg:grid-cols-2">
+            <div class="overflow-hidden rounded-lg border border-slate-200">
+              <div class="bg-cyan-600 px-4 py-2 text-sm font-bold text-white">模板指令</div>
+              <table class="w-full text-left text-xs">
+                <tbody class="divide-y divide-slate-100">
+                  <tr><td class="px-3 py-2 font-mono font-bold text-cyan-700">&#123;&#123; x &#125;&#125;</td><td class="px-3 py-2 text-slate-700">插值</td><td class="px-3 py-2 text-slate-500">变量、表达式</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-cyan-700">v-text</td><td class="px-3 py-2 text-slate-700">替换文本</td><td class="px-3 py-2 text-slate-500">同 {{ }}</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-cyan-700">v-html</td><td class="px-3 py-2 text-slate-700">渲染 HTML</td><td class="px-3 py-2 text-slate-500">⚠️ XSS 风险</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-cyan-700">v-if / v-else</td><td class="px-3 py-2 text-slate-700">条件插入</td><td class="px-3 py-2 text-slate-500">真删 DOM</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-cyan-700">v-show</td><td class="px-3 py-2 text-slate-700">条件显示</td><td class="px-3 py-2 text-slate-500">display 切换</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-cyan-700">v-for=&quot;i in list&quot;</td><td class="px-3 py-2 text-slate-700">循环</td><td class="px-3 py-2 text-slate-500">必加 :key</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-cyan-700">v-bind:src / :src</td><td class="px-3 py-2 text-slate-700">绑属性</td><td class="px-3 py-2 text-slate-500">:class :style</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-cyan-700">v-on:click / @click</td><td class="px-3 py-2 text-slate-700">绑事件</td><td class="px-3 py-2 text-slate-500">含修饰符</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-cyan-700">v-model</td><td class="px-3 py-2 text-slate-700">双向绑定</td><td class="px-3 py-2 text-slate-500">表单专用</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-cyan-700">v-pre</td><td class="px-3 py-2 text-slate-700">跳过编译</td><td class="px-3 py-2 text-slate-500">原样输出</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-cyan-700">v-once</td><td class="px-3 py-2 text-slate-700">只渲染一次</td><td class="px-3 py-2 text-slate-500">性能优化</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-cyan-700">v-memo</td><td class="px-3 py-2 text-slate-700">条件不变就跳过</td><td class="px-3 py-2 text-slate-500">长列表优化</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-cyan-700">ref="el"</td><td class="px-3 py-2 text-slate-700">DOM 引用</td><td class="px-3 py-2 text-slate-500">配 useTemplateRef</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="overflow-hidden rounded-lg border border-slate-200">
+              <div class="bg-violet-600 px-4 py-2 text-sm font-bold text-white">事件 / 按键修饰符</div>
+              <table class="w-full text-left text-xs">
+                <tbody class="divide-y divide-slate-100">
+                  <tr><td class="px-3 py-2 font-mono font-bold text-violet-700">.stop</td><td class="px-3 py-2">阻止冒泡</td><td class="px-3 py-2 text-slate-500">event.stopPropagation</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-violet-700">.prevent</td><td class="px-3 py-2">阻止默认</td><td class="px-3 py-2 text-slate-500">form/a 标签</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-violet-700">.self</td><td class="px-3 py-2">仅自身</td><td class="px-3 py-2 text-slate-500">遮罩层</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-violet-700">.capture</td><td class="px-3 py-2">捕获阶段</td><td class="px-3 py-2 text-slate-500">极少用</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-violet-700">.once</td><td class="px-3 py-2">仅一次</td><td class="px-3 py-2 text-slate-500">弹窗确认</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-violet-700">.passive</td><td class="px-3 py-2">不阻止默认</td><td class="px-3 py-2 text-slate-500">滚动性能</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-violet-700">.enter / .esc / .tab</td><td class="px-3 py-2">按键</td><td class="px-3 py-2 text-slate-500">输入框</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-violet-700">.up / .down / .left / .right</td><td class="px-3 py-2">方向键</td><td class="px-3 py-2 text-slate-500">列表选择</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-violet-700">.ctrl / .alt / .shift / .meta</td><td class="px-3 py-2">组合键</td><td class="px-3 py-2 text-slate-500">快捷键</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-violet-700">.exact</td><td class="px-3 py-2">完全匹配</td><td class="px-3 py-2 text-slate-500">只 ctrl 不 ctrl+shift</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-violet-700">.left / .right / .middle</td><td class="px-3 py-2">鼠标按键</td><td class="px-3 py-2 text-slate-500">右键菜单</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-violet-700">v-model.lazy/.number/.trim</td><td class="px-3 py-2">v-model 修饰</td><td class="px-3 py-2 text-slate-500">表单输入</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="overflow-hidden rounded-lg border border-slate-200">
+              <div class="bg-emerald-600 px-4 py-2 text-sm font-bold text-white">响应式 API</div>
+              <table class="w-full text-left text-xs">
+                <tbody class="divide-y divide-slate-100">
+                  <tr><td class="px-3 py-2 font-mono font-bold text-emerald-700">ref(v)</td><td class="px-3 py-2">包装单值</td><td class="px-3 py-2 text-slate-500">.value 访问</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-emerald-700">reactive(obj)</td><td class="px-3 py-2">包装对象</td><td class="px-3 py-2 text-slate-500">不能解构</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-emerald-700">computed(()=&gt;...)</td><td class="px-3 py-2">派生值</td><td class="px-3 py-2 text-slate-500">有缓存</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-emerald-700">watch(src, cb)</td><td class="px-3 py-2">侦听器</td><td class="px-3 py-2 text-slate-500">显式声明依赖</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-emerald-700">watchEffect(cb)</td><td class="px-3 py-2">自动追踪</td><td class="px-3 py-2 text-slate-500">立即执行</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-emerald-700">toRef / toRefs</td><td class="px-3 py-2">对象转 ref</td><td class="px-3 py-2 text-slate-500">解构时用</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-emerald-700">readonly(x)</td><td class="px-3 py-2">只读包装</td><td class="px-3 py-2 text-slate-500">防止意外修改</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-emerald-700">isRef / unref</td><td class="px-3 py-2">判断/解包</td><td class="px-3 py-2 text-slate-500">通用工具</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-emerald-700">shallowRef / shallowReactive</td><td class="px-3 py-2">浅响应</td><td class="px-3 py-2 text-slate-500">大对象性能</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="overflow-hidden rounded-lg border border-slate-200">
+              <div class="bg-rose-600 px-4 py-2 text-sm font-bold text-white">生命周期 + 组件 API</div>
+              <table class="w-full text-left text-xs">
+                <tbody class="divide-y divide-slate-100">
+                  <tr><td class="px-3 py-2 font-mono font-bold text-rose-700">onMounted</td><td class="px-3 py-2">挂载后</td><td class="px-3 py-2 text-slate-500">最常用：发请求</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-rose-700">onUpdated</td><td class="px-3 py-2">更新后</td><td class="px-3 py-2 text-slate-500">DOM 已变</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-rose-700">onUnmounted</td><td class="px-3 py-2">卸载后</td><td class="px-3 py-2 text-slate-500">清理资源</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-rose-700">onBeforeMount / Update / Unmount</td><td class="px-3 py-2">对应"之前"</td><td class="px-3 py-2 text-slate-500">很少用</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-rose-700">onErrorCaptured</td><td class="px-3 py-2">捕获子组件错</td><td class="px-3 py-2 text-slate-500">错误边界</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-rose-700">defineProps</td><td class="px-3 py-2">声明 props</td><td class="px-3 py-2 text-slate-500">父传子</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-rose-700">defineEmits</td><td class="px-3 py-2">声明事件</td><td class="px-3 py-2 text-slate-500">子传父</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-rose-700">defineExpose</td><td class="px-3 py-2">暴露给父</td><td class="px-3 py-2 text-slate-500">访问子方法</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-rose-700">provide / inject</td><td class="px-3 py-2">跨层级传值</td><td class="px-3 py-2 text-slate-500">替代 props 透传</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-rose-700">&lt;slot&gt; / #name</td><td class="px-3 py-2">插槽</td><td class="px-3 py-2 text-slate-500">默认/具名/作用域</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-rose-700">&lt;Teleport to&gt;</td><td class="px-3 py-2">DOM 传送</td><td class="px-3 py-2 text-slate-500">弹窗到 body</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-rose-700">&lt;Suspense&gt;</td><td class="px-3 py-2">异步组件占位</td><td class="px-3 py-2 text-slate-500">配 async setup</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-rose-700">&lt;Transition&gt;</td><td class="px-3 py-2">进入/离开动画</td><td class="px-3 py-2 text-slate-500">v-if/v-show 配套</td></tr>
+                  <tr><td class="px-3 py-2 font-mono font-bold text-rose-700">&lt;KeepAlive&gt;</td><td class="px-3 py-2">缓存组件</td><td class="px-3 py-2 text-slate-500">tab 切换不丢状态</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="mt-8 rounded-lg bg-gradient-to-r from-cyan-600 to-violet-600 p-6 text-white">
+            <h3 class="text-xl font-bold">🎯 读 Vue3 页面代码的总口诀</h3>
+            <ol class="mt-4 space-y-2 text-sm leading-7">
+              <li><strong>1. 先看结构：</strong>最外层是什么容器（min-h-screen / max-w-md / mx-auto）</li>
+              <li><strong>2. 再看布局：</strong>flex / grid / absolute 谁决定排列</li>
+              <li><strong>3. 接着看内容：</strong>img / h1 / p / button 各在哪里</li>
+              <li><strong>4. 最后看 Vue：</strong>{{ }} 是变量，:xxx 是属性，@xxx 是事件，v-xx 是指令</li>
+              <li><strong>5. 看不懂的 class：</strong>拆成"布局 / 盒子 / 文字 / 颜色 / 状态 / 响应式"六组</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+      <!-- ============== Vue3 字典专区 结束 ============== -->
+
+      <section id="debugging" class="bg-slate-100">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7">
+            <p class="text-sm font-bold text-blue-600">27</p>
+            <h2 class="mt-1 text-2xl font-bold">调试方法：用浏览器 DevTools 看懂页面为什么长这样</h2>
+            <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+              真正进步很快的人，不是把所有 class 背下来，而是会用浏览器检查元素、看 computed 样式、调盒子模型、切换移动端尺寸。
+            </p>
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+            <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 class="text-lg font-bold">调样式时按这个顺序查</h3>
+              <ol class="mt-4 space-y-3 text-sm leading-6 text-slate-700">
+                <li><strong>1. Inspect：</strong>右键检查元素，先确认你选中的是正确的 DOM 节点。</li>
+                <li><strong>2. Styles：</strong>看哪些 CSS 规则生效，哪些被划掉。</li>
+                <li><strong>3. Computed：</strong>看最终计算后的 width、height、padding、margin。</li>
+                <li><strong>4. Layout：</strong>Flex/Grid 面板可以看到主轴、列、gap。</li>
+                <li><strong>5. Responsive：</strong>切换手机宽度，检查 md/lg 前缀是否按预期生效。</li>
+              </ol>
+            </div>
+
+            <div class="rounded-lg bg-slate-950 p-5 text-slate-100">
+              <p class="mb-3 text-sm font-bold text-cyan-300">遇到问题时的判断</p>
+              <div class="space-y-3 text-sm leading-6 text-slate-300">
+                <p><strong class="text-white">元素没出现：</strong>先查 Vue 的 <code>v-if</code>、数据是否为空，再查 <code>hidden</code>、<code>opacity-0</code>。</p>
+                <p><strong class="text-white">元素位置不对：</strong>先查父元素是否有 <code>flex</code>、<code>grid</code>、<code>relative</code>。</p>
+                <p><strong class="text-white">文字溢出：</strong>查宽度、<code>min-w-0</code>、<code>truncate</code>、<code>break-words</code>。</p>
+                <p><strong class="text-white">层级被挡：</strong>查 <code>z-index</code>、定位、父元素是否创建了新的层叠上下文。</p>
+                <p><strong class="text-white">移动端崩了：</strong>查固定宽度、表格溢出、图片没有 <code>w-full</code> 或 <code>object-cover</code>。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="practice" class="bg-white">
+        <div class="mx-auto max-w-6xl px-5 py-12">
+          <div class="mb-7">
+            <p class="text-sm font-bold text-blue-600">28</p>
+            <h2 class="mt-1 text-2xl font-bold">进阶练习路线：看完以后怎么继续</h2>
+            <p class="mt-3 max-w-3xl leading-7 text-slate-600">
+              学前端最好的方式是边看边改。下面这些练习覆盖真实 Vue3 项目里最常见的页面结构，按顺序做一遍，读代码和写页面都会明显顺手。
+            </p>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <article class="rounded-lg border border-slate-200 p-5">
+              <p class="text-sm font-bold text-blue-600">练习 1</p>
+              <h3 class="mt-1 text-lg font-bold">用户资料卡</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">用 img、h3、p、button、flex、gap、rounded 写一张卡片。</p>
+            </article>
+            <article class="rounded-lg border border-slate-200 p-5">
+              <p class="text-sm font-bold text-blue-600">练习 2</p>
+              <h3 class="mt-1 text-lg font-bold">登录表单</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">写 label、input、button、focus 样式，并在 Vue 里接 v-model。</p>
+            </article>
+            <article class="rounded-lg border border-slate-200 p-5">
+              <p class="text-sm font-bold text-blue-600">练习 3</p>
+              <h3 class="mt-1 text-lg font-bold">商品列表</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">用 grid-cols、gap、v-for 渲染 6 张商品卡片。</p>
+            </article>
+            <article class="rounded-lg border border-slate-200 p-5">
+              <p class="text-sm font-bold text-blue-600">练习 4</p>
+              <h3 class="mt-1 text-lg font-bold">固定顶部导航</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">用 fixed、top-0、z-50、backdrop-blur，处理内容顶部留白。</p>
+            </article>
+            <article class="rounded-lg border border-slate-200 p-5">
+              <p class="text-sm font-bold text-blue-600">练习 5</p>
+              <h3 class="mt-1 text-lg font-bold">弹窗 Modal</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">用 fixed inset-0 做遮罩，用 relative/absolute 做关闭按钮。</p>
+            </article>
+            <article class="rounded-lg border border-slate-200 p-5">
+              <p class="text-sm font-bold text-blue-600">练习 6</p>
+              <h3 class="mt-1 text-lg font-bold">响应式仪表盘</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">手机一列，平板两列，电脑三列，练习 sm/md/lg 前缀。</p>
+            </article>
+          </div>
+
+          <div class="mt-6 rounded-lg bg-slate-950 p-5 text-slate-100">
+            <h3 class="text-lg font-bold">读任何 Vue3 页面时的总口诀</h3>
+            <p class="mt-3 leading-7 text-slate-300">
+              先看 HTML 结构，再看 Tailwind 布局，再看尺寸和间距，再看颜色和状态，最后看 Vue 指令和事件。看到长 class 不要慌，把它拆成“布局、盒子、文字、颜色、状态、响应式”几组就清楚了。
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-slate-950 px-5 py-8 text-center text-sm text-slate-400">
+      学习前端时，先读结构，再读布局，最后读交互。
+    </footer>
+
+    <script>
+      // ========== Vue3 字典：所有实时示例的挂载 ==========
+      (function () {
+        if (typeof Vue === 'undefined') {
+          console.error('Vue3 CDN 未加载');
+          return;
+        }
+        const { createApp, ref, reactive, computed, watch, onMounted, onBeforeUnmount, onUpdated } = Vue;
+
+        // ---- 15. hello ----
+        createApp({
+          setup() {
+            const message = ref('你好 Vue3！');
+            const count = ref(0);
+            return { message, count };
+          }
+        }).mount('#demo-hello');
+
+        // ---- 16. reactivity ----
+        createApp({
+          setup() {
+            const count = ref(0);
+            const user = reactive({ name: '小明', age: 18 });
+            return { count, user };
+          }
+        }).mount('#demo-reactive');
+
+        // ---- 17. interpolation ----
+        createApp({
+          setup() {
+            const name = ref('Vue');
+            const count = ref(3);
+            const rawHtml = ref('<b class="text-rose-600">这是粗体 HTML</b>');
+            return { name, count, rawHtml };
+          }
+        }).mount('#demo-interp');
+
+        // ---- 18. v-if ----
+        createApp({
+          setup() {
+            const score = ref(75);
+            const isOpen = ref(true);
+            return { score, isOpen };
+          }
+        }).mount('#demo-if');
+
+        // ---- 19. v-for ----
+        createApp({
+          setup() {
+            const newItem = ref('');
+            let nextId = 4;
+            const list = ref([
+              { id: 1, name: '热干面' },
+              { id: 2, name: '豆皮' },
+              { id: 3, name: '鸭脖' }
+            ]);
+            const add = () => {
+              const v = newItem.value.trim();
+              if (!v) return;
+              list.value.push({ id: nextId++, name: v });
+              newItem.value = '';
+            };
+            const remove = (id) => {
+              list.value = list.value.filter(x => x.id !== id);
+            };
+            return { newItem, list, add, remove };
+          }
+        }).mount('#demo-for');
+
+        // ---- 20. v-bind ----
+        createApp({
+          setup() {
+            const isActive = ref(true);
+            const isBig = ref(false);
+            const color = ref('#0891b2');
+            return { isActive, isBig, color };
+          }
+        }).mount('#demo-bind');
+
+        // ---- 21. v-on ----
+        createApp({
+          setup() {
+            const count = ref(0);
+            const onceCount = ref(0);
+            const outerLog = ref(0);
+            const innerLog = ref(0);
+            const text = ref('');
+            const messages = ref([]);
+            return { count, onceCount, outerLog, innerLog, text, messages };
+          }
+        }).mount('#demo-on');
+
+        // ---- 22. v-model ----
+        createApp({
+          setup() {
+            const name = ref('');
+            const age = ref(18);
+            const gender = ref('M');
+            const hobby = ref(['读书']);
+            const city = ref('武汉');
+            return { name, age, gender, hobby, city };
+          }
+        }).mount('#demo-model');
+
+        // ---- 23. computed & watch ----
+        createApp({
+          setup() {
+            const price = ref(10);
+            const qty = ref(2);
+            const total = computed(() => price.value * qty.value);
+            const logs = ref([`初始：¥${price.value} × ${qty.value} = ¥${price.value * qty.value}`]);
+            watch([price, qty], ([p, q], [op, oq]) => {
+              logs.value.unshift(`改：${op}×${oq} → ${p}×${q} = ¥${p * q}`);
+              if (logs.value.length > 5) logs.value.pop();
+            });
+            return { price, qty, total, logs };
+          }
+        }).mount('#demo-computed');
+
+        // ---- 24. lifecycle ----
+        const lifecycleLogs = ref([]);
+        function pushLog(text) {
+          const t = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+          lifecycleLogs.value.unshift(`[${t}] ${text}`);
+          if (lifecycleLogs.value.length > 8) lifecycleLogs.value.pop();
+        }
+        const ChildLifecycle = {
+          props: ['tick'],
+          template: '<span></span>',
+          setup() {
+            pushLog('🟢 onBeforeMount');
+            onMounted(() => pushLog('✅ onMounted（DOM 就绪）'));
+            onUpdated(() => pushLog('🔄 onUpdated（数据变化后）'));
+            onBeforeUnmount(() => pushLog('🟠 onBeforeUnmount（即将销毁）'));
+          }
+        };
+        createApp({
+          components: { ChildLifecycle },
+          setup() {
+            const mounted = ref(true);
+            const tick = ref(0);
+            pushLog('💡 父组件 setup() 执行');
+            return { mounted, tick, logs: lifecycleLogs };
+          },
+          template: `
+            <div class="flex gap-2 text-sm">
+              <button class="rounded bg-cyan-600 px-3 py-1 text-white" @click="mounted = !mounted">{{ mounted ? '卸载组件' : '挂载组件' }}</button>
+              <button class="rounded bg-violet-600 px-3 py-1 text-white disabled:opacity-50" @click="tick++" :disabled="!mounted">触发更新（{{ tick }}）</button>
+            </div>
+            <div v-if="mounted" class="mt-3 rounded border-2 border-dashed border-cyan-400 p-3 text-sm">
+              <p class="font-bold text-cyan-700">子组件已挂载 <span class="vue-pulse"></span></p>
+              <p class="text-xs text-slate-600">tick = {{ tick }}</p>
+              <child-lifecycle :tick="tick" />
+            </div>
+            <ul class="mt-3 max-h-32 overflow-y-auto rounded bg-slate-900 p-3 text-xs text-emerald-300 space-y-0.5">
+              <li v-for="(log, i) in logs" :key="i">{{ log }}</li>
+              <li v-if="logs.length === 0" class="text-slate-500">（暂无日志）</li>
+            </ul>
+          `
+        }).mount('#demo-lifecycle');
+
+        // ---- 25. component & slot ----
+        const MyCard = {
+          props: { title: String, count: { type: Number, default: 0 } },
+          emits: ['like'],
+          template: `
+            <div class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+              <h4 class="text-base font-bold text-slate-800">{{ title }}</h4>
+              <div class="mt-1 text-sm">
+                <slot>（默认内容：父组件没传东西）</slot>
+              </div>
+              <div class="mt-3 flex items-center justify-between">
+                <div class="text-xs text-slate-500"><slot name="footer">（脚注插槽）</slot></div>
+                <button class="rounded bg-rose-500 px-3 py-1 text-xs font-bold text-white hover:bg-rose-600" @click="$emit('like')">
+                  ❤ {{ count }}
+                </button>
+              </div>
+            </div>
+          `
+        };
+        createApp({
+          components: { MyCard },
+          setup() {
+            const likes1 = ref(12);
+            const likes2 = ref(8);
+            return { likes1, likes2 };
+          }
+        }).mount('#demo-component');
+      })();
+    </script>
+  </body>
+</html>
