@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>宇航员 Jim 的护眼任务</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap');
+
+:root {
+  --space-dark: #060a1e;
+  --space-blue: #1a1f4e;
+  --star-gold: #ffd700;
+  --nebula-purple: #6c5ce7;
+  --alert-red: #ff4757;
+  --safe-green: #2ed573;
+  --warning-orange: #ffa502;
+  --planet-blue: #45aaf2;
+  --text-light: #e8e8f0;
+  --card-bg: rgba(255,255,255,0.06);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans SC', sans-serif;
+  background: var(--space-dark);
+  color: var(--text-light);
+  overflow-x: hidden;
+  line-height: 1.8;
+}
+
+/* === Canvas Starfield === */
+#starfield {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* === Nebula Glow Blobs === */
+.nebula {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+  animation: nebulaDrift 20s ease-in-out infinite alternate;
+}
+.nebula-1 { width: 500px; height: 500px; background: #6c5ce7; top: -100px; left: -100px; }
+.nebula-2 { width: 400px; height: 400px; background: #ff4757; top: 40%; right: -100px; animation-delay: -7s; }
+.nebula-3 { width: 350px; height: 350px; background: #45aaf2; bottom: -50px; left: 20%; animation-delay: -13s; }
+@keyframes nebulaDrift {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(30px, -20px) scale(1.1); }
+}
+
+/* === Shooting Stars === */
+.shooting-star {
+  position: fixed;
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent);
+  border-radius: 2px;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  animation: shoot 1.5s ease-out forwards;
+}
+@keyframes shoot {
+  0% { opacity: 1; transform: translateX(0) translateY(0); }
+  100% { opacity: 0; transform: translateX(300px) translateY(200px); }
+}
+
+/* === Container === */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 16px 60px;
+}
+
+/* === Section Reveal === */
+.section {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === HERO === */
+.hero {
+  text-align: center;
+  padding: 50px 0 30px;
+  position: relative;
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.hero-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--nebula-purple), var(--planet-blue));
+  padding: 8px 24px;
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0 0 20px rgba(108,92,231,0.4);
+  animation: badgePulse 3s ease-in-out infinite;
+}
+@keyframes badgePulse {
+  0%,100% { box-shadow: 0 0 20px rgba(108,92,231,0.4); }
+  50% { box-shadow: 0 0 40px rgba(108,92,231,0.7); }
+}
+.hero h1 {
+  font-size: 36px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #ffd700, #ffaa00, #ff6b35, #ffd700);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  animation: goldShimmer 4s ease-in-out infinite;
+}
+@keyframes goldShimmer {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.hero .subtitle {
+  font-size: 16px;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 1px;
+}
+.hero-astronaut {
+  position: relative;
+  display: inline-block;
+  margin-top: 20px;
+}
+.astronaut-body {
+  font-size: 80px;
+  display: block;
+  animation: astronautFloat 4s ease-in-out infinite;
+  filter: drop-shadow(0 10px 30px rgba(255,215,0,0.3));
+}
+@keyframes astronautFloat {
+  0%,100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
+.astronaut-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 120px; height: 120px;
+  margin: -60px 0 0 -60px;
+  border: 2px solid rgba(255,215,0,0.3);
+  border-radius: 50%;
+  animation: ringRotate 8s linear infinite;
+}
+.astronaut-ring:nth-child(3) {
+  width: 160px; height: 160px;
+  margin: -80px 0 0 -80px;
+  border-color: rgba(69,170,242,0.2);
+  animation-direction: reverse;
+  animation-duration: 12s;
+}
+@keyframes ringRotate {
+  0% { transform: rotateX(60deg) rotateZ(0deg); }
+  100% { transform: rotateX(60deg) rotateZ(360deg); }
+}
+
+/* === Section Cards === */
+.section-card {
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 32px 28px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
+}
+.section-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+}
+.section-card h2 {
+  font-size: 24px;
+  font-weight: 900;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-card h2 .h2-icon {
+  font-size: 28px;
+  filter: drop-shadow(0 2px 8px rgba(255,215,0,0.4));
+}
+.section-card h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 20px 0 10px;
+  color: var(--planet-blue);
+}
+.section-card p {
+  font-size: 15px;
+  margin-bottom: 14px;
+  color: rgba(255,255,255,0.88);
+}
+
+/* === DANGER SECTION (red glow) === */
+.section-danger {
+  border-color: rgba(255,71,87,0.3);
+  box-shadow: 0 0 60px rgba(255,71,87,0.08), inset 0 0 60px rgba(255,71,87,0.03);
+  animation: dangerPulse 4s ease-in-out infinite;
+}
+@keyframes dangerPulse {
+  0%,100% { box-shadow: 0 0 60px rgba(255,71,87,0.08), inset 0 0 60px rgba(255,71,87,0.03); }
+  50% { box-shadow: 0 0 80px rgba(255,71,87,0.15), inset 0 0 80px rgba(255,71,87,0.06); }
+}
+
+/* === Alert Banner === */
+.alert-banner {
+  background: linear-gradient(135deg, rgba(255,71,87,0.15), rgba(255,71,87,0.05));
+  border: 1px solid rgba(255,71,87,0.3);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin: 16px 0;
+  position: relative;
+  overflow: hidden;
+}
+.alert-banner::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,71,87,0.1), transparent);
+  animation: alertSweep 3s ease-in-out infinite;
+}
+@keyframes alertSweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+.alert-banner p { margin: 0; position: relative; z-index: 1; }
+
+/* === Severity Dashboard === */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 20px 0;
+}
+.status-card {
+  border-radius: 16px;
+  padding: 20px 16px;
+  text-align: center;
+  border: 2px solid;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.status-card:hover {
+  transform: translateY(-4px);
+}
+.status-card .icon { font-size: 40px; display: block; margin-bottom: 8px; }
+.status-card .label { font-size: 13px; opacity: 0.8; display: block; }
+.status-card .value { font-size: 20px; font-weight: 900; display: block; margin-top: 4px; }
+.status-card .note { font-size: 11px; opacity: 0.65; display: block; margin-top: 4px; line-height: 1.4; }
+
+.status-green { border-color: var(--safe-green); background: rgba(46,213,115,0.08); }
+.status-green:hover { box-shadow: 0 8px 30px rgba(46,213,115,0.2); }
+.status-green .value { color: var(--safe-green); }
+.status-green::after {
+  content: '';
+  position: absolute;
+  top: -50%; right: -50%;
+  width: 100%; height: 100%;
+  background: radial-gradient(circle, rgba(46,213,115,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.status-yellow { border-color: var(--warning-orange); background: rgba(255,165,2,0.08); }
+.status-yellow:hover { box-shadow: 0 8px 30px rgba(255,165,2,0.2); }
+.status-yellow .value { color: var(--warning-orange); }
+
+.status-red { border-color: var(--alert-red); background: rgba(255,71,87,0.08); animation: redCardPulse 3s ease-in-out infinite; }
+.status-red:hover { box-shadow: 0 8px 30px rgba(255,71,87,0.3); }
+.status-red .value { color: var(--alert-red); }
+@keyframes redCardPulse {
+  0%,100% { box-shadow: 0 0 0 rgba(255,71,87,0); }
+  50% { box-shadow: 0 0 20px rgba(255,71,87,0.15); }
+}
+
+/* === Severity Meter === */
+.severity-meter {
+  margin: 24px 0;
+  text-align: center;
+}
+.meter-bar {
+  height: 36px;
+  background: linear-gradient(90deg,
+    var(--safe-green) 0%,
+    #7bed9f 15%,
+    var(--warning-orange) 40%,
+    #ff6348 65%,
+    var(--alert-red) 80%,
+    #a10000 100%
+  );
+  border-radius: 18px;
+  position: relative;
+  margin: 16px 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.meter-pointer {
+  position: absolute;
+  top: -14px;
+  transform: translateX(-50%);
+  font-size: 30px;
+  filter: drop-shadow(0 2px 8px rgba(255,71,87,0.5));
+  animation: pointerBounce 2s ease-in-out infinite;
+}
+@keyframes pointerBounce {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-6px); }
+}
+.meter-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  opacity: 0.5;
+  margin-top: 6px;
+}
+
+/* === Eye Diagram === */
+.eye-diagram {
+  background: rgba(0,0,0,0.35);
+  border-radius: 20px;
+  padding: 28px;
+  margin: 20px 0;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.eye-svg {
+  max-width: 460px;
+  margin: 0 auto;
+  display: block;
+}
+.eye-diagram .caption {
+  font-size: 14px;
+  color: rgba(255,255,255,0.55);
+  margin-top: 14px;
+}
+
+/* === Normal vs Your Eye Comparison === */
+.eye-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 20px 0;
+}
+.eye-compare-card {
+  border-radius: 20px;
+  padding: 24px 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.eye-compare-card.normal {
+  background: linear-gradient(135deg, rgba(46,213,115,0.08), rgba(46,213,115,0.02));
+  border: 2px solid rgba(46,213,115,0.3);
+}
+.eye-compare-card.yours {
+  background: linear-gradient(135deg, rgba(255,71,87,0.1), rgba(255,71,87,0.02));
+  border: 2px solid rgba(255,71,87,0.4);
+  animation: yoursGlow 3s ease-in-out infinite;
+}
+@keyframes yoursGlow {
+  0%,100% { box-shadow: 0 0 20px rgba(255,71,87,0.1); }
+  50% { box-shadow: 0 0 40px rgba(255,71,87,0.25); }
+}
+.eye-compare-card .eye-emoji { font-size: 48px; display: block; margin-bottom: 8px; }
+.eye-compare-card .eye-title { font-weight: 900; font-size: 16px; margin-bottom: 4px; }
+.eye-compare-card .eye-val { font-size: 28px; font-weight: 900; margin: 8px 0; }
+.eye-compare-card .eye-desc { font-size: 13px; opacity: 0.7; line-height: 1.5; }
+.eye-compare-card .eye-status { display: inline-block; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; margin-top: 8px; }
+.normal .eye-status { background: rgba(46,213,115,0.2); color: var(--safe-green); }
+.yours .eye-status { background: rgba(255,71,87,0.2); color: var(--alert-red); }
+
+/* === Danger Future === */
+.danger-future {
+  background: linear-gradient(135deg, rgba(255,71,87,0.12), rgba(255,71,87,0.04));
+  border: 2px solid rgba(255,71,87,0.3);
+  border-radius: 20px;
+  padding: 28px 24px;
+  margin: 20px 0;
+  position: relative;
+}
+.danger-future h3 {
+  color: var(--alert-red);
+  font-size: 18px;
+  margin-bottom: 16px;
+  text-align: center;
+  animation: textFlicker 4s ease-in-out infinite;
+}
+@keyframes textFlicker {
+  0%,90%,100% { opacity: 1; }
+  92% { opacity: 0.4; }
+  94% { opacity: 1; }
+  96% { opacity: 0.6; }
+}
+.danger-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0;
+}
+.danger-item {
+  text-align: center;
+  padding: 16px 10px;
+  background: rgba(0,0,0,0.25);
+  border-radius: 14px;
+  border: 1px solid rgba(255,71,87,0.15);
+}
+.danger-item .d-icon { font-size: 36px; display: block; margin-bottom: 6px; }
+.danger-item .d-title { font-size: 13px; font-weight: 700; color: var(--alert-red); margin-bottom: 4px; }
+.danger-item .d-desc { font-size: 11px; opacity: 0.6; line-height: 1.5; }
+
+/* === Timeline === */
+.timeline {
+  position: relative;
+  padding-left: 36px;
+  margin: 20px 0;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--safe-green), var(--warning-orange), var(--alert-red), var(--warning-orange));
+  border-radius: 2px;
+  box-shadow: 0 0 12px rgba(255,71,87,0.2);
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 14px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 14px;
+  font-size: 14px;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: background 0.2s, transform 0.2s;
+}
+.timeline-item:hover {
+  background: rgba(255,255,255,0.08);
+  transform: translateX(4px);
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -28px;
+  top: 18px;
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  border: 3px solid var(--warning-orange);
+  background: var(--space-dark);
+  z-index: 1;
+}
+.timeline-item.t-good::before { border-color: var(--safe-green); background: var(--safe-green); box-shadow: 0 0 10px rgba(46,213,115,0.5); }
+.timeline-item.t-warn::before { border-color: var(--warning-orange); background: var(--warning-orange); box-shadow: 0 0 10px rgba(255,165,2,0.5); }
+.timeline-item.t-danger::before { border-color: var(--alert-red); background: var(--alert-red); box-shadow: 0 0 10px rgba(255,71,87,0.5); animation: dotPulse 2s infinite; }
+@keyframes dotPulse {
+  0%,100% { box-shadow: 0 0 10px rgba(255,71,87,0.5); }
+  50% { box-shadow: 0 0 20px rgba(255,71,87,0.8); }
+}
+.timeline-date { font-weight: 700; font-size: 13px; color: var(--planet-blue); }
+.timeline-value { font-weight: 900; }
+
+/* === Progress Bar === */
+.progress-row { margin: 18px 0; }
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 8px;
+  opacity: 0.8;
+}
+.progress-bar {
+  height: 28px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 14px;
+  position: relative;
+  transition: width 2s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.progress-fill .bar-label {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+.fill-red { background: linear-gradient(90deg, #ff4757, #ff6b81); box-shadow: 0 0 20px rgba(255,71,87,0.4); }
+
+/* === Speed Compare === */
+.speed-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 20px 0;
+}
+.speed-card {
+  text-align: center;
+  padding: 24px 16px;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.speed-card.normal-speed {
+  background: rgba(46,213,115,0.06);
+  border: 1px solid rgba(46,213,115,0.2);
+}
+.speed-card.your-speed {
+  background: rgba(255,71,87,0.08);
+  border: 2px solid rgba(255,71,87,0.4);
+  animation: speedGlow 2s ease-in-out infinite;
+}
+@keyframes speedGlow {
+  0%,100% { box-shadow: 0 0 15px rgba(255,71,87,0.1); }
+  50% { box-shadow: 0 0 35px rgba(255,71,87,0.25); }
+}
+.speed-card .speed-label { font-size: 13px; opacity: 0.7; margin-bottom: 8px; }
+.speed-card .speed-value { font-size: 40px; font-weight: 900; line-height: 1.2; }
+.speed-card .speed-unit { font-size: 14px; opacity: 0.6; margin-top: 4px; }
+.speed-card .speed-bar-track {
+  height: 8px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+.speed-card .speed-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 2s ease;
+}
+.normal-speed .speed-value { color: var(--safe-green); }
+.normal-speed .speed-bar-fill { background: var(--safe-green); width: 33%; }
+.your-speed .speed-value { color: var(--alert-red); }
+.your-speed .speed-bar-fill { background: var(--alert-red); width: 100%; animation: speedBarPulse 2s infinite; }
+@keyframes speedBarPulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* === Habit Checklist === */
+.checklist { list-style: none; margin: 14px 0; }
+.checklist li {
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  font-size: 15px;
+  line-height: 1.6;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.checklist li:hover { background: rgba(255,255,255,0.08); transform: translateX(4px); border-color: rgba(255,255,255,0.12); }
+.checklist li.checked { opacity: 0.4; }
+.checklist li.checked span:last-child { text-decoration: line-through; }
+.check-box {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  margin-top: 2px;
+  transition: all 0.3s ease;
+  background: transparent;
+}
+.checklist li.checked .check-box {
+  background: var(--safe-green);
+  border-color: var(--safe-green);
+  box-shadow: 0 0 12px rgba(46,213,115,0.4);
+  transform: scale(1.1);
+}
+
+/* === Training Card === */
+.training-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 20px 0;
+}
+.training-card {
+  background: rgba(255,255,255,0.04);
+  border-radius: 20px;
+  padding: 24px 18px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.training-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+.training-card .t-icon { font-size: 44px; display: block; margin-bottom: 10px; }
+.training-card .t-title { font-weight: 700; font-size: 16px; margin-bottom: 6px; }
+.training-card .t-desc { font-size: 13px; opacity: 0.6; }
+.training-card .t-steps {
+  text-align: left;
+  font-size: 13px;
+  margin-top: 12px;
+  padding-left: 16px;
+  opacity: 0.85;
+}
+.training-card .t-steps li { margin-bottom: 6px; line-height: 1.5; }
+
+/* === Astronaut Quote === */
+.astronaut-quote {
+  background: linear-gradient(135deg, rgba(108,92,231,0.12), rgba(69,170,242,0.08));
+  border-radius: 20px;
+  padding: 28px;
+  margin: 24px 0;
+  border-left: 4px solid var(--star-gold);
+  text-align: center;
+  position: relative;
+}
+.astronaut-quote::after {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px; right: -1px; bottom: -1px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255,215,0,0.1), transparent, rgba(108,92,231,0.1));
+  z-index: -1;
+  filter: blur(1px);
+}
+.astronaut-quote .big-icon { font-size: 52px; display: block; margin-bottom: 14px; }
+.astronaut-quote p {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--star-gold);
+  line-height: 1.8;
+}
+.astronaut-quote .author {
+  font-size: 13px;
+  opacity: 0.5;
+  margin-top: 10px;
+  font-weight: 400;
+}
+
+/* === Victory Cards === */
+.victory-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 20px 0;
+}
+.victory-card {
+  border-radius: 16px;
+  padding: 20px 16px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+.victory-card:hover { transform: translateY(-4px); }
+.victory-card .v-icon { font-size: 36px; display: block; margin-bottom: 8px; }
+.victory-card .v-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+.victory-card .v-desc { font-size: 12px; opacity: 0.65; line-height: 1.5; }
+.victory-green {
+  background: rgba(46,213,115,0.06);
+  border: 1px solid rgba(46,213,115,0.25);
+}
+.victory-green .v-title { color: var(--safe-green); }
+.victory-orange {
+  background: rgba(255,165,2,0.06);
+  border: 1px solid rgba(255,165,2,0.25);
+}
+.victory-orange .v-title { color: var(--warning-orange); }
+
+/* === Schedule === */
+.schedule {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  margin: 14px 0;
+}
+.schedule th {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  text-align: left;
+  padding: 6px 14px;
+}
+.schedule td {
+  background: rgba(255,255,255,0.04);
+  padding: 12px 14px;
+  font-size: 14px;
+}
+.schedule tr td:first-child { border-radius: 10px 0 0 10px; }
+.schedule tr td:last-child { border-radius: 0 10px 10px 0; }
+
+/* === Summary List === */
+.summary-list { margin: 20px 0; }
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: transform 0.2s;
+}
+.summary-item:hover { transform: translateX(6px); }
+.summary-item:last-child { border-bottom: none; }
+.summary-num {
+  flex-shrink: 0;
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--nebula-purple), var(--planet-blue));
+  box-shadow: 0 4px 15px rgba(108,92,231,0.3);
+}
+
+/* === Final Section === */
+.final-section {
+  background: linear-gradient(135deg, rgba(108,92,231,0.12), rgba(69,170,242,0.08));
+  border-color: rgba(108,92,231,0.25);
+  text-align: center;
+}
+.final-section .astronaut-quote {
+  border-left-color: var(--safe-green);
+  background: transparent;
+}
+
+/* === CTA Button === */
+.cta-row {
+  text-align: center;
+  margin: 20px 0;
+}
+.cta-btn {
+  display: inline-block;
+  padding: 14px 36px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.cta-btn-primary {
+  background: linear-gradient(135deg, var(--safe-green), #7bed9f);
+  color: #0a0e27;
+  box-shadow: 0 4px 20px rgba(46,213,115,0.3);
+}
+.cta-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(46,213,115,0.5);
+}
+
+/* === Countdown / Progress Ring === */
+.progress-ring-container {
+  text-align: center;
+  margin: 20px 0;
+}
+.progress-ring-text {
+  font-size: 14px;
+  margin-top: 8px;
+  opacity: 0.7;
+}
+
+/* === Responsive === */
+@media (max-width: 600px) {
+  .container { padding: 12px 12px 40px; }
+  .hero h1 { font-size: 28px; }
+  .section-card { padding: 22px 16px; }
+  .dashboard { grid-template-columns: 1fr; }
+  .training-grid { grid-template-columns: 1fr; }
+  .eye-compare { grid-template-columns: 1fr; }
+  .danger-grid { grid-template-columns: 1fr; }
+  .speed-compare { grid-template-columns: 1fr; }
+  .victory-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div class="nebula nebula-1"></div>
+<div class="nebula nebula-2"></div>
+<div class="nebula nebula-3"></div>
+
+<div class="container">
+
+  <!-- ====== HERO ====== -->
+  <div class="hero">
+    <div class="hero-badge">CLASSIFIED · EYES ONLY</div>
+    <h1>宇航员 Jim 的护眼任务</h1>
+    <p class="subtitle">眼睛是太空探索最重要的装备 —— 任务简报 2026</p>
+    <div class="hero-astronaut">
+      <span class="astronaut-body">🧑‍🚀</span>
+      <div class="astronaut-ring"></div>
+      <div class="astronaut-ring"></div>
+    </div>
+  </div>
+
+  <!-- ====== SEVERITY OVERVIEW ====== -->
+  <div class="section-card section section-danger">
+    <h2><span class="h2-icon">⚠️</span> 任务严重程度评估</h2>
+    <p>Jim，你的眼睛目前处于 <strong style="color:var(--warning-orange)">黄色警报</strong> 状态。好消息是：你已经打赢了好几场硬仗。但眼轴问题仍然是一个 <strong style="color:var(--alert-red)">持续高风险</strong>。</p>
+
+    <div class="severity-meter">
+      <div class="meter-bar">
+        <span class="meter-pointer" style="left:60%">🚨</span>
+      </div>
+      <div class="meter-labels">
+        <span>安全</span>
+        <span>注意</span>
+        <span style="color:var(--warning-orange);font-weight:700">← 你在这里</span>
+        <span>危险</span>
+      </div>
+    </div>
+
+    <div class="dashboard">
+      <div class="status-card status-green">
+        <span class="icon">✅</span>
+        <span class="label">立体视</span>
+        <span class="value">60″ 正常</span>
+        <span class="note">半年前 >1200″（严重受损），现在完全正常</span>
+      </div>
+      <div class="status-card status-green">
+        <span class="icon">✅</span>
+        <span class="label">左眼抑制</span>
+        <span class="value">已解除</span>
+        <span class="note">双眼合作正常，手术已取消</span>
+      </div>
+      <div class="status-card status-yellow">
+        <span class="icon">⚡</span>
+        <span class="label">集合功能</span>
+        <span class="value">4.06（需训练）</span>
+        <span class="note">正常应 >10，每天练 10 分钟可恢复</span>
+      </div>
+      <div class="status-card status-red">
+        <span class="icon">🔴</span>
+        <span class="label">眼轴长度</span>
+        <span class="value">24.34 mm</span>
+        <span class="note">超过 24mm 警戒线，增速是正常的 2 倍</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== WHAT IS AXIAL LENGTH ====== -->
+  <div class="section-card section">
+    <h2><span class="h2-icon">👁️</span> 眼轴是什么？</h2>
+    <p>想象你的眼球是一个<strong>气球</strong>。眼轴就是气球从前面（角膜）到后面（视网膜）的<strong>直径长度</strong>。</p>
+
+    <div class="eye-diagram">
+      <svg class="eye-svg" viewBox="0 0 460 220" xmlns="http://www.w3.org/2000/svg">
+        <!-- Background glow -->
+        <defs>
+          <radialGradient id="eyeGlow" cx="50%" cy="50%">
+            <stop offset="0%" style="stop-color:#45aaf2;stop-opacity:0.05"/>
+            <stop offset="100%" style="stop-color:transparent"/>
+          </radialGradient>
+          <filter id="neonGlow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <rect width="460" height="220" fill="url(#eyeGlow)" rx="16"/>
+
+        <!-- Normal eye outline (faded) -->
+        <ellipse cx="220" cy="105" rx="130" ry="78" fill="none" stroke="#2ed573" stroke-width="2" opacity="0.35" stroke-dasharray="8 4"/>
+        <text x="220" y="22" text-anchor="middle" fill="#2ed573" font-size="11" opacity="0.5">正常眼轴 ≤ 24mm</text>
+
+        <!-- Your stretched eye -->
+        <ellipse cx="220" cy="105" rx="155" ry="82" fill="none" stroke="#ff4757" stroke-width="3" filter="url(#neonGlow)" opacity="0.9"/>
+
+        <!-- Cornea -->
+        <path d="M65 105 Q30 105 65 60 Q78 82 65 105 Z" fill="#74c0f7" opacity="0.3" stroke="#74c0f7" stroke-width="1.5"/>
+        <text x="42" y="108" fill="#74c0f7" font-size="12" font-weight="700">角膜</text>
+
+        <!-- Lens -->
+        <ellipse cx="115" cy="105" rx="16" ry="32" fill="#ffd700" opacity="0.4" stroke="#ffd700" stroke-width="1.5"/>
+
+        <!-- Light rays (bent) -->
+        <line x1="65" y1="85" x2="280" y2="130" stroke="rgba(255,215,0,0.15)" stroke-width="1" stroke-dasharray="4 4"/>
+        <line x1="65" y1="105" x2="280" y2="120" stroke="rgba(255,215,0,0.2)" stroke-width="1" stroke-dasharray="4 4"/>
+        <line x1="65" y1="125" x2="280" y2="110" stroke="rgba(255,215,0,0.15)" stroke-width="1" stroke-dasharray="4 4"/>
+
+        <!-- Focus point (BEHIND retina = bad) -->
+        <circle cx="310" cy="115" r="5" fill="#ff4757" opacity="0.8" filter="url(#neonGlow)">
+          <animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <text x="310" y="100" text-anchor="middle" fill="#ff4757" font-size="10" font-weight="700">焦点落在这里</text>
+
+        <!-- Retina -->
+        <path d="M375 30 Q385 105 375 180" fill="none" stroke="#ff6b81" stroke-width="4" filter="url(#neonGlow)"/>
+
+        <!-- Labels -->
+        <text x="115" y="58" text-anchor="middle" fill="#ffd700" font-size="12">晶状体</text>
+        <text x="390" y="110" fill="#ff6b81" font-size="12" font-weight="700">视网膜</text>
+
+        <!-- Axial length arrow -->
+        <line x1="52" y1="195" x2="383" y2="195" stroke="#ffd700" stroke-width="2" marker-start="url(#arrowL2)" marker-end="url(#arrowR2)"/>
+        <defs>
+          <marker id="arrowR2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#ffd700"/></marker>
+          <marker id="arrowL2" markerWidth="10" markerHeight="10" refX="2" refY="5" orient="auto"><path d="M10,0 L0,5 L10,10 Z" fill="#ffd700"/></marker>
+        </defs>
+        <text x="218" y="212" text-anchor="middle" fill="#ffd700" font-size="14" font-weight="900">你的眼轴 ≈ 24.34 mm（已超标！）</text>
+
+        <!-- Warning icon -->
+        <text x="420" y="195" fill="#ff4757" font-size="20" font-weight="900" filter="url(#neonGlow)">
+          ⚠
+          <animate attributeName="opacity" values="1;0.4;1" dur="1.5s" repeatCount="indefinite"/>
+        </text>
+      </svg>
+      <p class="caption">眼轴越长 = 眼球越"拉长" = 远处的东西聚焦不到视网膜上 = 看不清 = <strong style="color:var(--alert-red)">近视</strong></p>
+    </div>
+
+    <!-- Normal vs Yours -->
+    <div class="eye-compare">
+      <div class="eye-compare-card normal">
+        <span class="eye-emoji">👁️</span>
+        <div class="eye-title" style="color:var(--safe-green)">正常小朋友的眼球</div>
+        <div class="eye-val" style="color:var(--safe-green)">23.0 mm</div>
+        <div class="eye-desc">眼球圆圆的，光线准确聚焦在视网膜上，看什么都清清楚楚</div>
+        <span class="eye-status">一切正常</span>
+      </div>
+      <div class="eye-compare-card yours">
+        <span class="eye-emoji">👀</span>
+        <div class="eye-title" style="color:var(--alert-red)">你的眼球（被拉长了！）</div>
+        <div class="eye-val" style="color:var(--alert-red)">24.34 mm</div>
+        <div class="eye-desc">眼球被拉长了 1.34mm，远处的画面开始模糊了</div>
+        <span class="eye-status">已突破警戒线</span>
+      </div>
+    </div>
+
+    <!-- Speed Compare -->
+    <div class="speed-compare">
+      <div class="speed-card normal-speed">
+        <div class="speed-label">正常小朋友的增长速度</div>
+        <div class="speed-value">0.20</div>
+        <div class="speed-unit">mm / 年</div>
+        <div class="speed-bar-track"><div class="speed-bar-fill"></div></div>
+      </div>
+      <div class="speed-card your-speed">
+        <div class="speed-label">你的增长速度（⚠️ 是正常的 2 倍多！）</div>
+        <div class="speed-value">0.43</div>
+        <div class="speed-unit">mm / 年</div>
+        <div class="speed-bar-track"><div class="speed-bar-fill"></div></div>
+      </div>
+    </div>
+
+    <div class="alert-banner">
+      <p><strong>⚠️ 简单来说：</strong>你的眼球正在以<strong style="color:var(--alert-red)">正常速度的两倍多</strong>被拉长。如果不控制，到 12 岁时眼轴可能超过 26mm，近视度数可能达到 <strong style="color:var(--alert-red)">600 度以上</strong>（高度近视）。</p>
+    </div>
+
+    <!-- What if not controlled -->
+    <div class="danger-future">
+      <h3>❌ 如果不控制，会发生什么？</h3>
+      <div class="danger-grid">
+        <div class="danger-item">
+          <span class="d-icon">👓</span>
+          <div class="d-title">近视越来越深</div>
+          <div class="d-desc">眼镜越来越厚，不戴眼镜几乎看不清任何东西</div>
+        </div>
+        <div class="danger-item">
+          <span class="d-icon">🚫</span>
+          <div class="d-title">不能当宇航员</div>
+          <div class="d-desc">宇航员视力要求极高，高度近视会被淘汰</div>
+        </div>
+        <div class="danger-item">
+          <span class="d-icon">👁️‍🗨️</span>
+          <div class="d-title">眼底病变风险</div>
+          <div class="d-desc">眼轴太长可能拉裂视网膜，甚至导致失明</div>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:16px"><strong style="color:var(--safe-green);font-size:17px">但好消息是：</strong>最近 3 个月你的眼轴 <strong style="color:var(--safe-green)">停住了</strong>，没有再变长！这说明我们的努力开始起作用了！只要坚持，就能把眼轴稳住！</p>
+  </div>
+
+  <!-- ====== AXIAL LENGTH HISTORY ====== -->
+  <div class="section-card section">
+    <h2><span class="h2-icon">📈</span> 眼轴成长时间线</h2>
+    <p>看看你的眼球是怎么一步步被拉长的：</p>
+
+    <div class="timeline">
+      <div class="timeline-item t-good">
+        <div class="timeline-date">2023年7月 · 5岁 · 基线</div>
+        <div>眼轴 <span class="timeline-value" style="color:var(--safe-green)">23.12 mm</span> — 还在安全范围 ✅</div>
+      </div>
+      <div class="timeline-item t-warn">
+        <div class="timeline-date">2024年2月 · 6岁</div>
+        <div>眼轴 <span class="timeline-value" style="color:var(--warning-orange)">23.35 mm</span> — 半年涨 0.23mm，增速偏快 ⚡</div>
+      </div>
+      <div class="timeline-item t-warn">
+        <div class="timeline-date">2024年12月 · 6岁半</div>
+        <div>眼轴 <span class="timeline-value" style="color:var(--warning-orange)">23.83 mm</span> — 5个月暴涨 0.4mm，接近警戒线 ⚡</div>
+      </div>
+      <div class="timeline-item t-danger">
+        <div class="timeline-date">2025年8月 · 7岁</div>
+        <div>眼轴 <span class="timeline-value" style="color:var(--alert-red)">24.11 mm</span> — 🔴 首次突破 24mm 警戒线！</div>
+      </div>
+      <div class="timeline-item t-danger">
+        <div class="timeline-date">2025年12月 · 7岁半</div>
+        <div>眼轴 <span class="timeline-value" style="color:var(--alert-red)">24.20 mm</span> — 确诊外斜视，医生建议手术 😱</div>
+      </div>
+      <div class="timeline-item t-danger">
+        <div class="timeline-date">2026年2月 · 7岁半</div>
+        <div>眼轴 <span class="timeline-value" style="color:var(--alert-red)">24.35 mm</span> — 继续增长，进入高危区 🔴</div>
+      </div>
+      <div class="timeline-item t-good">
+        <div class="timeline-date">2026年5月 · 8岁 · 现在</div>
+        <div>眼轴 <span class="timeline-value" style="color:var(--star-gold)">24.34 mm</span> — 🎯 近 3 个月首次持平！希望之光！</div>
+      </div>
+    </div>
+
+    <div class="progress-row">
+      <div class="progress-label">
+        <span>23.12 mm（5岁）</span>
+        <span>累计增长 1.22 mm</span>
+        <span>24.34 mm（现在）</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill fill-red" style="width:0%" data-target="81">
+          <span class="bar-label">你的增速是正常的 2 倍！</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== HABIT PROBLEM ====== -->
+  <div class="section-card section section-danger">
+    <h2><span class="h2-icon">📚</span> 阅读习惯 —— 最大的敌人</h2>
+
+    <p>Jim，你有一个超级优点 —— <strong>特别爱看书</strong>！这说明你聪明、有好奇心，这正是宇航员需要的品质。🌟</p>
+
+    <p>但是！</p>
+
+    <div class="alert-banner">
+      <p style="font-size:16px"><strong style="color:var(--alert-red);font-size:18px">你的眼睛正在为这个习惯付出代价。</strong></p>
+    </div>
+
+    <div style="background:rgba(0,0,0,0.2);border-radius:16px;padding:20px;margin:16px 0;border:1px solid rgba(255,71,87,0.15)">
+      <p style="margin-bottom:10px"><strong>想象一下：</strong></p>
+      <p>你手里有一根橡皮筋。轻轻拉开，松手就弹回去。但如果你把它一直拉长、拉长、拉长……几个小时都不松手 —— <strong style="color:var(--alert-red)">橡皮筋就被拉坏了，再也缩不回去</strong>。</p>
+      <p style="margin-top:10px">你的眼球就像那根橡皮筋。你一看书就停不下来，眼球里面的肌肉一直紧绷，眼轴就被<strong style="color:var(--alert-red)">一点点拉长</strong>了。</p>
+    </div>
+
+    <!-- Reading danger illustration -->
+    <div style="text-align:center;margin:20px 0;padding:20px;background:rgba(255,71,87,0.05);border-radius:16px;border:1px dashed rgba(255,71,87,0.3)">
+      <div style="font-size:14px;opacity:0.6;margin-bottom:12px">长时间近距离看书时，你的眼球在经历什么：</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap">
+        <span style="font-size:28px">📖</span>
+        <span style="color:var(--alert-red);font-size:20px">→</span>
+        <span style="font-size:14px;padding:8px 12px;background:rgba(255,71,87,0.1);border-radius:8px">睫状肌紧绷</span>
+        <span style="color:var(--alert-red);font-size:20px">→</span>
+        <span style="font-size:14px;padding:8px 12px;background:rgba(255,71,87,0.15);border-radius:8px">眼球壁受压</span>
+        <span style="color:var(--alert-red);font-size:20px">→</span>
+        <span style="font-size:14px;padding:8px 12px;background:rgba(255,71,87,0.2);border-radius:8px;font-weight:700;color:var(--alert-red)">眼轴被拉长</span>
+        <span style="color:var(--alert-red);font-size:20px">→</span>
+        <span style="font-size:14px;padding:8px 12px;background:rgba(255,71,87,0.25);border-radius:8px;font-weight:900;color:var(--alert-red)">近视加深</span>
+      </div>
+    </div>
+
+    <div class="astronaut-quote">
+      <span class="big-icon">🧑‍🚀</span>
+      <p>宇航员的眼睛就是飞船的雷达。<br>雷达模糊了，飞船就找不到回家的路。</p>
+      <div class="author">—— 每一位宇航员都明白的道理</div>
+    </div>
+
+    <p style="text-align:center;font-size:16px"><strong>宇航员上天之前需要完美的视力。<br>如果近视度数太高，就可能<strong style="color:var(--alert-red)">永远失去飞向太空的机会</strong>。</strong></p>
+  </div>
+
+  <!-- ====== GOOD HABITS ====== -->
+  <div class="section-card section">
+    <h2><span class="h2-icon">🌟</span> 养成宇航员护眼习惯</h2>
+    <p>以下是你每天需要做到的任务，<strong>点击可以打勾</strong>：</p>
+
+    <ul class="checklist" id="dailyChecklist">
+      <li onclick="toggleCheck(this)">
+        <span class="check-box">✓</span>
+        <span><strong>阅读 30 分钟，必须休息！</strong>看书或拼乐高 30 分钟后，站起来看窗外远处至少 5-10 分钟。设一个闹钟提醒自己。</span>
+      </li>
+      <li onclick="toggleCheck(this)">
+        <span class="check-box">✓</span>
+        <span><strong>每天户外 2 小时 🌞</strong>在阳光下玩耍、运动、散步都算。阳光能让眼睛产生多巴胺，阻止眼轴变长！这是大自然送给你的护眼武器！</span>
+      </li>
+      <li onclick="toggleCheck(this)">
+        <span class="check-box">✓</span>
+        <span><strong>看书距离 ≥ 33 cm 📏</strong>用你的前臂量一下 —— 从手肘到指尖的距离就是你眼睛到书本最少要保持的距离。</span>
+      </li>
+      <li onclick="toggleCheck(this)">
+        <span class="check-box">✓</span>
+        <span><strong>不要趴着/躺着看书 🚫</strong>歪着看会让两只眼睛受力不一样，一只眼睛负担更重，加重斜视风险。</span>
+      </li>
+      <li onclick="toggleCheck(this)">
+        <span class="check-box">✓</span>
+        <span><strong>充足睡眠 ≥ 9 小时 😴</strong>睡觉时眼睛才能完全放松，眼球也能得到休息和恢复。晚睡的眼睛恢复不了！</span>
+      </li>
+      <li onclick="toggleCheck(this)">
+        <span class="check-box">✓</span>
+        <span><strong>少看手机/平板 📱</strong>屏幕蓝光 + 近距离用眼是眼轴增长的"超级加速器"。每天不超过 30 分钟。</span>
+      </li>
+    </ul>
+
+    <div style="text-align:center;margin-top:18px" id="checkCount">
+      <span style="font-size:14px;opacity:0.5">已完成</span>
+      <span style="font-size:28px;font-weight:900;display:block;margin:4px 0">0 / 6</span>
+      <div style="width:100%;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;margin-top:8px;overflow:hidden">
+        <div id="checkBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--safe-green),#7bed9f);border-radius:3px;transition:width 0.5s ease"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== EYE TRAINING ====== -->
+  <div class="section-card section">
+    <h2><span class="h2-icon">🎯</span> 每日眼睛训练任务</h2>
+    <p>这是医生专门给你开的训练，<strong>每天只要 10 分钟</strong>，能让你的双眼配合能力变强：</p>
+
+    <div class="training-grid">
+      <div class="training-card">
+        <span class="t-icon">✏️</span>
+        <div class="t-title">铅笔推近法</div>
+        <div class="t-desc">早上或放学后 · 每天 1 组 x 10 次</div>
+        <ol class="t-steps">
+          <li>拿一支笔竖在眼前 50cm</li>
+          <li>双眼盯住笔尖</li>
+          <li>慢慢把笔推向鼻子</li>
+          <li>看到"两支笔"就停下</li>
+          <li>退回 50cm，重来</li>
+        </ol>
+      </div>
+      <div class="training-card">
+        <span class="t-icon">☝️</span>
+        <div class="t-title">手指凑鼻法</div>
+        <div class="t-desc">睡前 · 每天 1 组 x 15 次</div>
+        <ol class="t-steps">
+          <li>伸一根手指放在眼前 40cm</li>
+          <li>双眼锁定手指</li>
+          <li>慢慢把手指凑向鼻尖</li>
+          <li>保持"一根手指"凑近，坚持 3 秒</li>
+          <li>退回原位，重来</li>
+        </ol>
+      </div>
+    </div>
+
+    <table class="schedule">
+      <thead>
+        <tr><th>时间</th><th>训练</th><th>时长</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>☀️ 早上 / 放学后</td><td>铅笔推近法 x 10 次</td><td>~ 5 分钟</td></tr>
+        <tr><td>🌙 睡前</td><td>手指凑鼻法 x 15 次</td><td>~ 5 分钟</td></tr>
+      </tbody>
+    </table>
+
+    <div style="background:rgba(255,165,2,0.08);border-radius:14px;padding:16px;margin-top:14px;font-size:14px;border-left:4px solid var(--warning-orange)">
+      ⚠️ <strong>注意：</strong>如果训练时头痛或眼睛酸胀，说明做太多了，减半就好。不要在看书累了之后做训练。
+    </div>
+  </div>
+
+  <!-- ====== YOUR VICTORIES ====== -->
+  <div class="section-card section">
+    <h2><span class="h2-icon">🏆</span> 你已经赢了的战斗</h2>
+    <p>虽然挑战还在，但你已经取得了非常了不起的成绩：</p>
+
+    <div class="victory-grid">
+      <div class="victory-card victory-green">
+        <span class="v-icon">🏅</span>
+        <div class="v-title">立体视恢复</div>
+        <div class="v-desc">从 >1200″（严重受损）<br>恢复到 60″（完全正常）<br>仅用了 5.5 个月！</div>
+      </div>
+      <div class="victory-card victory-green">
+        <span class="v-icon">🏅</span>
+        <div class="v-title">手术取消了！</div>
+        <div class="v-desc">医生说不需要开刀了<br>靠训练打败了手术建议</div>
+      </div>
+      <div class="victory-card victory-green">
+        <span class="v-icon">🏅</span>
+        <div class="v-title">左眼抑制解除</div>
+        <div class="v-desc">双眼配合完全正常<br>仅 14 天就解除了抑制</div>
+      </div>
+      <div class="victory-card victory-orange">
+        <span class="v-icon">🎯</span>
+        <div class="v-title">眼轴增速暂停</div>
+        <div class="v-desc">近 3 个月首次持平<br>干预有效的初步信号</div>
+      </div>
+    </div>
+
+    <div class="progress-ring-container">
+      <svg width="120" height="120" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="10"/>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="url(#ringGrad)" stroke-width="10" stroke-linecap="round"
+          stroke-dasharray="314" stroke-dashoffset="110" transform="rotate(-90 60 60)">
+          <animate attributeName="stroke-dashoffset" from="314" to="110" dur="2s" fill="freeze"/>
+        </circle>
+        <defs>
+          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#2ed573"/>
+            <stop offset="100%" style="stop-color:#ffd700"/>
+          </linearGradient>
+        </defs>
+        <text x="60" y="56" text-anchor="middle" fill="white" font-size="24" font-weight="900">65%</text>
+        <text x="60" y="74" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="11">已恢复</text>
+      </svg>
+      <div class="progress-ring-text">你已经走过了最难的路，剩下的 35% 就是坚持！</div>
+    </div>
+  </div>
+
+  <!-- ====== SUMMARY ====== -->
+  <div class="section-card section final-section">
+    <h2 style="justify-content:center"><span class="h2-icon">🚀</span> 宇航员 Jim 的护眼作战计划</h2>
+
+    <div class="summary-list">
+      <div class="summary-item">
+        <div class="summary-num">1</div>
+        <div><strong>看书 30 分钟必休息</strong> — 设闹钟，看远处 5-10 分钟</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-num">2</div>
+        <div><strong>每天户外 2 小时</strong> — 阳光是你最好的护眼武器</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-num">3</div>
+        <div><strong>每天训练 10 分钟</strong> — 铅笔推近 + 手指凑鼻</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-num">4</div>
+        <div><strong>保持 33cm 以上阅读距离</strong> — 不趴不躺不凑近</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-num">5</div>
+        <div><strong>8 月去复查</strong> — 看看眼轴是不是真的稳住了</div>
+      </div>
+    </div>
+
+    <div class="astronaut-quote" style="border-left-color:var(--safe-green)">
+      <span class="big-icon">🛸</span>
+      <p style="color:var(--text-light)">Jim，保护好自己的眼睛，<br>太空在等你。</p>
+      <p style="color:var(--star-gold);font-size:15px;margin-top:12px">你已经有能力打赢这场仗了 ——<br>你用 5 个月治好了立体视，打败了手术！<br>接下来，控制住眼轴，你就能飞得更远。</p>
+    </div>
+
+    <div class="cta-row">
+      <button class="cta-btn cta-btn-primary" onclick="this.textContent='🚀 任务接受！太空见！'; this.style.transform='scale(1.1)'; setTimeout(()=>{this.textContent='🛸 任务进行中...'; this.style.transform='scale(1)'}, 1500)">
+        我接受这个任务！
+      </button>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:24px 0;font-size:12px;opacity:0.3">
+    数据来源：协和医院 · 武汉儿童医院 · 同济医院 | 更新于 2026-05-26
+  </div>
+
+</div>
+
+<script>
+// ====== Animated Starfield Canvas ======
+(function() {
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  const STAR_COUNT = 200;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  for (let i = 0; i < STAR_COUNT; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 2 + 0.3,
+      speed: Math.random() * 0.3 + 0.05,
+      opacity: Math.random(),
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const t = Date.now() * 0.001;
+    stars.forEach(s => {
+      s.y += s.speed;
+      if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; }
+      const flicker = 0.5 + 0.5 * Math.sin(t * 1.5 + s.phase);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${flicker * 0.8})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ====== Shooting Stars ======
+(function() {
+  function createShootingStar() {
+    const star = document.createElement('div');
+    star.className = 'shooting-star';
+    star.style.top = Math.random() * 40 + '%';
+    star.style.left = Math.random() * 60 + '%';
+    star.style.transform = `rotate(${30 + Math.random() * 20}deg)`;
+    star.style.width = (80 + Math.random() * 100) + 'px';
+    document.body.appendChild(star);
+    setTimeout(() => star.remove(), 1600);
+  }
+  setInterval(() => {
+    if (Math.random() < 0.4) createShootingStar();
+  }, 4000);
+})();
+
+// ====== Scroll Reveal ======
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.section').forEach(s => observer.observe(s));
+})();
+
+// ====== Progress Bar Animation ======
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const fill = entry.target;
+        const target = fill.dataset.target;
+        setTimeout(() => { fill.style.width = target + '%'; }, 300);
+        observer.unobserve(fill);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('[data-target]').forEach(el => observer.observe(el));
+})();
+
+// ====== Checklist ======
+function toggleCheck(li) {
+  li.classList.toggle('checked');
+  updateCount();
+}
+function updateCount() {
+  const items = document.querySelectorAll('#dailyChecklist li');
+  const checked = document.querySelectorAll('#dailyChecklist li.checked');
+  const count = checked.length;
+  const total = items.length;
+  document.getElementById('checkCount').innerHTML =
+    `<span style="font-size:14px;opacity:0.5">已完成</span>
+     <span style="font-size:28px;font-weight:900;display:block;margin:4px 0;color:${count===total?'var(--safe-green)':'white'}">${count} / ${total}</span>
+     <div style="width:100%;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;margin-top:8px;overflow:hidden">
+       <div style="height:100%;width:${(count/total)*100}%;background:linear-gradient(90deg,var(--safe-green),#7bed9f);border-radius:3px;transition:width 0.5s ease${count===total?';box-shadow:0 0 10px rgba(46,213,115,0.5)':''}"></div>
+     </div>`;
+}
+</script>
+
+</body>
+</html>
