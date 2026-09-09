@@ -2,6 +2,8 @@
 
 网站：<https://vibe.pheth.com>。仓库中的独立 HTML 网页通过分类首页统一访问，使用 Cloudflare Workers Static Assets 托管。
 
+首页和每个内容页右下角会显示累计访问次数。计数由 Cloudflare Worker 写入 D1 数据库，同一内容页的兼容英文地址共用同一条记录。
+
 ## 本地预览与部署
 
 需要 Node.js 20 或更新版本。
@@ -17,7 +19,7 @@ npm run dev
 npm run deploy
 ```
 
-部署会自动生成首页和 `dist/`，然后发布到 `vibe.pheth.com`。域名由 `wrangler.jsonc` 的 Custom Domain 配置管理，Cloudflare 自动配置 DNS 和 HTTPS。只上传网页、`assets/` 和 404 页面。
+部署会自动生成首页和 `dist/`，然后发布到 `vibe.pheth.com`。域名由 `wrangler.jsonc` 的 Custom Domain 配置管理，Cloudflare 自动配置 DNS 和 HTTPS。首次部署或新增数据库迁移时，先执行 `npx wrangler d1 migrations apply pheth-vibe-views --remote`。
 
 ## 添加网页
 

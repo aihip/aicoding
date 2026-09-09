@@ -6,6 +6,12 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const output = path.join(root, 'dist');
 const catalog = JSON.parse(await readFile(path.join(root, 'catalog.json'), 'utf8'));
 const escape = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
+const addCounter = (source, page) => {
+  const style = '<link rel="stylesheet" href="/assets/views.css">';
+  const script = `<script src="/assets/views.js" data-page="${escape(page)}" defer></script>`;
+  if (!/<\/head>/i.test(source) || !/<\/body>/i.test(source)) throw new Error(`网页 ${page} 缺少完整的 head 或 body 标签。`);
+  return source.replace(/<\/head>/i, `${style}\n</head>`).replace(/<\/body>/i, `${script}\n</body>`);
+};
 const categoryIds = new Set(catalog.categories.map((category) => category.id));
 if (categoryIds.size !== catalog.categories.length || !categoryIds.has('more')) throw new Error('分类 ID 必须唯一，且须保留 more 分类。');
 for (const category of catalog.categories) {
@@ -46,6 +52,7 @@ html = html.replace(/\{\{([A-Z_]+)\}\}/g, (_, key) => {
   if (!(key in replacements)) throw new Error(`模板变量未知：${key}`);
   return replacements[key];
 });
+html = addCounter(html, 'home');
 // Only publish web content. Repository metadata, documentation and credentials stay outside dist.
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
@@ -55,7 +62,8 @@ await Promise.all(pages.flatMap((page) => {
   const targets = [`${page.slug}.html`];
   // Keep existing ASCII URLs compatible, but never publish non-ASCII filenames.
   if (/^[\x00-\x7F]+$/.test(page.file) && page.file !== `${page.slug}.html`) targets.push(page.file);
-  return targets.map((target) => writeFile(path.join(output, target), page.source));
+  const source = addCounter(page.source, page.slug);
+  return targets.map((target) => writeFile(path.join(output, target), source));
 }));
 await cp(path.join(root, 'assets'), path.join(output, 'assets'), { recursive: true, dereference: false });
 await cp(path.join(root, 'site/404.html'), path.join(output, '404.html'));

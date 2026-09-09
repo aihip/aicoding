@@ -1,16 +1,27 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "pheth-vibe",
+  "main": "src/worker.js",
   "compatibility_date": "2026-09-09",
   "workers_dev": false,
   "preview_urls": false,
   "build": { "command": "npm run build" },
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"],
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page"
   },
   "routes": [
     { "pattern": "vibe.pheth.com", "custom_domain": true }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "pheth-vibe-views",
+      "database_id": "d8678c28-d9c7-47fe-8310-dc5361be2f38",
+      "migrations_dir": "migrations"
+    }
   ]
 }
