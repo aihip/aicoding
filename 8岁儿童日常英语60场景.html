@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="description" content="8 岁儿童日常英语 60 场景：每天一课、按记忆曲线复习、朗读跟读、小测与奖章。">
+<style>
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;padding:0;font:14px system-ui}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+</style>
+<title>60 天英语脱口秀</title>
+<style>
+:root{
+  --bg:#FFFFFF; --bg2:#F5F5F7; --surface:#FFFFFF; --ink:#1D1D1F; --muted:#6E6E73;
+  --line:#E3E3E6; --hair:#D2D2D7; --blue:#0071E3; --blue-soft:#EAF3FE;
+  --green:#30A46C; --amber:#B25E09; --radius:18px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#000000; --bg2:#0B0B0D; --surface:#151517; --ink:#F5F5F7; --muted:#98989D;
+    --line:#2A2A2D; --hair:#3A3A3D; --blue:#0A84FF; --blue-soft:#12243A;
+    --green:#3ECF8E; --amber:#E7A33E;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#000000; --bg2:#0B0B0D; --surface:#151517; --ink:#F5F5F7; --muted:#98989D;
+  --line:#2A2A2D; --hair:#3A3A3D; --blue:#0A84FF; --blue-soft:#12243A;
+  --green:#3ECF8E; --amber:#E7A33E;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;letter-spacing:-0.01em;
+}
+h1,h2,h3{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue","PingFang SC",sans-serif;
+  font-weight:600;letter-spacing:-0.022em;text-wrap:balance;margin:0}
+button{font:inherit;color:inherit;cursor:pointer;letter-spacing:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:10px}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px 120px}
+svg.spk{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;display:block}
+
+/* header */
+header.top{background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+.top-in{max-width:760px;margin:0 auto;padding:11px 22px;display:flex;gap:16px;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0}
+.brand h1{font-size:17px;font-weight:600}
+.brand p{margin:0;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hud{display:flex;gap:14px;align-items:center;flex:none}
+.hud .pill{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.hud .pill b{color:var(--ink);font-weight:600}
+.iconbtn{background:none;border:none;padding:4px;color:var(--muted);line-height:0}
+.iconbtn:hover{color:var(--ink)}
+
+/* tabs */
+nav.tabs{position:sticky;top:47px;z-index:29;background:color-mix(in srgb,var(--bg) 82%,transparent);
+  backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line)}
+.tabs-in{max-width:760px;margin:0 auto;padding:0 22px;display:flex;gap:26px;overflow-x:auto;scrollbar-width:none}
+.tabs-in::-webkit-scrollbar{display:none}
+.tab{background:none;border:none;padding:12px 0;font-size:14px;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);font-weight:590;border-bottom-color:var(--ink)}
+
+section.view{display:flex;flex-direction:column;gap:14px;padding-top:34px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.h-row{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.hr{height:1px;background:var(--line);border:0;margin:18px 0}
+
+/* hero */
+.daycard{padding:6px 2px 26px;border-bottom:1px solid var(--line)}
+.daynum{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.daycard h2{margin:10px 0 2px;font-size:44px;line-height:1.08;font-weight:600}
+.daycard .en{font-size:19px;color:var(--muted);margin:0;font-weight:400}
+.progressbar{height:4px;border-radius:999px;background:var(--bg2);overflow:hidden;margin-top:26px}
+.progressbar i{display:block;height:100%;background:var(--ink);border-radius:999px}
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.step{font-size:13px;color:var(--muted);background:var(--bg2);border-radius:999px;padding:5px 12px}
+
+/* sentences */
+ul.sents{list-style:none;margin:0;padding:0}
+li.sent{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line)}
+li.sent:first-child{border-top:0}
+li.sent.key .e{font-weight:590}
+.sent .txt{flex:1;min-width:0}
+.sent .e{font-size:17px;line-height:1.45;word-wrap:break-word}
+.sent .z{font-size:14px;color:var(--muted);margin-top:1px}
+.say{border:none;background:none;padding:6px 0 0;color:var(--muted);flex:none;line-height:0}
+.say:hover{color:var(--blue)}
+.dot{flex:none;width:6px;height:6px;border-radius:50%;background:var(--blue);margin-top:15px}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--bg2);border:none;border-radius:999px;padding:6px 13px;font-size:14px;color:var(--ink)}
+.chip.word{cursor:pointer}
+.chip.word:hover{background:var(--blue);color:#fff}
+
+blockquote.ex{margin:0;padding:0}
+blockquote.ex p{margin:0}
+blockquote.ex .en{font-size:19px;line-height:1.5}
+blockquote.ex .z{color:var(--muted);font-size:14px;margin-top:8px}
+
+.dlg{display:flex;flex-direction:column;gap:10px}
+.turn{display:flex;gap:12px;align-items:flex-start}
+.who{flex:none;font-size:13px;color:var(--muted);width:62px;text-align:right;padding-top:9px}
+.bubble{background:var(--bg2);border-radius:16px;padding:8px 14px;font-size:16px}
+.turn.child .bubble{background:var(--blue);color:#fff}
+
+/* quiz */
+.quiz .q{font-size:26px;font-weight:600;letter-spacing:-0.02em;margin:14px 0 20px}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;background:var(--surface);border:1px solid var(--hair);border-radius:14px;padding:13px 16px;font-size:16px;transition:.15s}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--green);color:var(--green)}
+.opt.wrong{border-color:var(--amber);color:var(--amber)}
+.dots{display:flex;gap:5px}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--line)}
+.dots i.done{background:var(--ink)}
+.dots i.miss{background:var(--amber)}
+
+.btn{border:1px solid var(--ink);background:none;color:var(--ink);border-radius:999px;padding:10px 22px;font-size:15px;transition:.15s}
+.btn:hover{background:var(--ink);color:var(--bg)}
+.btn.go{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.go:hover{opacity:.85;background:var(--blue);color:#fff}
+.btn.ghost{border-color:var(--hair);color:var(--muted)}
+.btn.ghost:hover{background:none;border-color:var(--ink);color:var(--ink)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.note{font-size:15px;color:var(--muted);border-left:2px solid var(--line);padding-left:14px}
+
+/* scene list */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.scenebtn{text-align:left;background:var(--surface);border:none;padding:14px 16px;display:flex;gap:12px;align-items:baseline}
+.scenebtn:hover{background:var(--bg2)}
+.scenebtn b{display:block;font-size:15px;font-weight:500}
+.scenebtn span.sub{font-size:12px;color:var(--muted)}
+.scenebtn .no{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;flex:none;width:20px}
+.scenebtn .mark{margin-left:auto;font-size:11px;color:var(--muted);flex:none}
+.scenebtn.done .mark{color:var(--green)}
+.scenebtn.due .mark{color:var(--amber)}
+.parthead{margin:26px 0 10px;font-size:15px;color:var(--muted);font-weight:500}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.stat{background:var(--surface);padding:18px 16px}
+.stat b{display:block;font-size:34px;font-weight:600;letter-spacing:-0.03em;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--muted)}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.badge{display:flex;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:14px;color:var(--muted)}
+.badge.on{color:var(--ink);border-color:var(--ink)}
+.badge em{font-style:normal;font-size:15px;width:26px;height:26px;border-radius:50%;border:1px solid currentColor;display:grid;place-items:center;flex:none;font-size:12px}
+.badge b{display:block;font-size:14px;font-weight:550}
+.badge span{font-size:12px;color:var(--muted)}
+
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:11px 12px 11px 0;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.tablewrap{overflow-x:auto}
+ol.steps-list,ul.plain{margin:0;padding-left:20px}
+ol.steps-list li,ul.plain li{padding:5px 0}
+
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(8px);
+  background:var(--ink);color:var(--bg);padding:11px 20px;border-radius:999px;font-size:15px;
+  opacity:0;transition:.22s;pointer-events:none;z-index:50}
+.toast.on{opacity:1;transform:translateX(-50%)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:560px){
+  .daycard h2{font-size:32px}.quiz .q{font-size:22px}.who{width:50px}
+  body{font-size:16px}
+}
+</style>
+</head>
+<body>
+<script>window.__SCENES__=[{"id":1,"part":"早晨与个人生活","zh":"起床","en":"Wake Up","sentences":[{"en":"Good morning!","zh":"早上好！","star":true},{"en":"I wake up at seven.","zh":"我七点醒来。","star":true},{"en":"I get up at seven thirty.","zh":"我七点半起床。","star":false},{"en":"I'm still sleepy.","zh":"我还很困。","star":false},{"en":"I don't want to get up.","zh":"我不想起床。","star":false},{"en":"I slept well last night.","zh":"我昨晚睡得很好。","star":false},{"en":"I didn't sleep well last night.","zh":"我昨晚没睡好。","star":false},{"en":"I stayed in bed for five more minutes.","zh":"我又在床上躺了五分钟。","star":false},{"en":"I need to get ready for school.","zh":"我得准备去上学了。","star":false}],"examples":[{"title":"","en":"My alarm went off at seven. I was still sleepy, so I stayed in bed for five more minutes. Then Mom called me, and I got up.","zh":"我的闹钟七点响了。我还很困，所以又躺了五分钟。后来妈妈叫我，我就起床了。"}],"dialogs":[{"title":"迷你对话","lines":[{"who":"Mom","line":"Good morning! It's time to get up."},{"who":"Child","line":"What time is it?"},{"who":"Mom","line":"It's seven o'clock."},{"who":"Child","line":"I'm still sleepy. Can I have five more minutes?"},{"who":"Mom","line":"Okay, but don't be late for school."}]}],"swaps":[{"pattern":"I wake up at ___ and get up at ___.","options":"six thirty / seven / seven fifteen / seven thirty"}],"patterns":[],"keywords":["seven","well","last","night","good","morning","wake","thirty"]},{"id":2,"part":"早晨与个人生活","zh":"穿衣服","en":"Getting Dressed","sentences":[{"en":"I'm getting dressed.","zh":"我正在穿衣服。","star":true},{"en":"I put on my school uniform.","zh":"我穿上校服。","star":false},{"en":"I'm wearing a blue T-shirt and black pants.","zh":"我穿着蓝色 T 恤和黑裤子。","star":false},{"en":"Put on your socks and shoes.","zh":"穿上袜子和鞋。","star":false},{"en":"Take off your jacket.","zh":"脱下外套。","star":false},{"en":"I need to change my clothes.","zh":"我需要换衣服。","star":false},{"en":"This shirt is too small for me.","zh":"这件衬衫对我来说太小了。","star":false},{"en":"I can't find my other sock.","zh":"我找不到另一只袜子。","star":false},{"en":"Can you help me zip up my jacket?","zh":"你能帮我拉上外套拉链吗？","star":false}],"examples":[{"title":"","en":"It is cold today, so I put on a sweater and a warm coat. I also wear a hat when I go outside.","zh":"今天很冷，所以我穿上毛衣和厚外套。出门时我还戴了一顶帽子。"}],"dialogs":[{"title":"迷你对话","lines":[{"who":"Dad","line":"What are you wearing today?"},{"who":"Child","line":"I'm wearing my school uniform."},{"who":"Dad","line":"It's cold outside. Put on your coat."},{"who":"Child","line":"Okay. Can you help me find it?"}]}],"swaps":[{"pattern":"I'm wearing a ___ and ___.","options":"T-shirt / shirt / sweater / jacket；pants / shorts / skirt / jeans"}],"patterns":[],"keywords":["shirt","jacket","getting","dressed","school","uniform","wearing","blue"]},{"id":3,"part":"早晨与个人生活","zh":"刷牙","en":"Brush My Teeth","sentences":[{"en":"I brush my teeth twice a day.","zh":"我每天刷两次牙。","star":true},{"en":"I brushed my teeth and washed my face.","zh":"我刷了牙，也洗了脸。","star":true},{"en":"I put some toothpaste on my toothbrush.","zh":"我在牙刷上挤了一些牙膏。","star":false},{"en":"Brush every tooth carefully.","zh":"仔细刷每一颗牙。","star":false},{"en":"I rinse my mouth with water.","zh":"我用水漱口。","star":false},{"en":"Don't use too much toothpaste.","zh":"不要用太多牙膏。","star":false},{"en":"My mouth feels fresh and clean.","zh":"我的嘴巴感觉清新又干净。","star":false}],"examples":[{"title":"","en":"First, I put toothpaste on my toothbrush. Then I brushed my teeth for two minutes. Finally, I rinsed my mouth and cleaned my toothbrush.","zh":"首先，我在牙刷上挤牙膏。然后我刷了两分钟牙。最后，我漱了口并洗干净牙刷。"}],"dialogs":[{"title":"迷你对话","lines":[{"who":"Mom","line":"Did you brush your teeth?"},{"who":"Child","line":"Not yet. I'm doing it now."},{"who":"Mom","line":"Remember to brush for two minutes."},{"who":"Child","line":"Okay. My teeth will be nice and clean."}]}],"swaps":[],"patterns":[],"keywords":["brush","teeth","toothpaste","mouth","twice","day","brushed","washed"]},{"id":4,"part":"早晨与个人生活","zh":"洗脸与洗手","en":"Washing My Face and Hands","sentences":[{"en":"I wash my face every morning.","zh":"我每天早上洗脸。","star":true},{"en":"Wash your hands with soap.","zh":"用肥皂洗手。","star":true},{"en":"My hands are dirty.","zh":"我的手脏了。","star":false},{"en":"My hands are clean now.","zh":"我的手现在干净了。","star":false},{"en":"The water is too cold.","zh":"水太凉了。","star":false},{"en":"Please pass me the towel.","zh":"请把毛巾递给我。","star":false},{"en":"Dry your hands with a towel.","zh":"用毛巾擦干手。","star":false},{"en":"Don't forget to wash between your fingers.","zh":"别忘了洗指缝。","star":false}],"examples":[{"title":"","en":"I washed my hands with soap after playing outside. I cleaned my palms, my fingers, and the backs of my hands. Then I dried them with a towel.","zh":"我在外面玩后用肥皂洗了手。我洗了手掌、手指和手背，然后用毛巾擦干。"}],"dialogs":[{"title":"迷你对话","lines":[{"who":"Dad","line":"Dinner is ready."},{"who":"Child","line":"Great! I'm hungry."},{"who":"Dad","line":"Your hands are dirty. Please wash them first."},{"who":"Child","line":"Okay. I'll wash them with soap."}]}],"swaps":[],"patterns":[],"keywords":["hands","wash","towel","face","every","morning","soap","dirty"]},{"id":5,"part":"早晨与个人生活","zh":"洗澡","en":"Taking a Shower","sentences":[{"en":"I'm going to take a shower.","zh":"我要去洗澡了。","star":true},{"en":"I took a shower before bed.","zh":"我睡前洗了澡。","star":false},{"en":"I washed my hair with shampoo.","zh":"我用洗发水洗了头。","star":false},{"en":"The water is too hot.","zh":"水太热了。","star":false},{"en":"Could you make the water a little cooler?","zh":"能把水调凉一点吗？","star":false},{"en":"Be careful. The floor is slippery.","zh":"小心，地板很滑。","star":false},{"en":"I need a clean towel.","zh":"我需要一条干净的毛巾。","star":false},{"en":"I feel clean and fresh now.","zh":"我现在感觉干净又清爽。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Mom","line":"It's time for a shower."},{"who":"Child","line":"Can I finish this page first?"},{"who":"Mom","line":"Sure. Then take your pajamas with you."},{"who":"Child","line":"Okay. I'll be ready in two minutes."}]}],"swaps":[],"patterns":[],"keywords":["shower","water","clean","took","bed","washed","hair","shampoo"]},{"id":6,"part":"早晨与个人生活","zh":"上厕所","en":"Going to the Restroom","sentences":[{"en":"I need to go to the bathroom.","zh":"我需要上厕所。","star":true},{"en":"May I go to the restroom?","zh":"我可以去洗手间吗？","star":true},{"en":"Where is the restroom?","zh":"洗手间在哪里？","star":false},{"en":"The restroom is down the hall.","zh":"洗手间在走廊那边。","star":false},{"en":"Please wait for me outside.","zh":"请在外面等我。","star":false},{"en":"I washed my hands after using the bathroom.","zh":"我上完厕所后洗了手。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"Excuse me, may I go to the restroom?"},{"who":"Teacher","line":"Yes, you may."},{"who":"Child","line":"Thank you."},{"who":"Teacher","line":"Please come back quietly."}]}],"swaps":[],"patterns":[],"keywords":["restroom","bathroom","need","hall","wait","outside","washed","hands"]},{"id":7,"part":"早晨与个人生活","zh":"早餐","en":"Breakfast","sentences":[{"en":"What are we having for breakfast?","zh":"我们早餐吃什么？","star":true},{"en":"I had an egg and some milk for breakfast.","zh":"我早餐吃了一个鸡蛋，喝了一些牛奶。","star":false},{"en":"I'm hungry.","zh":"我饿了。","star":false},{"en":"This is delicious.","zh":"这个很好吃。","star":false},{"en":"The porridge is too hot.","zh":"粥太烫了。","star":false},{"en":"I don't really like porridge.","zh":"我不太喜欢粥。","star":false},{"en":"Can I have another piece of bread?","zh":"我能再吃一片面包吗？","star":false},{"en":"I'm full now.","zh":"我现在饱了。","star":false},{"en":"I finished my breakfast.","zh":"我吃完早餐了。","star":false}],"examples":[{"title":"","en":"This morning, I had a meat bun, an egg, and a glass of milk. The bun was warm and delicious. I finished everything because I was very hungry.","zh":"今天早上，我吃了一个肉包、一个鸡蛋，还喝了一杯牛奶。包子又热又好吃。我很饿，所以全吃完了。"}],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"What's for breakfast?"},{"who":"Mom","line":"Eggs, bread, and milk."},{"who":"Child","line":"Can I have some fruit, too?"},{"who":"Mom","line":"Of course. Would you like an apple or a banana?"},{"who":"Child","line":"A banana, please."}]}],"swaps":[{"pattern":"I had ___ and ___ for breakfast.","options":"an egg / bread / noodles / porridge / a meat bun / milk / juice / fruit"}],"patterns":[],"keywords":["breakfast","porridge","having","egg","milk","hungry","delicious","hot"]},{"id":8,"part":"早晨与个人生活","zh":"午饭与晚饭","en":"Lunch and Dinner","sentences":[{"en":"What are we having for dinner?","zh":"我们晚饭吃什么？","star":true},{"en":"We're having rice, chicken, and vegetables.","zh":"我们吃米饭、鸡肉和蔬菜。","star":false},{"en":"This dish tastes great.","zh":"这道菜很好吃。","star":false},{"en":"I don't like spicy food.","zh":"我不喜欢辣的食物。","star":false},{"en":"Can I have some more rice?","zh":"我可以再吃一些米饭吗？","star":false},{"en":"Please pass me the soup.","zh":"请把汤递给我。","star":false},{"en":"I ate too much.","zh":"我吃得太多了。","star":false},{"en":"Thank you for the meal.","zh":"谢谢你准备这顿饭。","star":false}],"examples":[{"title":"","en":"We had rice, fish, vegetables, and tomato soup for dinner. I liked the fish best. I had a second bowl of rice, so I was very full.","zh":"晚饭我们吃了米饭、鱼、蔬菜和番茄汤。我最喜欢鱼。我又吃了一碗米饭，所以特别饱。"}],"dialogs":[{"title":"迷你对话","lines":[{"who":"Dad","line":"Would you like some chicken?"},{"who":"Child","line":"Yes, please. It smells good."},{"who":"Dad","line":"Do you want some vegetables, too?"},{"who":"Child","line":"Just a little, please."},{"who":"Dad","line":"Here you are."}]}],"swaps":[],"patterns":[],"keywords":["having","rice","dinner","chicken","vegetables","dish","tastes","great"]},{"id":9,"part":"早晨与个人生活","zh":"喝水与饮料","en":"Water and Drinks","sentences":[{"en":"I'm thirsty.","zh":"我渴了。","star":true},{"en":"Can I have some water?","zh":"我可以喝点水吗？","star":true},{"en":"I drank a glass of water.","zh":"我喝了一杯水。","star":false},{"en":"My water bottle is empty.","zh":"我的水瓶空了。","star":false},{"en":"I need to fill my bottle.","zh":"我需要把水瓶装满。","star":false},{"en":"Is this water warm or cold?","zh":"这水是温的还是凉的？","star":false},{"en":"Be careful not to spill it.","zh":"小心别洒了。","star":false},{"en":"I spilled some juice on the table.","zh":"我把一些果汁洒在桌上了。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"Mom, I'm thirsty."},{"who":"Mom","line":"Your water bottle is on the table."},{"who":"Child","line":"It's empty."},{"who":"Mom","line":"Bring it here. I'll fill it for you."},{"who":"Child","line":"Thank you!"}]}],"swaps":[],"patterns":[],"keywords":["water","bottle","thirsty","drank","glass","empty","need","fill"]},{"id":10,"part":"早晨与个人生活","zh":"收拾房间","en":"Tidying My Room","sentences":[{"en":"My room is messy.","zh":"我的房间很乱。","star":true},{"en":"I need to clean my room.","zh":"我需要打扫房间。","star":true},{"en":"I put my books on the shelf.","zh":"我把书放在书架上。","star":false},{"en":"I put my toys away.","zh":"我把玩具收起来。","star":false},{"en":"These clothes belong in the closet.","zh":"这些衣服应该放进衣柜。","star":false},{"en":"I organized my desk.","zh":"我整理了书桌。","star":false},{"en":"Everything is in the right place.","zh":"每样东西都放对地方了。","star":false},{"en":"My room looks much better now.","zh":"我的房间现在看起来好多了。","star":false}],"examples":[{"title":"","en":"My room was very messy. First, I made my bed. Then I put my books on the shelf and my toys in the box. Finally, I cleaned my desk. Now everything is tidy.","zh":"我的房间很乱。首先我整理床铺，然后把书放上书架，把玩具放进箱子。最后我清理了书桌。现在一切都很整齐。"}],"dialogs":[{"title":"迷你对话","lines":[{"who":"Mom","line":"Please tidy your room before dinner."},{"who":"Child","line":"What should I do first?"},{"who":"Mom","line":"Put your toys away and make your bed."},{"who":"Child","line":"Okay. I'll start now."}]}],"swaps":[],"patterns":[],"keywords":["room","messy","need","clean","books","shelf","toys","away"]},{"id":11,"part":"早晨与个人生活","zh":"扫地与拖地","en":"Sweeping and Mopping","sentences":[{"en":"I swept the floor.","zh":"我扫了地。","star":true},{"en":"I mopped the floor.","zh":"我拖了地。","star":true},{"en":"There is dust under the table.","zh":"桌子下面有灰尘。","star":false},{"en":"The floor was dirty.","zh":"地板原来很脏。","star":false},{"en":"Please get the broom and dustpan.","zh":"请拿扫把和簸箕。","star":false},{"en":"The floor is still wet.","zh":"地板还是湿的。","star":false},{"en":"Be careful not to slip.","zh":"小心不要滑倒。","star":false},{"en":"I helped Mom clean the house.","zh":"我帮妈妈打扫了房子。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Dad","line":"Could you help me clean the floor?"},{"who":"Child","line":"Sure. Should I sweep or mop?"},{"who":"Dad","line":"Please sweep first. I'll mop afterward."},{"who":"Child","line":"Okay. Where is the broom?"}]}],"swaps":[],"patterns":[],"keywords":["floor","swept","mopped","dust","under","table","dirty","broom"]},{"id":12,"part":"早晨与个人生活","zh":"洗碗与其他家务","en":"Household Chores","sentences":[{"en":"I helped with the housework.","zh":"我帮忙做了家务。","star":true},{"en":"I helped wash the dishes.","zh":"我帮忙洗碗。","star":false},{"en":"I took out the trash.","zh":"我倒了垃圾。","star":false},{"en":"I made my bed.","zh":"我整理了床铺。","star":false},{"en":"I folded my clothes.","zh":"我叠了衣服。","star":false},{"en":"I put the clean clothes in the closet.","zh":"我把干净衣服放进衣柜。","star":false},{"en":"The trash can is full.","zh":"垃圾桶满了。","star":false},{"en":"What can I do to help?","zh":"我能帮忙做什么？","star":false},{"en":"I finished all my chores.","zh":"我做完所有家务了。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"What can I do to help?"},{"who":"Mom","line":"Please clear the table and wash your bowl."},{"who":"Child","line":"Okay. Should I take out the trash, too?"},{"who":"Mom","line":"Yes, please. That would be very helpful."}]}],"swaps":[],"patterns":[],"keywords":["helped","trash","clothes","housework","wash","dishes","took","bed"]},{"id":13,"part":"出门与交通","zh":"出门","en":"Leaving Home","sentences":[{"en":"I'm ready to go.","zh":"我准备好出发了。","star":true},{"en":"We're leaving home at eight.","zh":"我们八点离开家。","star":false},{"en":"Don't forget your backpack.","zh":"别忘了书包。","star":false},{"en":"I forgot my water bottle.","zh":"我忘带水瓶了。","star":false},{"en":"Do you have the key?","zh":"你带钥匙了吗？","star":false},{"en":"Let me check my bag.","zh":"让我检查一下书包。","star":false},{"en":"Please close the door.","zh":"请关门。","star":false},{"en":"Let's go, or we'll be late.","zh":"我们走吧，不然要迟到了。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Dad","line":"Are you ready to go?"},{"who":"Child","line":"Almost. I can't find my water bottle."},{"who":"Dad","line":"It's next to your backpack."},{"who":"Child","line":"I found it. Let's go!"}]}],"swaps":[],"patterns":[],"keywords":["ready","leaving","home","eight","forget","backpack","forgot","water"]},{"id":14,"part":"出门与交通","zh":"走路","en":"Walking","sentences":[{"en":"I walk to school every day.","zh":"我每天走路去学校。","star":true},{"en":"We walked home together.","zh":"我们一起走回家。","star":false},{"en":"Stay on the sidewalk.","zh":"走在人行道上。","star":false},{"en":"Look both ways before crossing the street.","zh":"过马路前看看两边。","star":false},{"en":"The light is red. We need to wait.","zh":"红灯了，我们要等。","star":false},{"en":"The light turned green. We can cross now.","zh":"绿灯了，我们现在可以过马路。","star":false},{"en":"Hold my hand when we cross the street.","zh":"过马路时拉着我的手。","star":false},{"en":"It takes ten minutes to walk there.","zh":"走到那里要十分钟。","star":false}],"examples":[{"title":"","en":"I walked to school with Dad. We stopped at the red light and waited. When the light turned green, we looked both ways and crossed the street.","zh":"我和爸爸走路去学校。我们在红灯前停下等待。绿灯亮后，我们看看两边，然后过马路。"}],"dialogs":[],"swaps":[],"patterns":[],"keywords":["walk","street","light","cross","school","every","day","walked"]},{"id":15,"part":"出门与交通","zh":"坐公交车","en":"Taking the Bus","sentences":[{"en":"We took the bus to school.","zh":"我们坐公交车去学校。","star":true},{"en":"We waited at the bus stop.","zh":"我们在公交站等车。","star":false},{"en":"I got on the bus and found a seat.","zh":"我上车后找到了座位。","star":false},{"en":"The bus is crowded today.","zh":"今天公交车很拥挤。","star":false},{"en":"Would you like my seat?","zh":"你想坐我的座位吗？","star":false},{"en":"This is our stop.","zh":"这是我们要下的站。","star":false},{"en":"We get off at the next stop.","zh":"我们下一站下车。","star":false},{"en":"Don't leave your bag on the bus.","zh":"别把包落在公交车上。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"Is this the bus to the library?"},{"who":"Dad","line":"Yes, it is. Let's get on."},{"who":"Child","line":"Where should we get off?"},{"who":"Dad","line":"At the third stop. I'll tell you."}]}],"swaps":[],"patterns":[],"keywords":["bus","stop","seat","took","school","waited","found","crowded"]},{"id":16,"part":"出门与交通","zh":"坐地铁","en":"Taking the Subway","sentences":[{"en":"We took the subway downtown.","zh":"我们坐地铁去了市中心。","star":true},{"en":"Which line should we take?","zh":"我们应该坐哪条线？","star":false},{"en":"We need to change lines at the next station.","zh":"我们需要在下一站换乘。","star":false},{"en":"The subway is very crowded.","zh":"地铁很拥挤。","star":false},{"en":"Stand behind the yellow line.","zh":"站在黄线后面。","star":false},{"en":"The train is coming.","zh":"车来了。","star":false},{"en":"The doors are closing.","zh":"车门要关了。","star":false},{"en":"We got off at the wrong station.","zh":"我们下错站了。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"How many stops are left?"},{"who":"Mom","line":"Three more stops."},{"who":"Child","line":"Do we need to change lines?"},{"who":"Mom","line":"Yes. We'll change to Line Two."}]}],"swaps":[],"patterns":[],"keywords":["subway","line","station","took","downtown","which","need","change"]},{"id":17,"part":"出门与交通","zh":"坐车与打车","en":"Going by Car or Taxi","sentences":[{"en":"Please fasten your seat belt.","zh":"请系好安全带。","star":true},{"en":"We went there by car.","zh":"我们坐车去了那里。","star":false},{"en":"Could you take us to this address?","zh":"请带我们去这个地址好吗？","star":false},{"en":"There is a traffic jam.","zh":"堵车了。","star":false},{"en":"The traffic is moving slowly.","zh":"车流走得很慢。","star":false},{"en":"How long will it take?","zh":"要花多长时间？","star":false},{"en":"It took us thirty minutes to get there.","zh":"我们花了三十分钟到那里。","star":false},{"en":"Please stop here.","zh":"请在这里停车。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Dad","line":"Is your seat belt fastened?"},{"who":"Child","line":"Yes, it is. How long will the ride take?"},{"who":"Dad","line":"About twenty minutes if there is no traffic."},{"who":"Child","line":"Great. I'll look out the window."}]}],"swaps":[],"patterns":[],"keywords":["traffic","fasten","seat","belt","car","address","jam","moving"]},{"id":18,"part":"学校生活","zh":"去学校","en":"Going to School","sentences":[{"en":"I go to school at eight.","zh":"我八点去学校。","star":true},{"en":"I arrived at school on time.","zh":"我准时到校了。","star":false},{"en":"I saw my classmates at the school gate.","zh":"我在校门口看到了同学。","star":false},{"en":"Our teacher came into the classroom.","zh":"老师走进了教室。","star":false},{"en":"Class starts at eight thirty.","zh":"八点半开始上课。","star":false},{"en":"I put my backpack beside my desk.","zh":"我把书包放在书桌旁边。","star":false},{"en":"I took out my textbook and pencil case.","zh":"我拿出了课本和铅笔盒。","star":false},{"en":"I was almost late for school.","zh":"我上学差点迟到。","star":false}],"examples":[{"title":"","en":"I left home at seven forty and arrived at school on time. I greeted my teacher, put my backpack beside my desk, and got ready for class.","zh":"我七点四十离开家，准时到了学校。我向老师问好，把书包放在书桌旁，准备上课。"}],"dialogs":[{"title":"迷你对话","lines":[{"who":"Friend","line":"Good morning!"},{"who":"Child","line":"Good morning! Did you finish your homework?"},{"who":"Friend","line":"Yes, I did. What class do we have first?"},{"who":"Child","line":"We have English first."}]}],"swaps":[],"patterns":[],"keywords":["school","eight","arrived","time","saw","classmates","gate","teacher"]},{"id":19,"part":"学校生活","zh":"上课","en":"In Class","sentences":[{"en":"I raised my hand and answered the question.","zh":"我举手回答了问题。","star":true},{"en":"The teacher asked us a question.","zh":"老师问了我们一个问题。","star":false},{"en":"I listened carefully.","zh":"我认真听讲。","star":false},{"en":"I wrote the answer in my notebook.","zh":"我把答案写在笔记本上。","star":false},{"en":"I don't understand this question.","zh":"我不明白这道题。","star":false},{"en":"Could you explain it again, please?","zh":"请再讲一遍好吗？","star":false},{"en":"Can you speak more slowly, please?","zh":"请说慢一点好吗？","star":false},{"en":"I learned something new today.","zh":"我今天学到了新东西。","star":false},{"en":"We worked in pairs.","zh":"我们两人一组完成任务。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Teacher","line":"Who knows the answer?"},{"who":"Child","line":"I think I know."},{"who":"Teacher","line":"Please tell us."},{"who":"Child","line":"The answer is twelve."},{"who":"Teacher","line":"That's right. Good job!"}]}],"swaps":[],"patterns":[],"keywords":["question","raised","hand","answered","teacher","asked","listened","carefully"]},{"id":20,"part":"学校生活","zh":"数学课","en":"Math Class","sentences":[{"en":"We had math class this morning.","zh":"我们今天上午上了数学课。","star":true},{"en":"Two plus three equals five.","zh":"二加三等于五。","star":false},{"en":"Ten minus four equals six.","zh":"十减四等于六。","star":false},{"en":"Three times four equals twelve.","zh":"三乘四等于十二。","star":false},{"en":"Twelve divided by three equals four.","zh":"十二除以三等于四。","star":false},{"en":"This problem is easy.","zh":"这道题很简单。","star":false},{"en":"This question is difficult.","zh":"这道题很难。","star":false},{"en":"I got the right answer.","zh":"我答对了。","star":false},{"en":"I made a mistake, so I checked my work again.","zh":"我出错了，所以又检查了一遍。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Teacher","line":"What is eight plus seven?"},{"who":"Child","line":"It is fifteen."},{"who":"Teacher","line":"Correct. How did you work it out?"},{"who":"Child","line":"I added seven to eight."}]}],"swaps":[],"patterns":[],"keywords":["equals","four","twelve","math","class","morning","plus","five"]},{"id":21,"part":"学校生活","zh":"英语课","en":"English Class","sentences":[{"en":"We learned five new words today.","zh":"我们今天学了五个新单词。","star":true},{"en":"I read the story aloud.","zh":"我大声朗读了故事。","star":false},{"en":"How do you spell this word?","zh":"这个单词怎么拼？","star":false},{"en":"What does this word mean?","zh":"这个单词是什么意思？","star":false},{"en":"I practiced speaking English with my partner.","zh":"我和搭档练习说英语。","star":false},{"en":"I spelled the word correctly.","zh":"我把单词拼对了。","star":false},{"en":"I made a few mistakes.","zh":"我犯了几个小错误。","star":false},{"en":"Let me try one more time.","zh":"让我再试一次。","star":false},{"en":"Please correct me if I'm wrong.","zh":"如果我错了，请纠正我。","star":false}],"examples":[{"title":"","en":"In English class, we learned some words about animals. I read a short story aloud and answered two questions. I made one mistake, but I tried again and got it right.","zh":"英语课上，我们学了一些有关动物的单词。我大声读了一个小故事，还回答了两个问题。我错了一次，但再试后答对了。"}],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"What does “quiet” mean?"},{"who":"Teacher","line":"It means making little or no noise."},{"who":"Child","line":"How do you spell it?"},{"who":"Teacher","line":"Q-U-I-E-T."},{"who":"Child","line":"Thank you. I understand now."}]}],"swaps":[],"patterns":[],"keywords":["word","learned","five","new","words","today","read","story"]},{"id":22,"part":"学校生活","zh":"体育课","en":"PE Class","sentences":[{"en":"We had PE today.","zh":"我们今天上了体育课。","star":true},{"en":"We ran around the playground.","zh":"我们绕着操场跑步。","star":false},{"en":"We played basketball in teams.","zh":"我们分队打篮球。","star":false},{"en":"Please pass me the ball.","zh":"请把球传给我。","star":false},{"en":"I scored a point.","zh":"我得了一分。","star":false},{"en":"Our team won the game.","zh":"我们队赢了比赛。","star":false},{"en":"Our team lost, but we had fun.","zh":"我们队输了，但玩得很开心。","star":false},{"en":"I was tired and sweaty after PE.","zh":"体育课后我又累又满身汗。","star":false},{"en":"I need to drink some water.","zh":"我需要喝点水。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Friend","line":"Do you want to be on our team?"},{"who":"Child","line":"Yes! What are we playing?"},{"who":"Friend","line":"Basketball. Can you pass the ball to me?"},{"who":"Child","line":"Sure. Let's do our best!"}]}],"swaps":[{"pattern":"We played ___ in PE class.","options":"basketball / football / badminton / table tennis / a running game"}],"patterns":[],"keywords":["team","today","ran","around","playground","played","basketball","teams"]},{"id":23,"part":"学校生活","zh":"课间休息","en":"Break Time","sentences":[{"en":"We had a ten-minute break.","zh":"我们有十分钟的课间休息。","star":true},{"en":"I played with my friends on the playground.","zh":"我和朋友在操场上玩。","star":false},{"en":"We talked about our favorite games.","zh":"我们聊了喜欢的游戏。","star":false},{"en":"I shared my snack with my friend.","zh":"我和朋友分享了零食。","star":false},{"en":"The bell rang.","zh":"铃响了。","star":false},{"en":"Break time is over.","zh":"课间休息结束了。","star":false},{"en":"We went back to the classroom.","zh":"我们回到了教室。","star":false},{"en":"I need to use the restroom before class.","zh":"我需要在上课前去洗手间。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Friend","line":"Do you want to play tag?"},{"who":"Child","line":"Sure, but we only have five minutes."},{"who":"Friend","line":"That's okay. Let's go!"},{"who":"Child","line":"The bell is ringing. We need to go back."}]}],"swaps":[],"patterns":[],"keywords":["break","ten","minute","played","friends","playground","talked","favorite"]},{"id":24,"part":"学校生活","zh":"和同学相处","en":"Getting Along with Classmates","sentences":[{"en":"Can I play with you?","zh":"我可以和你一起玩吗？","star":true},{"en":"Let's play together.","zh":"我们一起玩吧。","star":true},{"en":"Can I borrow your pencil?","zh":"我可以借你的铅笔吗？","star":false},{"en":"Here you are.","zh":"给你。","star":false},{"en":"I'll give it back after class.","zh":"我下课后还给你。","star":false},{"en":"Would you like to share this with me?","zh":"你愿意和我一起分享这个吗？","star":false},{"en":"He helped me with my work.","zh":"他帮助我完成任务。","star":false},{"en":"We had an argument.","zh":"我们吵架了。","star":false},{"en":"I'm sorry I hurt your feelings.","zh":"对不起，我让你难过了。","star":false},{"en":"It's okay. Let's be friends again.","zh":"没关系，我们重新做好朋友吧。","star":false},{"en":"Please stop. I don't like that.","zh":"请停下，我不喜欢这样。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child A","line":"Can I borrow your ruler?"},{"who":"Child B","line":"Sure. Here you are."},{"who":"Child A","line":"Thank you. I'll give it back after class."},{"who":"Child B","line":"You're welcome."}]}],"swaps":[],"patterns":[],"keywords":["play","together","borrow","pencil","i'll","give","back","class"]},{"id":25,"part":"学校生活","zh":"听懂老师的课堂指令","en":"Classroom Instructions","sentences":[{"en":"Sit down, please.","zh":"请坐。","star":false},{"en":"Stand up, please.","zh":"请起立。","star":false},{"en":"Listen carefully.","zh":"仔细听。","star":false},{"en":"Look at the board.","zh":"看黑板。","star":false},{"en":"Open your book.","zh":"打开书。","star":false},{"en":"Close your book.","zh":"合上书。","star":false},{"en":"Turn to page twenty.","zh":"翻到第 20 页。","star":false},{"en":"Read aloud.","zh":"大声朗读。","star":false},{"en":"Write it down.","zh":"把它写下来。","star":false},{"en":"Raise your hand.","zh":"举手。","star":false},{"en":"Be quiet, please.","zh":"请安静。","star":false},{"en":"Work in pairs.","zh":"两人一组。","star":false},{"en":"Take turns.","zh":"轮流来。","star":false},{"en":"Try again.","zh":"再试一次。","star":false},{"en":"Time is up.","zh":"时间到了。","star":false},{"en":"Okay, I understand.","zh":"好的，我明白了。","star":true},{"en":"Which page, please?","zh":"请问第几页？","star":false},{"en":"Should I write it in my notebook?","zh":"我应该把它写在笔记本上吗？","star":false},{"en":"Are we working alone or in pairs?","zh":"我们是独立完成还是两人一组？","star":false},{"en":"I'm finished.","zh":"我完成了。","star":false},{"en":"I need a little more time.","zh":"我还需要一点时间。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Teacher","line":"Open your books and turn to page twenty."},{"who":"Child","line":"Page twenty?"},{"who":"Teacher","line":"Yes. Read the first story quietly."},{"who":"Child","line":"Should we answer the questions, too?"},{"who":"Teacher","line":"Yes. Write the answers in your notebook."}]}],"swaps":[],"patterns":[],"keywords":["book","page","write","pairs","time","sit","stand","listen"]},{"id":26,"part":"学校生活","zh":"放学","en":"After School","sentences":[{"en":"School is over.","zh":"放学了。","star":true},{"en":"School was over at five.","zh":"学校五点放学。","star":false},{"en":"My dad came to pick me up.","zh":"爸爸来接我。","star":false},{"en":"I waited outside the school gate.","zh":"我在校门外等。","star":false},{"en":"We walked home together.","zh":"我们一起走回家。","star":false},{"en":"How was school today?","zh":"今天在学校怎么样？","star":false},{"en":"I told Dad about my day.","zh":"我把今天的事情告诉了爸爸。","star":false},{"en":"I had a good day at school.","zh":"我今天在学校过得很好。","star":false},{"en":"Something funny happened today.","zh":"今天发生了一件有趣的事。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Dad","line":"How was school today?"},{"who":"Child","line":"It was good. We had PE, and our team won."},{"who":"Dad","line":"That's great! Did you get any homework?"},{"who":"Child","line":"Yes, I have math and English homework."}]}],"swaps":[],"patterns":[],"keywords":["school","over","dad","today","day","five","pick","waited"]},{"id":27,"part":"学校生活","zh":"写作业","en":"Doing Homework","sentences":[{"en":"I need to do my homework first.","zh":"我得先写作业。","star":true},{"en":"I have math and English homework.","zh":"我有数学和英语作业。","star":false},{"en":"This question is difficult.","zh":"这道题很难。","star":false},{"en":"I don't know how to do this one.","zh":"我不知道这题怎么做。","star":false},{"en":"Can you give me a hint?","zh":"你能给我一点提示吗？","star":false},{"en":"I asked Dad for help.","zh":"我请爸爸帮忙。","star":false},{"en":"I finished my homework at eight.","zh":"我八点写完了作业。","star":false},{"en":"I checked my answers carefully.","zh":"我认真检查了答案。","star":false},{"en":"I forgot to bring my homework.","zh":"我忘记带作业了。","star":false}],"examples":[{"title":"","en":"After I got home, I had a snack and started my homework. One math problem was difficult, so Dad gave me a hint. I worked it out by myself and checked all my answers.","zh":"回家后，我吃了点心就开始写作业。有一道数学题很难，所以爸爸给了我一点提示。我自己算出了答案，并检查了所有答案。"}],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"Dad, can you help me with this problem?"},{"who":"Dad","line":"What part don't you understand?"},{"who":"Child","line":"I don't know what to do first."},{"who":"Dad","line":"Read the question again and circle the important numbers."},{"who":"Child","line":"Oh, I see. Let me try."}]}],"swaps":[],"patterns":[],"keywords":["homework","need","first","math","english","question","difficult","know"]},{"id":28,"part":"阅读、娱乐与电子设备","zh":"阅读","en":"Reading","sentences":[{"en":"I read for half an hour every day.","zh":"我每天阅读半小时。","star":true},{"en":"This book is very interesting.","zh":"这本书很有趣。","star":false},{"en":"What is this story about?","zh":"这个故事讲什么？","star":false},{"en":"I finished one chapter.","zh":"我读完了一章。","star":false},{"en":"This is my favorite character.","zh":"这是我最喜欢的角色。","star":false},{"en":"I don't know this word, but I can guess.","zh":"我不认识这个词，但我可以猜。","star":false},{"en":"I couldn't stop reading.","zh":"我读得停不下来。","star":false},{"en":"Can you read this story to me?","zh":"你能给我读这个故事吗？","star":false},{"en":"I want to know what happens next.","zh":"我想知道接下来发生什么。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Mom","line":"What are you reading?"},{"who":"Child","line":"A story about a brave little rabbit."},{"who":"Mom","line":"Do you like it?"},{"who":"Child","line":"Yes! I want to know what happens next."}]}],"swaps":[],"patterns":[],"keywords":["read","story","know","half","hour","every","day","book"]},{"id":29,"part":"阅读、娱乐与电子设备","zh":"去图书馆","en":"Going to the Library","sentences":[{"en":"We went to the library after school.","zh":"我们放学后去了图书馆。","star":true},{"en":"I'm looking for a book about space.","zh":"我在找一本关于太空的书。","star":false},{"en":"I found an interesting book on the shelf.","zh":"我在书架上找到了一本有趣的书。","star":false},{"en":"I borrowed two books.","zh":"我借了两本书。","star":false},{"en":"When should I return this book?","zh":"我应该什么时候还这本书？","star":false},{"en":"Please speak quietly in the library.","zh":"在图书馆请小声说话。","star":false},{"en":"I sat by the window and read.","zh":"我坐在窗边看书。","star":false},{"en":"The librarian helped me find the book.","zh":"图书管理员帮我找到了书。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"Excuse me, where are the animal books?"},{"who":"Librarian","line":"They are on the second shelf over there."},{"who":"Child","line":"Can I borrow this one?"},{"who":"Librarian","line":"Yes. Please return it in two weeks."},{"who":"Child","line":"Thank you."}]}],"swaps":[],"patterns":[],"keywords":["book","library","school","looking","space","found","interesting","shelf"]},{"id":30,"part":"阅读、娱乐与电子设备","zh":"玩玩具与游戏","en":"Toys and Games","sentences":[{"en":"I played with my Lego.","zh":"我玩了乐高。","star":true},{"en":"I built a car by myself.","zh":"我自己搭了一辆车。","star":false},{"en":"Let's do this puzzle together.","zh":"我们一起拼这个拼图吧。","star":false},{"en":"Whose turn is it?","zh":"轮到谁了？","star":false},{"en":"It's your turn.","zh":"轮到你了。","star":false},{"en":"Please follow the rules.","zh":"请遵守规则。","star":false},{"en":"I won this round.","zh":"这一轮我赢了。","star":false},{"en":"I lost, but I want to try again.","zh":"我输了，但还想再试一次。","star":false},{"en":"Let's put the toys away when we finish.","zh":"玩完后我们把玩具收好吧。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"Dad, do you want to play a game with me?"},{"who":"Dad","line":"Sure. How do we play?"},{"who":"Child","line":"Roll the dice and move your piece."},{"who":"Dad","line":"Okay. Whose turn is it?"},{"who":"Child","line":"It's your turn."}]}],"swaps":[],"patterns":[],"keywords":["turn","played","lego","built","car","myself","puzzle","together"]},{"id":31,"part":"阅读、娱乐与电子设备","zh":"看电视、平板与手机","en":"Screens","sentences":[{"en":"Can I watch a cartoon?","zh":"我可以看动画片吗？","star":true},{"en":"I watched some videos on the tablet.","zh":"我在平板上看了一些视频。","star":false},{"en":"I played a game for twenty minutes.","zh":"我玩了二十分钟游戏。","star":false},{"en":"How much screen time do I have left?","zh":"我的屏幕时间还剩多少？","star":false},{"en":"Please turn the volume down.","zh":"请把音量调小。","star":false},{"en":"This video is funny.","zh":"这个视频很有趣。","star":false},{"en":"My eyes feel tired.","zh":"我的眼睛感觉累了。","star":false},{"en":"I spent too much time looking at the screen.","zh":"我看屏幕的时间太长了。","star":false},{"en":"Time is up. I'll turn it off now.","zh":"时间到了，我现在关掉。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"Can I use the tablet after homework?"},{"who":"Mom","line":"Yes, for twenty minutes."},{"who":"Child","line":"Can I finish this game when time is up?"},{"who":"Mom","line":"Finish the round, then turn it off."},{"who":"Child","line":"Okay. I promise."}]}],"swaps":[],"patterns":[],"keywords":["time","screen","turn","watch","cartoon","watched","videos","tablet"]},{"id":32,"part":"自然、身体与情绪","zh":"天气","en":"Weather","sentences":[{"en":"What's the weather like today?","zh":"今天天气怎么样？","star":true},{"en":"It's sunny and warm.","zh":"天气晴朗又暖和。","star":false},{"en":"It's cloudy and windy.","zh":"多云而且有风。","star":false},{"en":"It's raining outside.","zh":"外面在下雨。","star":false},{"en":"It's very hot and humid.","zh":"天气很热而且潮湿。","star":false},{"en":"It's a little cold today.","zh":"今天有点冷。","star":false},{"en":"It looks like it's going to rain.","zh":"看起来要下雨了。","star":false},{"en":"The rain stopped, and the sun came out.","zh":"雨停了，太阳出来了。","star":false},{"en":"Don't forget your umbrella.","zh":"别忘了雨伞。","star":false}],"examples":[{"title":"","en":"It was sunny in the morning, but dark clouds came in the afternoon. It started raining on our way home, so we shared an umbrella.","zh":"上午天气晴朗，但下午出现了乌云。回家路上开始下雨，所以我们共用一把伞。"}],"dialogs":[],"swaps":[{"pattern":"It is ___ today, so I need ___.","options":"sunny—my hat / rainy—my umbrella / cold—my coat / hot—some water"}],"patterns":[],"keywords":["today","rain","what's","weather","sunny","warm","cloudy","windy"]},{"id":33,"part":"自然、身体与情绪","zh":"四季","en":"The Four Seasons","sentences":[{"en":"My favorite season is autumn.","zh":"我最喜欢的季节是秋天。","star":true},{"en":"Spring is warm, and flowers begin to grow.","zh":"春天温暖，花儿开始生长。","star":false},{"en":"Summer is hot, so I like to swim.","zh":"夏天很热，所以我喜欢游泳。","star":false},{"en":"Autumn is cool, and the leaves change color.","zh":"秋天凉爽，树叶会变色。","star":false},{"en":"Winter is cold, and it sometimes snows.","zh":"冬天寒冷，有时会下雪。","star":false},{"en":"Which season do you like best?","zh":"你最喜欢哪个季节？","star":false},{"en":"I like spring because I can play outside.","zh":"我喜欢春天，因为可以在户外玩。","star":false},{"en":"I don't like winter because it gets dark early.","zh":"我不喜欢冬天，因为天黑得早。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Friend","line":"What's your favorite season?"},{"who":"Child","line":"Summer."},{"who":"Friend","line":"Why do you like summer?"},{"who":"Child","line":"Because I can swim and eat ice cream. What about you?"},{"who":"Friend","line":"I like autumn because the weather is cool."}]}],"swaps":[],"patterns":[],"keywords":["season","autumn","spring","winter","because","favorite","warm","flowers"]},{"id":34,"part":"自然、身体与情绪","zh":"身体感觉","en":"Physical Feelings","sentences":[{"en":"I don't feel well.","zh":"我感觉不舒服。","star":true},{"en":"I'm hungry and thirsty.","zh":"我又饿又渴。","star":false},{"en":"I'm tired and sleepy.","zh":"我又累又困。","star":false},{"en":"I feel hot. Can I take off my jacket?","zh":"我觉得热，可以脱外套吗？","star":false},{"en":"My stomach hurts.","zh":"我肚子疼。","star":false},{"en":"My head hurts.","zh":"我头疼。","star":false},{"en":"I hurt my knee when I fell.","zh":"我摔倒时伤到了膝盖。","star":false},{"en":"I feel a little dizzy.","zh":"我感觉有点头晕。","star":false},{"en":"I need to sit down and rest.","zh":"我需要坐下来休息。","star":false},{"en":"I feel much better now.","zh":"我现在感觉好多了。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Teacher","line":"You look tired. Are you okay?"},{"who":"Child","line":"I don't feel well. My head hurts."},{"who":"Teacher","line":"Sit down and drink some water. I'll call your parents."},{"who":"Child","line":"Thank you."}]}],"swaps":[],"patterns":[],"keywords":["feel","hurts","well","hungry","thirsty","tired","sleepy","hot"]},{"id":35,"part":"自然、身体与情绪","zh":"心情","en":"Feelings and Emotions","sentences":[{"en":"How are you feeling?","zh":"你感觉怎么样？","star":true},{"en":"I'm happy because I finished my project.","zh":"我很开心，因为完成了项目。","star":false},{"en":"I'm sad because my friend is away.","zh":"我很难过，因为朋友不在。","star":false},{"en":"I'm angry because he took my toy.","zh":"我很生气，因为他拿了我的玩具。","star":false},{"en":"I'm scared of the dark.","zh":"我怕黑。","star":false},{"en":"I'm worried about tomorrow.","zh":"我为明天担心。","star":false},{"en":"I'm excited about the trip.","zh":"我很期待这次旅行。","star":false},{"en":"I was nervous before the test.","zh":"考试前我很紧张。","star":false},{"en":"I'm bored. Can we play something?","zh":"我很无聊，我们能玩点什么吗？","star":false},{"en":"I felt proud of myself.","zh":"我为自己感到自豪。","star":false},{"en":"I need a little time to calm down.","zh":"我需要一点时间平静下来。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Mom","line":"You look worried. What happened?"},{"who":"Child","line":"I have to speak in front of the class tomorrow."},{"who":"Mom","line":"It's okay to feel nervous. Let's practice together."},{"who":"Child","line":"Good idea. That will make me feel better."}]}],"swaps":[],"patterns":[],"keywords":["because","feeling","happy","finished","project","sad","friend","away"]},{"id":36,"part":"购物、用餐与户外活动","zh":"去超市","en":"At the Supermarket","sentences":[{"en":"We went to the supermarket to buy groceries.","zh":"我们去超市买食品和日用品。","star":true},{"en":"I pushed the shopping cart.","zh":"我推购物车。","star":false},{"en":"We need some milk, bread, and fruit.","zh":"我们需要牛奶、面包和水果。","star":false},{"en":"Where can I find the eggs?","zh":"我在哪里能找到鸡蛋？","star":false},{"en":"How much is this?","zh":"这个多少钱？","star":false},{"en":"That's too expensive.","zh":"那太贵了。","star":false},{"en":"These apples look fresh.","zh":"这些苹果看起来很新鲜。","star":false},{"en":"Let's check the shopping list.","zh":"我们看一下购物清单吧。","star":false},{"en":"We paid at the checkout.","zh":"我们在收银台付了钱。","star":false},{"en":"I helped carry a shopping bag.","zh":"我帮忙提了一个购物袋。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Mom","line":"We need six apples. Can you choose them?"},{"who":"Child","line":"Sure. These look fresh."},{"who":"Mom","line":"Good. Put them in the bag, please."},{"who":"Child","line":"Do we need bananas, too?"},{"who":"Mom","line":"Yes, let's get four."}]}],"swaps":[],"patterns":[],"keywords":["shopping","supermarket","buy","groceries","pushed","cart","need","milk"]},{"id":37,"part":"购物、用餐与户外活动","zh":"去商场","en":"At the Mall","sentences":[{"en":"We went to the mall on Saturday.","zh":"我们星期六去了商场。","star":true},{"en":"Which floor is the toy store on?","zh":"玩具店在几楼？","star":false},{"en":"We took the elevator to the fifth floor.","zh":"我们坐电梯到五楼。","star":false},{"en":"Let's take the escalator.","zh":"我们坐扶梯吧。","star":false},{"en":"There were many people in the mall.","zh":"商场里人很多。","star":false},{"en":"We walked around for a while.","zh":"我们逛了一会儿。","star":false},{"en":"Can I try this on?","zh":"我可以试穿这个吗？","star":false},{"en":"It is too big for me.","zh":"它对我来说太大了。","star":false},{"en":"We had lunch at the food court.","zh":"我们在美食广场吃了午饭。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"Can we go to the bookstore?"},{"who":"Dad","line":"Sure. Do you know which floor it's on?"},{"who":"Child","line":"I think it's on the third floor."},{"who":"Dad","line":"Let's check the map and take the escalator."}]}],"swaps":[],"patterns":[],"keywords":["mall","floor","saturday","which","toy","store","took","elevator"]},{"id":38,"part":"购物、用餐与户外活动","zh":"去餐馆","en":"At a Restaurant","sentences":[{"en":"Can I see the menu, please?","zh":"请给我看看菜单好吗？","star":true},{"en":"I'd like some noodles, please.","zh":"我想要一些面条。","star":false},{"en":"What would you recommend?","zh":"你推荐什么？","star":false},{"en":"Can I have some water?","zh":"我可以喝点水吗？","star":false},{"en":"This tastes really good.","zh":"这个味道很好。","star":false},{"en":"This is too spicy for me.","zh":"这个对我来说太辣了。","star":false},{"en":"Could we have another bowl, please?","zh":"可以再给我们一个碗吗？","star":false},{"en":"I'm full. I can't eat any more.","zh":"我饱了，吃不下了。","star":false},{"en":"Can we have the bill, please?","zh":"请给我们账单好吗？","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Server","line":"Are you ready to order?"},{"who":"Child","line":"Yes. I'd like the beef noodles, please."},{"who":"Server","line":"Would you like anything to drink?"},{"who":"Child","line":"A glass of water, please."},{"who":"Server","line":"Certainly."}]}],"swaps":[],"patterns":[],"keywords":["see","menu","i'd","noodles","recommend","water","tastes","really"]},{"id":39,"part":"购物、用餐与户外活动","zh":"去公园","en":"At the Park","sentences":[{"en":"We went to the park after lunch.","zh":"午饭后我们去了公园。","star":true},{"en":"I played on the playground.","zh":"我在游乐场玩。","star":false},{"en":"I went on the swing and the slide.","zh":"我玩了秋千和滑梯。","star":false},{"en":"Can you push me on the swing?","zh":"你能推我荡秋千吗？","star":false},{"en":"We walked around the lake.","zh":"我们绕着湖散步。","star":false},{"en":"There are ducks on the water.","zh":"水面上有鸭子。","star":false},{"en":"Don't step on the flowers.","zh":"不要踩花。","star":false},{"en":"We sat on the grass and had a snack.","zh":"我们坐在草地上吃了点心。","star":false},{"en":"I had a great time at the park.","zh":"我在公园玩得很开心。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"Can I go on the slide?"},{"who":"Dad","line":"Yes, but wait in line and be careful."},{"who":"Child","line":"Okay. Can we walk around the lake afterward?"},{"who":"Dad","line":"Of course."}]}],"swaps":[],"patterns":[],"keywords":["park","swing","lunch","played","playground","slide","push","walked"]},{"id":40,"part":"购物、用餐与户外活动","zh":"旅行与出发","en":"Going on a Trip","sentences":[{"en":"We're going on a trip tomorrow.","zh":"我们明天要去旅行。","star":true},{"en":"Where are we going?","zh":"我们要去哪里？","star":false},{"en":"I packed my backpack by myself.","zh":"我自己收拾了背包。","star":false},{"en":"Don't forget your ticket and passport.","zh":"别忘了票和护照。","star":false},{"en":"I made a list of things to bring.","zh":"我列了一张物品清单。","star":false},{"en":"We left home early in the morning.","zh":"我们一大早离开家。","star":false},{"en":"How long are we staying there?","zh":"我们要在那里待多久？","star":false},{"en":"I'm excited about the trip.","zh":"我很期待这次旅行。","star":false},{"en":"I hope we have good weather.","zh":"我希望天气好。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Mom","line":"Have you finished packing?"},{"who":"Child","line":"Almost. I packed my clothes and toothbrush."},{"who":"Mom","line":"What about your water bottle?"},{"who":"Child","line":"Oh, I forgot it. I'll put it in now."},{"who":"Mom","line":"Great. Now we're ready."}]}],"swaps":[],"patterns":[],"keywords":["trip","tomorrow","packed","backpack","myself","forget","ticket","passport"]},{"id":41,"part":"旅行中的常见场景","zh":"坐火车","en":"Taking a Train","sentences":[{"en":"We took a train to Beijing.","zh":"我们坐火车去了北京。","star":true},{"en":"We arrived at the train station early.","zh":"我们很早就到了火车站。","star":false},{"en":"Which platform should we go to?","zh":"我们应该去哪个站台？","star":false},{"en":"May I see the ticket?","zh":"我可以看看车票吗？","star":false},{"en":"Our seats are in Car Five.","zh":"我们的座位在五号车厢。","star":false},{"en":"I sat by the window.","zh":"我坐在窗边。","star":false},{"en":"The train left on time.","zh":"火车准时出发了。","star":false},{"en":"I watched the scenery outside.","zh":"我看着窗外的风景。","star":false},{"en":"How many stops are left?","zh":"还剩几站？","star":false},{"en":"We arrived safely.","zh":"我们安全到达了。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"Which platform is our train on?"},{"who":"Dad","line":"Platform Six. We still have twenty minutes."},{"who":"Child","line":"Can I sit by the window?"},{"who":"Dad","line":"Yes. Your seat is right next to it."}]}],"swaps":[],"patterns":[],"keywords":["train","arrived","left","took","beijing","station","early","which"]},{"id":42,"part":"旅行中的常见场景","zh":"坐飞机","en":"Taking a Plane","sentences":[{"en":"We went to the airport early.","zh":"我们很早到了机场。","star":true},{"en":"Here is my passport and boarding pass.","zh":"这是我的护照和登机牌。","star":false},{"en":"Which gate should we go to?","zh":"我们应该去哪个登机口？","star":false},{"en":"Our flight is on time.","zh":"我们的航班准点。","star":false},{"en":"Our flight is delayed.","zh":"我们的航班延误了。","star":false},{"en":"We got on the plane.","zh":"我们登上了飞机。","star":false},{"en":"I sat by the window.","zh":"我坐在窗边。","star":false},{"en":"Please fasten your seat belt.","zh":"请系好安全带。","star":false},{"en":"The plane took off.","zh":"飞机起飞了。","star":false},{"en":"My ears feel funny.","zh":"我的耳朵感觉怪怪的。","star":false},{"en":"We landed two hours later.","zh":"两小时后我们着陆了。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"When will the plane take off?"},{"who":"Mom","line":"In about fifteen minutes."},{"who":"Child","line":"Can I look out the window?"},{"who":"Mom","line":"Yes, but keep your seat belt fastened."},{"who":"Child","line":"Okay. I'm so excited!"}]}],"swaps":[],"patterns":[],"keywords":["flight","plane","airport","early","passport","boarding","pass","which"]},{"id":43,"part":"旅行中的常见场景","zh":"住酒店","en":"Staying at a Hotel","sentences":[{"en":"We stayed at a hotel for two nights.","zh":"我们在酒店住了两晚。","star":true},{"en":"We have a reservation.","zh":"我们预订了房间。","star":false},{"en":"Our room is on the tenth floor.","zh":"我们的房间在十楼。","star":false},{"en":"Here is our key card.","zh":"这是我们的房卡。","star":false},{"en":"The room is clean and bright.","zh":"房间干净又明亮。","star":false},{"en":"The bed is very comfortable.","zh":"床很舒服。","star":false},{"en":"The air conditioner isn't working.","zh":"空调坏了。","star":false},{"en":"Could we have another towel, please?","zh":"请再给我们一条毛巾好吗？","star":false},{"en":"What time is breakfast?","zh":"早餐几点开始？","star":false},{"en":"We need to check out before noon.","zh":"我们需要在中午前退房。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"Which room are we in?"},{"who":"Dad","line":"Room 1008, on the tenth floor."},{"who":"Child","line":"Can I use the key card?"},{"who":"Dad","line":"Sure. Hold it near the lock."},{"who":"Child","line":"It worked! The room looks nice."}]}],"swaps":[],"patterns":[],"keywords":["room","stayed","hotel","nights","reservation","tenth","floor","key"]},{"id":44,"part":"旅行中的常见场景","zh":"景点游玩","en":"Visiting Places","sentences":[{"en":"We visited a museum today.","zh":"我们今天参观了博物馆。","star":true},{"en":"We went to the zoo and saw many animals.","zh":"我们去了动物园，看到了许多动物。","star":false},{"en":"The aquarium had colorful fish.","zh":"水族馆里有五颜六色的鱼。","star":false},{"en":"We waited in line to buy tickets.","zh":"我们排队买票。","star":false},{"en":"This dinosaur skeleton is huge.","zh":"这副恐龙骨架好大。","star":false},{"en":"We took lots of photos.","zh":"我们拍了很多照片。","star":false},{"en":"There were a lot of people.","zh":"那里有很多人。","star":false},{"en":"What did you like best?","zh":"你最喜欢什么？","star":false},{"en":"My favorite part was the dolphin show.","zh":"我最喜欢的是海豚表演。","star":false},{"en":"I learned many interesting things.","zh":"我学到了许多有趣的东西。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Dad","line":"What would you like to see first?"},{"who":"Child","line":"Let's see the pandas first."},{"who":"Dad","line":"Okay. The panda house is this way."},{"who":"Child","line":"Can we visit the aquarium afterward?"},{"who":"Dad","line":"Yes, we have plenty of time."}]}],"swaps":[{"pattern":"We visited ___ and saw ___.","options":"a museum—old paintings / a zoo—many animals / an aquarium—colorful fish / a theme park—an exciting show / a beach—big waves"}],"patterns":[],"keywords":["visited","museum","today","zoo","saw","animals","aquarium","colorful"]},{"id":45,"part":"旅行中的常见场景","zh":"动物","en":"Animals","sentences":[{"en":"My favorite animal is the panda.","zh":"我最喜欢的动物是熊猫。","star":true},{"en":"I saw a panda eating bamboo.","zh":"我看到一只熊猫在吃竹子。","star":false},{"en":"The monkey was climbing a tree.","zh":"猴子正在爬树。","star":false},{"en":"The elephant has a long trunk.","zh":"大象有长鼻子。","star":false},{"en":"The tiger looks strong.","zh":"老虎看起来很强壮。","star":false},{"en":"The bird is singing in the tree.","zh":"鸟儿在树上歌唱。","star":false},{"en":"This dog is friendly.","zh":"这只狗很友好。","star":false},{"en":"Please don't touch the animals.","zh":"请不要触摸动物。","star":false},{"en":"I'm afraid of snakes.","zh":"我怕蛇。","star":false},{"en":"What does this animal eat?","zh":"这种动物吃什么？","star":false}],"examples":[{"title":"","en":"At the zoo, I saw two pandas. One was sleeping, and the other was eating bamboo. They looked soft and cute, so I took many photos.","zh":"在动物园，我看到了两只熊猫。一只在睡觉，另一只在吃竹子。它们看起来毛茸茸的又可爱，所以我拍了很多照片。"}],"dialogs":[],"swaps":[],"patterns":[],"keywords":["animal","panda","tree","favorite","saw","eating","bamboo","monkey"]},{"id":46,"part":"特别日子与健康","zh":"生日与节日","en":"Birthdays and Festivals","sentences":[{"en":"Today is my birthday.","zh":"今天是我的生日。","star":true},{"en":"Happy birthday!","zh":"生日快乐！","star":false},{"en":"I got a birthday present.","zh":"我收到了一份生日礼物。","star":false},{"en":"We had a birthday cake.","zh":"我们吃了生日蛋糕。","star":false},{"en":"I blew out the candles and made a wish.","zh":"我吹灭蜡烛并许了愿。","star":false},{"en":"Thank you for coming to my party.","zh":"谢谢你来参加我的派对。","star":false},{"en":"We had dinner together.","zh":"我们一起吃了晚饭。","star":false},{"en":"We put up decorations for the Spring Festival.","zh":"我们为春节挂上装饰。","star":false},{"en":"I got a red envelope.","zh":"我收到了红包。","star":false},{"en":"We visited our family during the holiday.","zh":"节日期间我们拜访了家人。","star":false}],"examples":[],"dialogs":[{"title":"生日对话","lines":[{"who":"Friend","line":"Happy birthday! This is for you."},{"who":"Child","line":"Thank you! Can I open it now?"},{"who":"Friend","line":"Of course. I hope you like it."},{"who":"Child","line":"Wow, it's a puzzle! I love it."}]},{"title":"节日对话","lines":[{"who":"Child","line":"What are we doing for the Spring Festival?"},{"who":"Dad","line":"We're having dinner with Grandma and Grandpa."},{"who":"Child","line":"Can I help put up the decorations?"},{"who":"Dad","line":"Yes. Let's do it together."}]}],"swaps":[],"patterns":[],"keywords":["birthday","today","happy","present","cake","blew","candles","wish"]},{"id":47,"part":"特别日子与健康","zh":"看医生","en":"Seeing a Doctor","sentences":[{"en":"I don't feel well.","zh":"我感觉不舒服。","star":true},{"en":"I have a cough and a fever.","zh":"我咳嗽而且发烧。","star":false},{"en":"My throat hurts.","zh":"我的喉咙疼。","star":false},{"en":"My stomach hurts.","zh":"我的肚子疼。","star":false},{"en":"When did it start?","zh":"什么时候开始的？","star":false},{"en":"It started last night.","zh":"昨晚开始的。","star":false},{"en":"The doctor checked my throat.","zh":"医生检查了我的喉咙。","star":false},{"en":"The nurse took my temperature.","zh":"护士给我量了体温。","star":false},{"en":"I took some medicine.","zh":"我吃了一些药。","star":false},{"en":"The doctor told me to rest and drink water.","zh":"医生让我休息并多喝水。","star":false},{"en":"I feel better today.","zh":"我今天感觉好多了。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Doctor","line":"What's wrong?"},{"who":"Child","line":"I have a cough, and my throat hurts."},{"who":"Doctor","line":"Do you have a fever?"},{"who":"Child","line":"Yes. It started last night."},{"who":"Doctor","line":"I'll check you now. Please open your mouth."}]}],"swaps":[],"patterns":[],"keywords":["feel","throat","hurts","doctor","took","well","cough","fever"]},{"id":48,"part":"把句子连起来的表达工具","zh":"时间","en":"Time","sentences":[{"en":"today","zh":"今天　`yesterday` 昨天　`tomorrow` 明天","star":false},{"en":"in the morning","zh":"上午　`in the afternoon` 下午　`in the evening` 晚上","star":false},{"en":"before","zh":"在……之前　`after` 在……之后　`later` 后来　`finally` 最后","star":false},{"en":"What time is it?","zh":"现在几点？","star":true},{"en":"It's half past seven.","zh":"现在七点半。","star":false},{"en":"This morning, I got up early.","zh":"今天早上我起得很早。","star":false},{"en":"In the afternoon, I played basketball.","zh":"下午我打了篮球。","star":false},{"en":"After lunch, I read a book.","zh":"午饭后我看了书。","star":false},{"en":"Before dinner, I finished my homework.","zh":"晚饭前我写完了作业。","star":false},{"en":"Later, we went for a walk.","zh":"后来我们去散步了。","star":false},{"en":"Yesterday, I stayed at home.","zh":"昨天我待在家里。","star":false},{"en":"Tomorrow, we're going to the zoo.","zh":"明天我们要去动物园。","star":false}],"examples":[{"title":"","en":"This morning, I went to school at eight. After lunch, I had two classes. In the evening, I finished my homework. Finally, I went to bed at nine thirty.","zh":"今天早上我八点去学校。午饭后上了两节课。晚上我写完作业。最后，我九点半上床睡觉。"}],"dialogs":[],"swaps":[],"patterns":[],"keywords":["morning","today","time","half","past","seven","early","afternoon"]},{"id":49,"part":"把句子连起来的表达工具","zh":"表达喜欢与不喜欢","en":"Likes and Dislikes","sentences":[{"en":"I like reading.","zh":"我喜欢阅读。","star":true},{"en":"I really like noodles.","zh":"我真的很喜欢面条。","star":false},{"en":"I love playing basketball.","zh":"我非常喜欢打篮球。","star":false},{"en":"I don't like spicy food.","zh":"我不喜欢辣的食物。","star":false},{"en":"I don't really like rainy days.","zh":"我不太喜欢下雨天。","star":false},{"en":"My favorite subject is math.","zh":"我最喜欢的科目是数学。","star":false},{"en":"What do you like to do after school?","zh":"你放学后喜欢做什么？","star":false},{"en":"Why do you like this book?","zh":"你为什么喜欢这本书？","star":false},{"en":"Because it is funny and exciting.","zh":"因为它既有趣又令人兴奋。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Friend","line":"What food do you like?"},{"who":"Child","line":"I really like noodles and dumplings."},{"who":"Friend","line":"Do you like spicy food?"},{"who":"Child","line":"No, I don't. It's too hot for me."}]}],"swaps":[{"pattern":"I like ___ because it is ___.","options":"math—interesting / this story—funny / autumn—cool / basketball—exciting"}],"patterns":[],"keywords":["really","reading","noodles","love","playing","basketball","spicy","food"]},{"id":50,"part":"把句子连起来的表达工具","zh":"表达能力","en":"Abilities","sentences":[{"en":"I can swim.","zh":"我会游泳。","star":true},{"en":"I can ride a bike by myself.","zh":"我会自己骑自行车。","star":false},{"en":"I can't skate yet.","zh":"我还不会滑冰。","star":false},{"en":"I know how to make my bed.","zh":"我知道怎样整理床铺。","star":false},{"en":"I don't know how to cook.","zh":"我不知道怎样做饭。","star":false},{"en":"Can you show me how to do it?","zh":"你能示范怎样做吗？","star":false},{"en":"I'm learning how to play the piano.","zh":"我正在学弹钢琴。","star":false},{"en":"I couldn't do it before, but I can do it now.","zh":"我以前不会，但现在会了。","star":false},{"en":"I need more practice.","zh":"我需要更多练习。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Friend","line":"Can you ride a bike?"},{"who":"Child","line":"Yes, I can. Can you?"},{"who":"Friend","line":"Not yet. Can you teach me?"},{"who":"Child","line":"Sure. We can practice in the park."}]}],"swaps":[],"patterns":[],"keywords":["know","swim","ride","bike","myself","can't","skate","yet"]},{"id":51,"part":"把句子连起来的表达工具","zh":"表达“想要”","en":"Wants","sentences":[{"en":"I want some water.","zh":"我想喝水。","star":true},{"en":"I want to go home.","zh":"我想回家。","star":false},{"en":"I'd like some rice, please.","zh":"我想要一些米饭。","star":false},{"en":"Can I have another one?","zh":"我可以再要一个吗？","star":false},{"en":"I want to try it by myself.","zh":"我想自己试试。","star":false},{"en":"I'd like to borrow this book.","zh":"我想借这本书。","star":false},{"en":"Do you want to play with me?","zh":"你想和我一起玩吗？","star":false},{"en":"What would you like for dinner?","zh":"你晚饭想吃什么？","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Dad","line":"What would you like for breakfast?"},{"who":"Child","line":"I'd like an egg and some bread."},{"who":"Dad","line":"Would you like some milk?"},{"who":"Child","line":"Yes, please."}]}],"swaps":[],"patterns":[],"keywords":["want","i'd","water","home","rice","another","try","myself"]},{"id":52,"part":"把句子连起来的表达工具","zh":"表达计划","en":"Plans","sentences":[{"en":"What are you going to do today?","zh":"你今天打算做什么？","star":true},{"en":"I'm going to read tonight.","zh":"我今晚打算看书。","star":false},{"en":"We're going to the zoo tomorrow.","zh":"我们明天要去动物园。","star":false},{"en":"I plan to finish my homework first.","zh":"我计划先完成作业。","star":false},{"en":"After that, I'm going to play outside.","zh":"之后我打算去外面玩。","star":false},{"en":"Are you going to join us?","zh":"你打算和我们一起吗？","star":false},{"en":"I'm not sure yet.","zh":"我还不确定。","star":false},{"en":"That sounds like a good plan.","zh":"听起来是个好计划。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Mom","line":"What are you going to do after school?"},{"who":"Child","line":"I'm going to finish my homework first."},{"who":"Mom","line":"What will you do after that?"},{"who":"Child","line":"I'm going to ride my bike in the park."}]}],"swaps":[],"patterns":[],"keywords":["plan","today","read","tonight","zoo","tomorrow","finish","homework"]},{"id":53,"part":"把句子连起来的表达工具","zh":"表达原因","en":"Giving Reasons","sentences":[{"en":"I'm tired because I didn't sleep well.","zh":"我很累，因为昨晚没睡好。","star":false},{"en":"I'm happy because I got a new book.","zh":"我很开心，因为得到了一本新书。","star":false},{"en":"I stayed home because it was raining.","zh":"因为下雨，所以我待在家里。","star":false},{"en":"I like PE because I enjoy running.","zh":"我喜欢体育课，因为我喜欢跑步。","star":false},{"en":"I was late because the bus came late.","zh":"我迟到了，因为公交车来晚了。","star":false},{"en":"I need help because I don't understand the question.","zh":"我需要帮助，因为我不明白这道题。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Dad","line":"Why are you so happy?"},{"who":"Child","line":"Because our team won the game."},{"who":"Dad","line":"Why did you win?"},{"who":"Child","line":"Because we worked together."}]}],"swaps":[{"pattern":"Why do you like ___?","options":""},{"pattern":"Because ___.","options":"English / pandas / summer / this game / the library"}],"patterns":[],"keywords":["because","late","tired","sleep","well","happy","new","book"]},{"id":54,"part":"把句子连起来的表达工具","zh":"表达先后顺序","en":"Putting Events in Order","sentences":[{"en":"First...","zh":"首先……","star":false},{"en":"Then...","zh":"然后……","star":false},{"en":"After that...","zh":"在那之后……","star":false},{"en":"Later...","zh":"后来……","star":false},{"en":"Finally...","zh":"最后……","star":false}],"examples":[{"title":"放学后","en":"First, I changed my clothes. Then I had a snack. After that, I did my homework. Later, I read a book. Finally, I took a shower and went to bed.","zh":"首先我换了衣服，然后吃了点心。之后我写了作业。后来我看了书。最后我洗澡并上床睡觉。"},{"title":"做三明治","en":"First, I put two pieces of bread on a plate. Then I added an egg and some vegetables. After that, I put the pieces together. Finally, I cut the sandwich in half.","zh":"首先我把两片面包放在盘子上，然后加上鸡蛋和蔬菜。之后把面包合起来。最后把三明治切成两半。"}],"dialogs":[],"swaps":[],"patterns":[],"keywords":["first","later","finally"]},{"id":55,"part":"把句子连起来的表达工具","zh":"表达转折","en":"Contrast","sentences":[{"en":"I was tired, but I still finished my homework.","zh":"我很累，但仍然写完了作业。","star":true},{"en":"The question was difficult, but I didn't give up.","zh":"题目很难，但我没有放弃。","star":false},{"en":"It was raining, but we still had fun.","zh":"虽然下雨，但我们还是玩得很开心。","star":false},{"en":"I like apples, but I don't like bananas.","zh":"我喜欢苹果，但不喜欢香蕉。","star":false},{"en":"Our team lost, but we played well.","zh":"我们队输了，但表现得很好。","star":false},{"en":"The book is long, but it is very interesting.","zh":"这本书很长，但非常有趣。","star":false},{"en":"Although it was raining, we still went to the library.","zh":"虽然下雨，我们还是去了图书馆。","star":false},{"en":"I made a mistake. However, I learned from it.","zh":"我犯了错误，不过我从中学到了东西。","star":false}],"examples":[],"dialogs":[],"swaps":[{"pattern":"I wanted to ___, but ___.","options":""}],"patterns":[],"keywords":["still","raining","tired","finished","homework","question","difficult","give"]},{"id":56,"part":"把句子连起来的表达工具","zh":"描述看到、听到与闻到","en":"Senses","sentences":[{"en":"I saw many birds in the park.","zh":"我在公园看见许多鸟。","star":true},{"en":"I could see the mountains from the train.","zh":"我从火车上能看到群山。","star":false},{"en":"I heard someone calling my name.","zh":"我听见有人叫我的名字。","star":false},{"en":"I could hear children playing outside.","zh":"我能听到孩子们在外面玩。","star":false},{"en":"I could smell food from the restaurant.","zh":"我能闻到餐馆飘来的食物香味。","star":false},{"en":"The flowers smell sweet.","zh":"这些花闻起来很香。","star":false},{"en":"The music sounded beautiful.","zh":"音乐听起来很美。","star":false},{"en":"The clouds looked dark.","zh":"云看起来很黑。","star":false}],"examples":[{"title":"","en":"When I walked into the park, I saw green trees and colorful flowers. I heard birds singing and children laughing. I could also smell fresh grass.","zh":"走进公园时，我看见绿树和五颜六色的花，听见鸟儿歌唱和孩子们欢笑，还闻到了青草的气味。"}],"dialogs":[],"swaps":[],"patterns":[],"keywords":["smell","saw","birds","park","see","mountains","train","heard"]},{"id":57,"part":"把句子连起来的表达工具","zh":"描述发生了什么","en":"What Happened","sentences":[{"en":"Something funny happened today.","zh":"今天发生了一件有趣的事。","star":true},{"en":"I dropped my pencil on the floor.","zh":"我的铅笔掉在了地上。","star":false},{"en":"I lost my eraser.","zh":"我弄丢了橡皮。","star":false},{"en":"I looked everywhere for it.","zh":"我到处找它。","star":false},{"en":"I found it under my desk.","zh":"我在书桌下面找到了它。","star":false},{"en":"I forgot my homework at home.","zh":"我把作业忘在家里了。","star":false},{"en":"My toy broke when it fell.","zh":"我的玩具掉下来时摔坏了。","star":false},{"en":"I fell down, but I wasn't hurt.","zh":"我摔倒了，但没有受伤。","star":false},{"en":"What happened next?","zh":"接下来发生了什么？","star":false},{"en":"In the end, everything was okay.","zh":"最后一切都没事了。","star":false}],"examples":[{"title":"","en":"I couldn't find my pencil case this morning. I looked in my backpack and under my desk. Then my friend saw it beside the bookshelf. I was happy to get it back.","zh":"今天早上我找不到铅笔盒。我在书包里和桌子下面找。后来朋友在书架旁看见了它。我很高兴失而复得。"}],"dialogs":[{"title":"迷你对话","lines":[{"who":"Teacher","line":"What happened?"},{"who":"Child","line":"I dropped my water bottle, and the water spilled."},{"who":"Teacher","line":"Are you okay?"},{"who":"Child","line":"Yes. I'm sorry. I'll clean it up now."}]}],"swaps":[],"patterns":[],"keywords":["happened","fell","something","funny","today","dropped","pencil","floor"]},{"id":58,"part":"把句子连起来的表达工具","zh":"请求帮助","en":"Asking for Help","sentences":[{"en":"Can you help me?","zh":"你能帮我吗？","star":true},{"en":"I need some help.","zh":"我需要帮助。","star":true},{"en":"I don't understand.","zh":"我不明白。","star":true},{"en":"Could you show me how to do it?","zh":"你能示范怎样做吗？","star":false},{"en":"Can you say that again, please?","zh":"请再说一遍好吗？","star":false},{"en":"Can you speak more slowly, please?","zh":"请说慢一点好吗？","star":false},{"en":"What does this mean?","zh":"这是什么意思？","star":false},{"en":"How do you spell this word?","zh":"这个词怎么拼？","star":false},{"en":"Where can I find it?","zh":"我在哪里能找到它？","star":false},{"en":"Could you give me a hint?","zh":"你能给我一点提示吗？","star":false},{"en":"Thank you. I can do it now.","zh":"谢谢，我现在会做了。","star":false}],"examples":[],"dialogs":[{"title":"课堂求助","lines":[{"who":"Child","line":"Excuse me, I don't understand this question."},{"who":"Teacher","line":"Which part is difficult?"},{"who":"Child","line":"I don't know what this word means."},{"who":"Teacher","line":"It means “very big.”"},{"who":"Child","line":"Oh, I understand. Thank you."}]},{"title":"生活求助","lines":[{"who":"Child","line":"Can you help me zip up my jacket?"},{"who":"Dad","line":"Of course. The zipper is stuck."},{"who":"Child","line":"Can you show me how to fix it?"},{"who":"Dad","line":"Hold the bottom here and pull slowly."}]}],"swaps":[],"patterns":[],"keywords":["help","need","understand","show","say","again","speak","slowly"]},{"id":59,"part":"把句子连起来的表达工具","zh":"社交礼貌","en":"Polite Social English","sentences":[{"en":"Hello! How are you?","zh":"你好！你好吗？","star":true},{"en":"Good morning.","zh":"早上好。","star":false},{"en":"Nice to meet you.","zh":"很高兴认识你。","star":false},{"en":"See you tomorrow.","zh":"明天见。","star":false},{"en":"Have a nice day!","zh":"祝你今天愉快！","star":false},{"en":"Thank you very much.","zh":"非常感谢。","star":true},{"en":"You're welcome.","zh":"不客气。","star":false},{"en":"That was very kind of you.","zh":"你真好。","star":false},{"en":"Excuse me.","zh":"打扰一下。","star":true},{"en":"Could you please move a little?","zh":"可以请你挪一点吗？","star":false},{"en":"I'm sorry.","zh":"对不起。","star":false},{"en":"I'm sorry I'm late.","zh":"对不起，我迟到了。","star":false},{"en":"That's okay.","zh":"没关系。","star":false},{"en":"It was an accident.","zh":"那不是故意的。","star":false}],"examples":[],"dialogs":[{"title":"迷你对话","lines":[{"who":"Child","line":"Excuse me, is this seat free?"},{"who":"Person","line":"Yes, it is. You can sit here."},{"who":"Child","line":"Thank you very much."},{"who":"Person","line":"You're welcome."}]}],"swaps":[],"patterns":[],"keywords":["nice","sorry","hello","good","morning","meet","see","tomorrow"]},{"id":60,"part":"把句子连起来的表达工具","zh":"40 个万能句型","en":"The 40 Power Patterns","sentences":[],"examples":[],"dialogs":[],"swaps":[],"patterns":[{"n":1,"pat":"I am...","en":"I am eight years old.","zh":"我八岁。"},{"n":2,"pat":"I have...","en":"I have a new pencil case.","zh":"我有一个新铅笔盒。"},{"n":3,"pat":"I like...","en":"I like reading funny stories.","zh":"我喜欢读有趣的故事。"},{"n":4,"pat":"I don't like...","en":"I don't like spicy food.","zh":"我不喜欢辣的食物。"},{"n":5,"pat":"I want...","en":"I want some warm water.","zh":"我想要一些温水。"},{"n":6,"pat":"I want to...","en":"I want to play outside.","zh":"我想去外面玩。"},{"n":7,"pat":"I need...","en":"I need a clean towel.","zh":"我需要一条干净毛巾。"},{"n":8,"pat":"I need to...","en":"I need to finish my homework.","zh":"我需要完成作业。"},{"n":9,"pat":"I can...","en":"I can ride a bike.","zh":"我会骑自行车。"},{"n":10,"pat":"I can't...","en":"I can't reach the top shelf.","zh":"我够不到最上面的架子。"},{"n":11,"pat":"I went to...","en":"I went to the library yesterday.","zh":"我昨天去了图书馆。"},{"n":12,"pat":"I saw...","en":"I saw a rainbow after the rain.","zh":"雨后我看见了彩虹。"},{"n":13,"pat":"I heard...","en":"I heard a bird singing.","zh":"我听见一只鸟在唱歌。"},{"n":14,"pat":"I ate...","en":"I ate noodles for lunch.","zh":"我午饭吃了面条。"},{"n":15,"pat":"I drank...","en":"I drank a glass of milk.","zh":"我喝了一杯牛奶。"},{"n":16,"pat":"I played...","en":"I played basketball with my friends.","zh":"我和朋友们打了篮球。"},{"n":17,"pat":"I read...","en":"I read two chapters tonight.","zh":"我今晚读了两章。"},{"n":18,"pat":"I learned...","en":"I learned five new words.","zh":"我学了五个新单词。"},{"n":19,"pat":"I helped...","en":"I helped Mom wash the dishes.","zh":"我帮妈妈洗碗。"},{"n":20,"pat":"I made...","en":"I made my bed this morning.","zh":"我今天早上整理了床铺。"},{"n":21,"pat":"There is...","en":"There is a book on the desk.","zh":"桌上有一本书。"},{"n":22,"pat":"There are...","en":"There are three apples in the bag.","zh":"袋子里有三个苹果。"},{"n":23,"pat":"It is...","en":"It is sunny and warm today.","zh":"今天晴朗又温暖。"},{"n":24,"pat":"It was...","en":"It was cold yesterday.","zh":"昨天很冷。"},{"n":25,"pat":"I feel...","en":"I feel tired now.","zh":"我现在感觉累。"},{"n":26,"pat":"I felt...","en":"I felt nervous before class.","zh":"上课前我感到紧张。"},{"n":27,"pat":"I think...","en":"I think this answer is right.","zh":"我认为这个答案是对的。"},{"n":28,"pat":"I know...","en":"I know the way home.","zh":"我知道回家的路。"},{"n":29,"pat":"I don't know...","en":"I don't know his name.","zh":"我不知道他的名字。"},{"n":30,"pat":"I don't understand...","en":"I don't understand this question.","zh":"我不明白这道题。"},{"n":31,"pat":"Can I...?","en":"Can I borrow your ruler?","zh":"我能借你的尺子吗？"},{"n":32,"pat":"Can you...?","en":"Can you help me, please?","zh":"你能帮我吗？"},{"n":33,"pat":"What is...?","en":"What is your favorite subject?","zh":"你最喜欢什么科目？"},{"n":34,"pat":"Where is...?","en":"Where is my water bottle?","zh":"我的水瓶在哪里？"},{"n":35,"pat":"Why...?","en":"Why are you laughing?","zh":"你为什么笑？"},{"n":36,"pat":"...because...","en":"I'm happy because we won.","zh":"我很开心，因为我们赢了。"},{"n":37,"pat":"First..., then...","en":"First I washed my hands, then I ate.","zh":"我先洗手，然后吃饭。"},{"n":38,"pat":"After that...","en":"After that, I went home.","zh":"之后我回家了。"},{"n":39,"pat":"When I...","en":"When I got home, I did my homework.","zh":"我到家后写了作业。"},{"n":40,"pat":"I had a great time.","en":"I had a great time at the park.","zh":"我在公园玩得很开心。"}],"keywords":[]}];
+window.__WEEKS__=[["第 1 周", "1～5", "连说“起床到洗澡”的 8 句话"], ["第 2 周", "6～10", "表演早餐对话，并描述自己的房间"], ["第 3 周", "11～15", "说出做家务和走路、坐公交的过程"], ["第 4 周", "16～20", "描述从出门到数学课的一段经历"], ["第 5 周", "21～25", "表演英语课、体育课和同学借东西"], ["第 6 周", "26～30", "从放学一直讲到阅读和玩游戏"], ["第 7 周", "31～35", "描述屏幕时间、天气、身体和心情"], ["第 8 周", "36～40", "表演超市、商场、餐馆及旅行准备"], ["第 9 周", "41～45", "模拟火车、飞机、酒店和景点对话"], ["第 10 周", "46～50", "表演生日、看医生，并介绍自己的能力"], ["第 11 周", "51～55", "用想要、计划、原因、顺序和转折讲故事"], ["第 12 周", "56～60", "用感官、事件、求助、礼貌和万能句型完成两分钟复述"]];</script>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <h1>60 天英语脱口秀</h1>
+      <p>每天一个场景，说出真实的一天</p>
+    </div>
+    <div class="hud">
+      <span class="pill" title="累计星星"><b id="hudStars">0</b> 星</span>
+      <span class="pill" title="连续打卡"><b id="hudStreak">0</b> 天</span>
+      <button class="iconbtn" id="themeBtn" title="切换外观" aria-label="切换外观">
+        <svg class="spk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M4.2 12H2M22 12h-2.2M6.5 6.5 5 5M19 19l-1.5-1.5M17.5 6.5 19 5M5 19l1.5-1.5"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tabs-in" role="tablist">
+    <button class="tab" role="tab" data-view="today" aria-selected="true">今天</button>
+    <button class="tab" role="tab" data-view="review" aria-selected="false">复习 <span id="dueBadge"></span></button>
+    <button class="tab" role="tab" data-view="all" aria-selected="false">60 个场景</button>
+    <button class="tab" role="tab" data-view="plan" aria-selected="false">计划表</button>
+    <button class="tab" role="tab" data-view="me" aria-selected="false">我的奖章</button>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section class="view" id="view-today"></section>
+  <section class="view" id="view-review" hidden></section>
+  <section class="view" id="view-all" hidden></section>
+  <section class="view" id="view-plan" hidden></section>
+  <section class="view" id="view-me" hidden></section>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+const SPK = '<svg class="spk" viewBox="0 0 24 24"><path d="M4 9.5h3.6L12 5.6v12.8L7.6 14.5H4z"/><path d="M15.8 9.2a4 4 0 0 1 0 5.6"/><path d="M18.4 6.6a7.6 7.6 0 0 1 0 10.8"/></svg>';
+const SCENES = window.__SCENES__;
+const PATTERNS = SCENES[59].patterns;
+const WEEKS = window.__WEEKS__;
+const FIVE_Q = [
+  ["What did you do today?","你今天做了什么？"],
+  ["What did you eat?","你吃了什么？"],
+  ["What did you learn?","你学到了什么？"],
+  ["How did you feel?","你感觉怎么样？"],
+  ["What are you going to do tomorrow?","你明天打算做什么？"]
+];
+const CHEERS = ["太棒了！你说得越来越自然了。","Wow! 这些句子已经变成你的了。","坚持就是超能力，继续加油！","你今天又多了几句可以脱口而出的英语。","Great job! 明天的你会更厉害。"];
+const INTERVALS = [1,2,4,7,15,30];
+const BADGES = [
+  {id:"d3", emoji:"3", name:"三天不断", desc:"连续打卡 3 天", test:s=>s.streak>=3},
+  {id:"d7", emoji:"7", name:"一周坚持", desc:"连续打卡 7 天", test:s=>s.streak>=7},
+  {id:"d14",emoji:"14", name:"两周达人", desc:"连续打卡 14 天", test:s=>s.streak>=14},
+  {id:"s10",emoji:"◔", name:"小小开口", desc:"学完 10 个场景", test:s=>s.done>=10},
+  {id:"s30",emoji:"◑", name:"半程英雄", desc:"学完 30 个场景", test:s=>s.done>=30},
+  {id:"s60",emoji:"●", name:"全场景通关", desc:"学完 60 个场景", test:s=>s.done>=60},
+  {id:"st50",emoji:"★", name:"五十颗星", desc:"累计 50 颗星", test:s=>s.stars>=50},
+  {id:"st150",emoji:"✦", name:"星星收藏家", desc:"累计 150 颗星", test:s=>s.stars>=150},
+  {id:"r20",emoji:"↻", name:"记忆大师", desc:"完成 20 次复习", test:s=>s.reviews>=20}
+];
+
+/* ---------- storage: db when available, localStorage otherwise ---------- */
+const LS = "kid-english-60";
+let state = {records:{}, reviews:0, lastDay:null, days:[]};
+let dbDoc = null;
+function loadLocal(){ try{ const r=localStorage.getItem(LS); if(r) state=Object.assign(state,JSON.parse(r)); }catch(e){} }
+function save(){
+  try{ localStorage.setItem(LS, JSON.stringify(state)); }catch(e){}
+  if(dbDoc){ dbDoc.set(JSON.parse(JSON.stringify(state))).catch(()=>{}); }
+}
+loadLocal();
+(async function(){
+  try{
+    const db = await window.claude?.use?.("db");
+    if(!db) return;
+    dbDoc = db.doc("progress/main");
+    const snap = await dbDoc.get();
+    if(snap && snap.records && Object.keys(snap.records).length >= Object.keys(state.records).length){
+      state = Object.assign(state, snap); render();
+    }else{ save(); }
+  }catch(e){}
+})();
+
+const today = () => new Date().toISOString().slice(0,10);
+const dayNum = d => Math.floor(new Date(d+"T00:00:00").getTime()/86400000);
+const addDays = (d,n) => new Date((dayNum(d)+n)*86400000).toISOString().slice(0,10);
+
+function rec(id){ return state.records[id] || null; }
+function streak(){
+  const days=[...new Set(state.days||[])].sort();
+  if(!days.length) return 0;
+  const t=dayNum(today()); const last=dayNum(days[days.length-1]);
+  if(t-last>1) return 0;
+  let n=1;
+  for(let i=days.length-1;i>0;i--){ if(dayNum(days[i])-dayNum(days[i-1])===1) n++; else break; }
+  return n;
+}
+function totalStars(){ return Object.values(state.records).reduce((a,r)=>a+(r.stars||0),0); }
+function doneCount(){ return Object.keys(state.records).length; }
+function stats(){ return {streak:streak(), stars:totalStars(), done:doneCount(), reviews:state.reviews||0}; }
+function dueList(){
+  const t=today();
+  return Object.keys(state.records).map(Number).filter(id=>{
+    const r=state.records[id];
+    return r.next && r.next<=t && r.stage < INTERVALS.length;
+  }).sort((a,b)=>state.records[a].next.localeCompare(state.records[b].next));
+}
+function todayScene(){
+  const t=today();
+  const idsToday = Object.keys(state.records).filter(id=>state.records[id].learned===t).map(Number);
+  if(idsToday.length) return idsToday[0];
+  for(let i=1;i<=60;i++) if(!state.records[i]) return i;
+  return 60;
+}
+function completeScene(id, stars){
+  const t=today(), r=rec(id);
+  state.records[id] = {learned: r?r.learned:t, stage:0, next:addDays(t,INTERVALS[0]), stars:(r?r.stars:0)+stars};
+  state.days = [...new Set([...(state.days||[]), t])];
+  save();
+}
+function completeReview(id, stars){
+  const r=rec(id); if(!r) return;
+  const t=today(); const stage=Math.min((r.stage||0)+1, INTERVALS.length);
+  r.stage=stage; r.stars=(r.stars||0)+stars;
+  r.next = stage<INTERVALS.length ? addDays(t, INTERVALS[stage]) : null;
+  state.reviews=(state.reviews||0)+1;
+  state.days=[...new Set([...(state.days||[]), t])];
+  save();
+}
+
+/* ---------- speech ---------- */
+let voice=null;
+function pickVoice(){
+  const vs = speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));
+  voice = vs.find(v=>/US|United States/i.test(v.lang+v.name)) || vs[0] || null;
+}
+if("speechSynthesis" in window){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+function speak(text, rate){
+  if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="en-US"; u.rate=rate||0.85; if(voice) u.voice=voice;
+  speechSynthesis.speak(u);
+}
+
+/* ---------- helpers ---------- */
+const esc = s => String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function el(html){ const d=document.createElement("div"); d.innerHTML=html.trim(); return d.firstElementChild; }
+function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("on"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("on"),2200); }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function sentenceHTML(s, key){
+  return `<li class="sent${key?" key":""}"><span class="dot"${key?"":' style="background:transparent"'}></span>
+    <div class="txt"><div class="e">${esc(s.en)}</div><div class="z">${esc(s.zh)}</div></div>
+    <button class="say" data-say="${esc(s.en)}" aria-label="朗读">${SPK}</button></li>`;
+}
+function keySentences(sc){
+  const st = sc.sentences.filter(s=>s.star);
+  return st.length ? st : sc.sentences.slice(0,3);
+}
+
+/* ---------- quiz ---------- */
+function makeQuiz(sc, n){
+  const pool = sc.sentences.length>=4 ? sc.sentences : SCENES[sc.id-1].sentences;
+  const picks = shuffle(keySentences(sc).concat(shuffle(sc.sentences)))
+    .filter((v,i,a)=>a.findIndex(x=>x.en===v.en)===i).slice(0, Math.min(n, sc.sentences.length));
+  const others = SCENES.flatMap(s=>s.sentences);
+  return picks.map(p=>{
+    const wrong = shuffle(others.filter(o=>o.en!==p.en && Math.abs(o.en.length-p.en.length)<26)).slice(0,3);
+    return {zh:p.zh, en:p.en, opts:shuffle([p, ...wrong])};
+  });
+}
+function quizCard(sc, mode, onDone){
+  const qs = makeQuiz(sc, mode==="review"?4:5);
+  let i=0, right=0;
+  const card = el(`<div class="card quiz">
+    <div class="h-row" style="justify-content:space-between">
+      <span class="eyebrow">${mode==="review"?"复习小测 · 看中文说英文":"练一练 · 看中文选英文"}</span>
+      <span class="dots"></span>
+    </div>
+    <div class="q"></div><div class="opts"></div>
+    <div class="row" style="margin-top:14px"><span class="small muted" id="qtip">先在心里说出来，再选答案。</span></div>
+  </div>`);
+  const dots=card.querySelector(".dots"), qEl=card.querySelector(".q"), oEl=card.querySelector(".opts"), tip=card.querySelector("#qtip");
+  dots.innerHTML = qs.map(()=>'<i></i>').join("");
+  function step(){
+    if(i>=qs.length){
+      const stars = right>=qs.length?3 : right>=qs.length-1?2 : right>0?1:0;
+      qEl.textContent = `你答对了 ${right} / ${qs.length} 题`;
+      oEl.innerHTML = `<div class="note">${stars?"★".repeat(stars)+" ":""}${esc(CHEERS[Math.floor(Math.random()*CHEERS.length)])}</div>`;
+      tip.textContent="";
+      onDone(stars, card);
+      return;
+    }
+    const q=qs[i];
+    qEl.textContent = q.zh;
+    oEl.innerHTML = q.opts.map(o=>`<button class="opt" data-en="${esc(o.en)}">${esc(o.en)}</button>`).join("");
+    oEl.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{
+      const ok = b.dataset.en===q.en;
+      oEl.querySelectorAll(".opt").forEach(x=>{ x.disabled=true; if(x.dataset.en===q.en) x.classList.add("right"); });
+      if(!ok) b.classList.add("wrong"); else right++;
+      dots.children[i].className = ok?"done":"miss";
+      speak(q.en);
+      tip.textContent = ok?"答对啦！跟着读一遍。":"正确答案已经点亮，跟读两遍就记住了。";
+      i++;
+      setTimeout(step, 1400);
+    }));
+  }
+  step();
+  return card;
+}
+
+/* ---------- scene detail blocks ---------- */
+function sceneBlocks(sc){
+  const out=[];
+  out.push(el(`<div class="card">
+    <div class="eyebrow">重点句 · 先练成条件反射</div>
+    <ul class="sents" style="margin-top:10px">${keySentences(sc).map(s=>sentenceHTML(s,true)).join("")}</ul>
+    <div class="row" style="margin-top:12px">
+      <button class="btn ghost" data-playall="key">连续朗读重点句</button>
+    </div>
+  </div>`));
+  out.push(el(`<div class="card">
+    <div class="eyebrow">本场景高频词</div>
+    <div class="chips" style="margin-top:10px">${sc.keywords.map(w=>`<button class="chip word" data-say="${esc(w)}">${esc(w)}</button>`).join("")}</div>
+    <div class="eyebrow" style="margin-top:16px">全部句子（${sc.sentences.length} 句）</div>
+    <ul class="sents" style="margin-top:10px">${sc.sentences.map(s=>sentenceHTML(s,s.star)).join("")}</ul>
+  </div>`));
+  if(sc.examples.length) out.push(el(`<div class="card">
+    <div class="eyebrow">连起来说一小段</div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:10px">
+    ${sc.examples.map(e=>`<blockquote class="ex">${e.title?`<div class="eyebrow">${esc(e.title)}</div>`:""}
+      <p class="en">${esc(e.en)} <button class="say" data-say="${esc(e.en)}" aria-label="朗读">${SPK}</button></p>
+      <p class="z">${esc(e.zh)}</p></blockquote>`).join("")}</div>
+  </div>`));
+  if(sc.dialogs.length) out.push(el(`<div class="card">
+    <div class="eyebrow">和爸爸妈妈演一演</div>
+    ${sc.dialogs.map(d=>`<div style="margin-top:12px">${d.title?`<div class="small muted" style="font-weight:900">${esc(d.title)}</div>`:""}
+      <div class="dlg" style="margin-top:8px">${d.lines.map(l=>`<div class="turn ${/child/i.test(l.who)?"child":""}">
+        <div class="who">${esc(l.who)}</div>
+        <button class="say" data-say="${esc(l.line)}" aria-label="朗读">${SPK}</button>
+        <div class="bubble">${esc(l.line)}</div></div>`).join("")}</div></div>`).join("")}
+  </div>`));
+  if(sc.swaps.length) out.push(el(`<div class="card">
+    <div class="eyebrow">换一个词，再说一遍</div>
+    ${sc.swaps.map(s=>`<div style="margin-top:12px">
+      <div class="e" style="font-size:19px;font-weight:900">${esc(s.pattern)}</div>
+      ${s.options?`<div class="chips" style="margin-top:8px">${s.options.split(/[；;]/).flatMap(g=>g.split("/")).map(o=>o.trim()).filter(Boolean).map(o=>`<span class="chip">${esc(o)}</span>`).join("")}</div>`:""}
+    </div>`).join("")}
+  </div>`));
+  if(sc.patterns.length) out.push(el(`<div class="card">
+    <div class="eyebrow">40 个万能句型</div>
+    <div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>#</th><th>句型</th><th>例句</th><th>中文</th></tr></thead>
+    <tbody>${sc.patterns.map(p=>`<tr><td>${p.n}</td><td><b>${esc(p.pat)}</b></td>
+      <td>${esc(p.en)} <button class="say" data-say="${esc(p.en)}" aria-label="朗读">${SPK}</button></td>
+      <td class="muted">${esc(p.zh)}</td></tr>`).join("")}</tbody></table></div>
+  </div>`));
+  return out;
+}
+
+/* ---------- views ---------- */
+function renderToday(){
+  const v=document.getElementById("view-today"); v.innerHTML="";
+  const id = todayScene(), sc = SCENES[id-1], r = rec(id);
+  const done = doneCount();
+  const hero = el(`<div class="daycard">
+    <div class="daynum">DAY ${id} / 60 · ${esc(sc.part)}</div>
+    <h2>${esc(sc.zh)}</h2>
+    <p class="en">${esc(sc.en)}</p>
+    <div class="progressbar"><i style="width:${Math.round(done/60*100)}%"></i></div>
+    <div class="row small muted" style="margin-top:8px;justify-content:space-between">
+      <span>已学 ${done} / 60 个场景</span><span>约 10 分钟</span>
+    </div>
+    <div class="steps">
+      <span class="step">1 听 · 跟读 3 遍</span><span class="step">2 遮住英文说</span>
+      <span class="step">3 换词再说</span><span class="step">4 演对话</span><span class="step">5 做小测</span>
+    </div>
+  </div>`);
+  v.appendChild(hero);
+  sceneBlocks(sc).forEach(b=>v.appendChild(b));
+
+  const quizWrap = el('<div id="todayQuiz"></div>');
+  v.appendChild(quizWrap);
+  quizWrap.appendChild(quizCard(sc, "learn", (stars, card)=>{
+    const btn = el(`<button class="btn go" style="margin-top:14px">完成今天的打卡 · ${"★".repeat(Math.max(stars,1))}</button>`);
+    btn.addEventListener("click", ()=>{
+      completeScene(id, Math.max(stars,1));
+      toast(`Day ${id} 打卡成功！明天复习这一课。`);
+      render();
+      window.scrollTo({top:0,behavior:"smooth"});
+    });
+    card.appendChild(btn);
+  }));
+
+  v.appendChild(el(`<div class="card">
+    <div class="eyebrow">睡前每日五问</div>
+    <ul class="sents" style="margin-top:10px">${FIVE_Q.map(q=>sentenceHTML({en:q[0],zh:q[1]},false)).join("")}</ul>
+  </div>`));
+
+  if(r) v.appendChild(el(`<div class="card"><div class="note">今天的场景已经打卡（得到 ${r.stars} 星）。下一次复习：${esc(r.next||"已毕业")}。去「复习」看看有没有到期的旧场景。</div></div>`));
+}
+
+function renderReview(){
+  const v=document.getElementById("view-review"); v.innerHTML="";
+  const due = dueList();
+  v.appendChild(el(`<div class="card">
+    <div class="eyebrow">记忆曲线复习</div>
+    <h2 style="margin:6px 0 4px">今天要复习 ${due.length} 个场景</h2>
+    <p class="small muted" style="margin:0">每个场景在学完后的第 1、2、4、7、15、30 天各复习一次；复习通过一次，下次间隔就会变长。</p>
+  </div>`));
+  if(!due.length){
+    v.appendChild(el(`<div class="card"><div class="note">今天没有到期的复习。可以去「今天」学新场景，或在「60 个场景」里挑一个自由练习。</div></div>`));
+  }
+  due.forEach(id=>{
+    const sc=SCENES[id-1], r=rec(id);
+    const card=el(`<div class="card">
+      <div class="h-row" style="justify-content:space-between">
+        <div><div class="daynum">场景 ${id} · 第 ${(r.stage||0)+1} 次复习</div>
+        <h3 style="margin:2px 0 0">${esc(sc.zh)} <span class="muted" style="font-weight:700;font-size:16px">${esc(sc.en)}</span></h3></div>
+        <button class="btn ghost" data-open="${id}">看课文</button>
+      </div>
+      <ul class="sents" style="margin-top:12px">${keySentences(sc).map(s=>sentenceHTML(s,true)).join("")}</ul>
+      <div class="rq"></div>
+    </div>`);
+    const wrap=card.querySelector(".rq");
+    const start=el('<button class="btn" style="margin-top:14px">开始复习小测</button>');
+    start.addEventListener("click",()=>{
+      start.remove();
+      wrap.appendChild(quizCard(sc,"review",(stars,qc)=>{
+        const b=el(`<button class="btn go" style="margin-top:14px">复习完成 · ${"★".repeat(Math.max(stars,1))}</button>`);
+        b.addEventListener("click",()=>{ completeReview(id, Math.max(stars,1)); toast("复习完成，下次间隔变长啦！"); render(); });
+        qc.appendChild(b);
+      }));
+    });
+    wrap.appendChild(start);
+    v.appendChild(card);
+  });
+}
+
+function renderAll(){
+  const v=document.getElementById("view-all"); v.innerHTML="";
+  const due=new Set(dueList());
+  let part=null;
+  const head=el(`<div class="card"><div class="eyebrow">场景库</div>
+    <p class="small muted" style="margin:6px 0 0">标注「已学」表示学过，「待复习」表示今天到期。点任意场景都可以自由练习。</p></div>`);
+  v.appendChild(head);
+  let grid=null;
+  SCENES.forEach(sc=>{
+    if(sc.part!==part){ part=sc.part; v.appendChild(el(`<h3 class="parthead">${esc(part)}</h3>`)); grid=el('<div class="grid"></div>'); v.appendChild(grid); }
+    const cls = due.has(sc.id)?"due" : rec(sc.id)?"done":"";
+    const mark = due.has(sc.id)?"待复习" : rec(sc.id)?"已学":"";
+    grid.appendChild(el(`<button class="scenebtn ${cls}" data-open="${sc.id}">
+      <span class="no">${String(sc.id).padStart(2,"0")}</span>
+      <span style="min-width:0"><b>${esc(sc.zh)}</b><span class="sub">${esc(sc.en)}</span></span>
+      <span class="mark">${mark}</span></button>`));
+  });
+}
+
+function openScene(id){
+  const sc=SCENES[id-1];
+  const v=document.getElementById("view-all"); v.innerHTML="";
+  switchTab("all");
+  v.appendChild(el(`<div class="card"><button class="btn ghost" id="backAll">← 返回场景库</button></div>`));
+  v.appendChild(el(`<div class="daycard"><div class="daynum">场景 ${id} · ${esc(sc.part)}</div>
+    <h2>${esc(sc.zh)}</h2><p class="en">${esc(sc.en)}</p></div>`));
+  sceneBlocks(sc).forEach(b=>v.appendChild(b));
+  const qw=el("<div></div>"); v.appendChild(qw);
+  qw.appendChild(quizCard(sc,"learn",(stars,card)=>{
+    const b=el(`<button class="btn go" style="margin-top:14px">记录这次练习 · ${"★".repeat(Math.max(stars,1))}</button>`);
+    b.addEventListener("click",()=>{ if(rec(id)) completeReview(id,Math.max(stars,1)); else completeScene(id,Math.max(stars,1)); toast("已记录！"); render(); });
+    card.appendChild(b);
+  }));
+  document.getElementById("backAll").addEventListener("click",()=>{ renderAll(); window.scrollTo({top:0}); });
+  window.scrollTo({top:0});
+}
+
+function renderPlan(){
+  const v=document.getElementById("view-plan"); v.innerHTML="";
+  v.appendChild(el(`<div class="card"><div class="eyebrow">怎么用这份材料</div>
+    <h2 style="margin:6px 0 8px">每天 10 分钟，5 个步骤</h2>
+    <ol class="steps-list small" style="margin:8px 0 0">
+      <li><b>听和跟读</b>：家长读一句，孩子跟读一句，重复 3 遍。</li>
+      <li><b>看中文说英文</b>：遮住英文，根据中文说出句子。</li>
+      <li><b>替换关键词</b>：把时间、人物、食物、地点换成今天的真实情况。</li>
+      <li><b>角色对话</b>：和家长交换角色，把迷你对话说 2 遍。</li>
+      <li><b>当天复述</b>：晚上挑 5～10 句，连起来说说自己的一天。</li>
+    </ol></div>`));
+  v.appendChild(el(`<div class="card"><div class="eyebrow">记忆曲线安排</div>
+    <p class="small" style="margin:8px 0 0">学完一个场景后，会在 <b>第 1、2、4、7、15、30 天</b> 自动排入复习。到期的场景会出现在「复习」页，并标注「待复习」。六次复习都通过，这个场景就算真正学会了。</p></div>`));
+  const rows = WEEKS.map(w=>`<tr><td><b>${esc(w[0])}</b></td><td>${esc(w[1])}</td><td class="muted">${esc(w[2])}</td></tr>`).join("");
+  v.appendChild(el(`<div class="card"><div class="eyebrow">12 周口语任务</div>
+    <div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>周数</th><th>场景</th><th>口语任务</th></tr></thead><tbody>${rows}</tbody></table></div></div>`));
+  v.appendChild(el(`<div class="card"><div class="eyebrow">最终目标检查</div>
+    <ul class="plain small" style="margin:8px 0 0">
+      <li>不看文字，连续说出早晨、学校和晚上的日常活动。</li>
+      <li>遇到不懂的内容，会用英语求助或请对方重复。</li>
+      <li>能表达需要、喜欢、能力、计划、身体感觉和情绪。</li>
+      <li>能用 <b>because</b> 说原因，用 <b>but</b> 说转折。</li>
+      <li>能用 <b>First / Then / After that / Finally</b> 讲清顺序。</li>
+      <li>能围绕当天真实生活，独立说 1～2 分钟。</li>
+    </ul></div>`));
+}
+
+function renderMe(){
+  const v=document.getElementById("view-me"); v.innerHTML="";
+  const s=stats();
+  v.appendChild(el(`<div class="card"><div class="eyebrow">我的进度</div>
+    <div class="stats" style="margin-top:12px">
+      <div class="stat"><b>${s.done}</b><span>学过的场景 / 60</span></div>
+      <div class="stat"><b>${s.stars}</b><span>累计星星</span></div>
+      <div class="stat"><b>${s.streak}</b><span>连续打卡天数</span></div>
+      <div class="stat"><b>${s.reviews}</b><span>完成的复习次数</span></div>
+    </div></div>`));
+  v.appendChild(el(`<div class="card"><div class="eyebrow">奖章墙</div>
+    <div class="badges" style="margin-top:12px">${BADGES.map(b=>`<div class="badge ${b.test(s)?"on":""}">
+      <em>${b.emoji}</em><div><b>${esc(b.name)}</b><span>${esc(b.desc)}</span></div></div>`).join("")}</div></div>`));
+  const learned = Object.keys(state.records).map(Number).sort((a,b)=>a-b);
+  v.appendChild(el(`<div class="card"><div class="eyebrow">我的复习表</div>
+    ${learned.length?`<div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>场景</th><th>学习日</th><th>复习进度</th><th>下次复习</th></tr></thead><tbody>
+    ${learned.map(id=>{const r=state.records[id];return `<tr><td><b>${id}. ${esc(SCENES[id-1].zh)}</b></td><td>${esc(r.learned)}</td>
+      <td>${"●".repeat(r.stage||0)}${"○".repeat(Math.max(0,6-(r.stage||0)))}</td>
+      <td>${r.next?esc(r.next):"已毕业"}</td></tr>`}).join("")}</tbody></table></div>`
+    :'<p class="small muted" style="margin:8px 0 0">还没有记录。去「今天」完成第一课吧！</p>'}</div>`));
+  v.appendChild(el(`<div class="card"><div class="eyebrow">给爸爸妈妈的话</div>
+    <p class="small" style="margin:8px 0 0">少量、高频、真实使用，比一次背很多更有效。孩子说错时先重复一遍正确说法，再让他跟着说一次，不要打断表达的兴致。每天完成后，一起把星星数一数——这是他看得见的进步。</p>
+    <div class="row" style="margin-top:14px"><button class="btn ghost" id="resetBtn">清空全部进度</button></div></div>`));
+  document.getElementById("resetBtn").addEventListener("click",()=>{
+    if(confirm("确定要清空所有打卡、星星和复习记录吗？")){ state={records:{},reviews:0,days:[]}; save(); render(); toast("已清空，可以重新开始。"); }
+  });
+}
+
+/* ---------- shell ---------- */
+function switchTab(name){
+  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", String(t.dataset.view===name)));
+  document.querySelectorAll(".view").forEach(v=>{ v.hidden = v.id!=="view-"+name; });
+}
+function render(){
+  const s=stats();
+  document.getElementById("hudStars").textContent=s.stars;
+  document.getElementById("hudStreak").textContent=s.streak;
+  const d=dueList().length;
+  document.getElementById("dueBadge").textContent = d?`(${d})`:"";
+  renderToday(); renderReview(); renderAll(); renderPlan(); renderMe();
+}
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{ switchTab(t.dataset.view); window.scrollTo({top:0}); }));
+document.addEventListener("click",e=>{
+  const say=e.target.closest("[data-say]"); if(say){ speak(say.dataset.say); return; }
+  const open=e.target.closest("[data-open]"); if(open){ openScene(Number(open.dataset.open)); return; }
+  const pa=e.target.closest("[data-playall]");
+  if(pa){
+    const list=[...pa.closest(".card").querySelectorAll(".sents .e")].map(x=>x.textContent);
+    let i=0; const next=()=>{ if(i>=list.length) return; const u=new SpeechSynthesisUtterance(list[i++]);
+      u.lang="en-US"; u.rate=.85; if(voice)u.voice=voice; u.onend=next; speechSynthesis.speak(u); };
+    speechSynthesis.cancel(); next();
+  }
+});
+const themeBtn=document.getElementById("themeBtn");
+themeBtn.addEventListener("click",()=>{
+  const cur=document.documentElement.getAttribute("data-theme");
+  const dark = cur ? cur==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.setAttribute("data-theme", dark?"light":"dark");
+});
+render();
+})();
+</script>
+</body>
+</html>
