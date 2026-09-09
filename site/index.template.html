@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Vibe 网页集：英语学习、儿童成长、健康照护、武汉生活与前端编程，值得随时打开的实用网页。">
+  <meta name="theme-color" content="#f7f8fc">
+  <title>Vibe · 网页集</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/home.css">
+</head>
+<body>
+  <a class="skip-link" href="#content">跳到网页目录</a>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Vibe 首页"><span class="brand-mark" aria-hidden="true">v.</span><span>vibe<span class="brand-dot">.</span></span></a>
+    <span class="topbar-note">一个不断生长的网页集</span>
+    <a class="topbar-link" href="#content">浏览目录 <span aria-hidden="true">↗</span></a>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <p class="nav-label">内容索引 <span>INDEX</span></p>
+      <nav aria-label="网页分类">{{NAVIGATION}}</nav>
+      <div class="sidebar-note"><span class="note-line"></span><p>学习一点，<br>生活好一点。</p><span>PHETH / VIBE</span></div>
+    </aside>
+    <main id="content">
+      <div class="intro">
+        <div><p class="eyebrow">THE WEB COLLECTION</p><h1>日常有用的网页<span>，</span><br>都放在这里<span>。</span></h1><p class="intro-copy">关于学习、成长、生活，以及动手创造。</p></div>
+        <div class="collection-count"><strong>{{PAGE_COUNT}}</strong><span>个网页 · {{CATEGORY_COUNT}} 个分类</span></div>
+      </div>
+      <div class="catalog">{{SECTIONS}}</div>
+      <footer><span>vibe.pheth.com</span><span>保持好奇，持续生长。 <span aria-hidden="true">↗</span></span></footer>
+    </main>
+  </div>
+</body>
+</html>

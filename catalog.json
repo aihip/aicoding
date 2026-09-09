@@ -1,0 +1,56 @@
+{
+  "categories": [
+    { "id": "learn", "name": "学习与成长", "description": "从每天的小练习，走向更大的世界。", "color": "blue" },
+    { "id": "health", "name": "健康与照护", "description": "照顾好身体，也照顾好日常。", "color": "green" },
+    { "id": "life", "name": "城市与生活", "description": "把生活里的数字和选择，慢慢看明白。", "color": "orange" },
+    { "id": "build", "name": "编程与创造", "description": "理解网页如何运作，动手做点新东西。", "color": "purple" },
+    { "id": "more", "name": "更多探索", "description": "新加入的网页，从这里开始。", "color": "blue" }
+  ],
+  "pages": {
+    "8岁儿童日常英语60场景.html": {
+      "title": "60 天英语脱口秀",
+      "description": "60 个日常场景，结合朗读跟读、记忆复习和小测，把英语练成每天的习惯。",
+      "category": "learn", "label": "日常英语", "mark": "Aa", "slug": "daily-english-scenes", "order": 1
+    },
+    "english_powerup_guide.html": {
+      "title": "Power Up 英语冒险营",
+      "description": "每天 25 分钟，用听力、口语和阅读任务，让教材里的英语真正用起来。",
+      "category": "learn", "label": "听说读训练", "mark": "Up", "slug": "english-powerup", "order": 2
+    },
+    "child_development_guide.html": {
+      "title": "8 岁儿童成长计划",
+      "description": "六大能力培养、每周练习安排与睡眠指南，陪孩子一步步长大。",
+      "category": "learn", "label": "能力培养", "mark": "↗", "slug": "child-development", "order": 3
+    },
+    "wuhan_primary_certificates.html": {
+      "title": "证书星球闯关地图",
+      "description": "从兴趣与小任务出发，探索六个能力关卡，认识武汉小学生的成长路线。",
+      "category": "learn", "label": "兴趣探索", "mark": "★", "slug": "primary-certificates", "order": 4
+    },
+    "children_health_guide.html": {
+      "title": "儿童日常保健指南",
+      "description": "日常习惯、疾病预防与安全知识，配合每日打卡，适合亲子一起阅读。",
+      "category": "health", "label": "日常保健", "mark": "+", "slug": "children-health", "order": 5
+    },
+    "jim_vision_guide.html": {
+      "title": "宇航员 Jim 的护眼任务",
+      "description": "用太空任务记录护眼日常，查看眼轴成长、训练安排与连续打卡。",
+      "category": "health", "label": "视力健康", "mark": "◎", "slug": "jim-vision", "order": 6
+    },
+    "tcm_medicine_guide.html": {
+      "title": "常用中成药使用指南",
+      "description": "查阅常见症状对应的用药参考、停药条件与需要及时就医的情况。",
+      "category": "health", "label": "家庭用药参考", "mark": "十", "slug": "tcm-medicine", "order": 7
+    },
+    "wuhan_life_cost_guide.html": {
+      "title": "武汉家庭生活成本指南",
+      "description": "从一天的账单到一个月的开支，和孩子一起理解家庭预算与妈妈的付出。",
+      "category": "life", "label": "家庭生活", "mark": "¥", "slug": "wuhan-life-cost", "order": 8
+    },
+    "html_css_tailwind_tutorial.html": {
+      "title": "Web 前端完整教程",
+      "description": "从 HTML、CSS 到 Tailwind 与 Vue 3，结合示例理解布局、样式和交互。",
+      "category": "build", "label": "前端开发", "mark": "</>", "slug": "web-frontend-tutorial", "order": 9
+    }
+  }
+}

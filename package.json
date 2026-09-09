@@ -1,0 +1,13 @@
+{
+  "name": "pheth-vibe",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "npm run build && wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "engines": { "node": ">=20" },
+  "devDependencies": { "wrangler": "4.84.1" }
+}
