@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-vibe-nav="off">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -13,7 +13,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans G
 button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
 .wrap{max-width:520px;margin:0 auto;padding:calc(12px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));min-height:100dvh}
 .top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
-.logo{font-weight:800;font-size:18px;letter-spacing:.5px}
+.logo{font-weight:800;font-size:18px;letter-spacing:.5px;display:flex;align-items:center;gap:8px}
+.homelink{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#ffffffcc;text-decoration:none;font-size:18px;box-shadow:0 2px 0 #00000012}
 .chips{display:flex;gap:8px}
 .chip{background:#ffffffcc;border-radius:99px;padding:6px 12px;font-size:14px;font-weight:700;box-shadow:0 2px 0 #00000012}
 .scene{position:relative;border-radius:28px;overflow:hidden;background:linear-gradient(180deg,#9fd8ff 0%,#d6f1ff 62%,#b8ecb0 62%,#8fd98c 100%);box-shadow:0 6px 0 #00000014;padding:14px 12px 10px;text-align:center}
@@ -839,7 +840,7 @@ function petBlock(a, p, big) {
   return `<div class="pet ${p.shiny ? "shiny" : ""}" data-act="poke" role="button" aria-label="点一点小动物">${drawAnimal(a, st, { idx: ANIMALS.indexOf(a), pct: pr.pct, shiny: p.shiny, acc: p.acc })}</div><div class="shadow"></div>`;
 }
 function topBar(extra = "") {
-  return `<div class="top"><div class="logo">🦁 动物园进化</div><div class="chips">${extra}<button class="chip" data-act="mute" aria-label="声音开关">${S.mute ? "🔇" : "🔊"}</button></div></div>`;
+  return `<div class="top"><div class="logo"><a class="homelink" href="./" aria-label="返回 vibe 首页">🏠</a> 动物园进化</div><div class="chips">${extra}<button class="chip" data-act="mute" aria-label="声音开关">${S.mute ? "🔇" : "🔊"}</button></div></div>`;
 }
 
 function homeView() {

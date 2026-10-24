@@ -120,7 +120,8 @@
       "label": "闯关游戏",
       "mark": "🦁",
       "slug": "zoo-evolution",
-      "order": 5
+      "order": 5,
+      "new": true
     },
     "动物园进化大冒险玩法说明.html": {
       "title": "进化大冒险玩法说明",
@@ -129,7 +130,8 @@
       "label": "游戏说明",
       "mark": "📖",
       "slug": "zoo-evolution-guide",
-      "order": 6
+      "order": 6,
+      "new": true
     }
   }
 }

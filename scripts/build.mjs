@@ -7,8 +7,8 @@ const output = path.join(root, 'dist');
 const catalog = JSON.parse(await readFile(path.join(root, 'catalog.json'), 'utf8'));
 const escape = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const addCounter = (source, page) => {
-  const style = '<link rel="stylesheet" href="/assets/views.css">';
-  const script = `<script src="/assets/views.js" data-page="${escape(page)}" defer></script>`;
+  const style = '<link rel="stylesheet" href="/assets/views.css">\n<link rel="stylesheet" href="/assets/site.css">';
+  const script = `<script src="/assets/views.js" data-page="${escape(page)}" defer></script>\n<script src="/assets/site.js" defer></script>`;
   if (!/<\/head>/i.test(source) || !/<\/body>/i.test(source)) throw new Error(`网页 ${page} 缺少完整的 head 或 body 标签。`);
   return source.replace(/<\/head>/i, `${style}\n</head>`).replace(/<\/body>/i, `${script}\n</body>`);
 };
@@ -32,7 +32,7 @@ const pages = await Promise.all(files.map(async (file) => {
   const title = entry.title ?? source.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.trim() ?? file.replace(/\.html$/, '');
   const slug = entry.slug ?? path.parse(file).name.normalize('NFKD').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase();
   if (!slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw new Error(`网页 ${file} 需要有效的英文 slug。`);
-  return { file, slug, source, category, title, description: entry.description ?? '打开网页，浏览完整内容。', label: entry.label ?? '新收录', mark: entry.mark ?? '↗', order: entry.order ?? 1000 };
+  return { file, slug, source, category, title, description: entry.description ?? '打开网页，浏览完整内容。', label: entry.label ?? '新收录', mark: entry.mark ?? '↗', order: entry.order ?? 1000, isNew: entry.new === true };
 }));
 if (new Set(pages.map((page) => page.slug)).size !== pages.length) throw new Error('网页 slug 必须唯一。');
 pages.sort((a, b) => a.order - b.order || a.file.localeCompare(b.file, 'zh-CN'));
@@ -41,7 +41,7 @@ const navigation = categories.map((category, index) => `<a class="nav-item" href
 const sections = categories.map((category, index) => `<section class="category ${category.color}" id="${category.id}" aria-labelledby="title-${category.id}">
   <div class="section-head"><span class="section-number" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span><h2 id="title-${category.id}">${escape(category.name)}</h2><p>${escape(category.description)}</p></div>
   <div class="cards${category.pages.length === 1 ? ' single' : ''}">${category.pages.map((page) => `<a class="card" href="/${escape(page.slug)}" aria-labelledby="page-${escape(page.slug)}">
-    <div class="card-top"><span class="card-mark" aria-hidden="true">${escape(page.mark)}</span><span class="card-label">${escape(page.label)}</span></div>
+    <div class="card-top"><span class="card-mark" aria-hidden="true">${escape(page.mark)}</span><span class="card-label">${page.isNew ? '<b class="card-new">NEW</b>' : ''}${escape(page.label)}</span></div>
     <h3 id="page-${escape(page.slug)}">${escape(page.title)}</h3><p>${escape(page.description)}</p>
     <div class="card-bottom"><span>打开网页</span><span class="card-arrow" aria-hidden="true">↗</span></div>
   </a>`).join('\n')}</div>
@@ -52,7 +52,7 @@ html = html.replace(/\{\{([A-Z_]+)\}\}/g, (_, key) => {
   if (!(key in replacements)) throw new Error(`模板变量未知：${key}`);
   return replacements[key];
 });
-html = addCounter(html, 'home');
+html = addCounter(html, 'home').replace(/<\/body>/i, '<script src="assets/home.js" defer></script>\n</body>');
 // Only publish web content. Repository metadata, documentation and credentials stay outside dist.
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });

@@ -9,6 +9,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="stylesheet" href="assets/home.css">
 <link rel="stylesheet" href="/assets/views.css">
+<link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
   <a class="skip-link" href="#content">跳到网页目录</a>
@@ -31,6 +32,7 @@
         <div><p class="eyebrow">THE WEB COLLECTION</p><h1>日常有用的网页<span>，</span><br>都放在这里<span>。</span></h1><p class="intro-copy">关于学习、成长、生活，以及动手创造。</p></div>
         <div class="collection-count"><strong>11</strong><span>个网页 · 4 个分类</span></div>
       </div>
+      <div class="search" role="search"><span class="search-icon" aria-hidden="true">⌕</span><input id="q" type="search" autocomplete="off" placeholder="搜索网页：英语、健康、游戏、武汉……" aria-label="搜索网页"><kbd aria-hidden="true">/</kbd><span id="result-count" class="result-count" aria-live="polite"></span></div>
       <div class="catalog"><section class="category blue" id="learn" aria-labelledby="title-learn">
   <div class="section-head"><span class="section-number" aria-hidden="true">01</span><h2 id="title-learn">学习与成长</h2><p>从每天的小练习，走向更大的世界。</p></div>
   <div class="cards"><a class="card" href="/daily-english-scenes" aria-labelledby="page-daily-english-scenes">
@@ -54,12 +56,12 @@
     <div class="card-bottom"><span>打开网页</span><span class="card-arrow" aria-hidden="true">↗</span></div>
   </a>
 <a class="card" href="/zoo-evolution" aria-labelledby="page-zoo-evolution">
-    <div class="card-top"><span class="card-mark" aria-hidden="true">🦁</span><span class="card-label">闯关游戏</span></div>
+    <div class="card-top"><span class="card-mark" aria-hidden="true">🦁</span><span class="card-label"><b class="card-new">NEW</b>闯关游戏</span></div>
     <h3 id="page-zoo-evolution">动物园进化大冒险</h3><p>领养 30 种动物园小伙伴，用英语和数学任务让它们从神秘蛋一路进化成传说神兽。</p>
     <div class="card-bottom"><span>打开网页</span><span class="card-arrow" aria-hidden="true">↗</span></div>
   </a>
 <a class="card" href="/zoo-evolution-guide" aria-labelledby="page-zoo-evolution-guide">
-    <div class="card-top"><span class="card-mark" aria-hidden="true">📖</span><span class="card-label">游戏说明</span></div>
+    <div class="card-top"><span class="card-mark" aria-hidden="true">📖</span><span class="card-label"><b class="card-new">NEW</b>游戏说明</span></div>
     <h3 id="page-zoo-evolution-guide">进化大冒险玩法说明</h3><p>九级成长、30 种动物和题目难度一览，给家长和孩子的游戏说明。</p>
     <div class="card-bottom"><span>打开网页</span><span class="card-arrow" aria-hidden="true">↗</span></div>
   </a></div>
@@ -98,9 +100,12 @@
     <div class="card-bottom"><span>打开网页</span><span class="card-arrow" aria-hidden="true">↗</span></div>
   </a></div>
 </section></div>
+      <p id="empty" class="empty" hidden>没有找到匹配的网页，换个关键词试试。</p>
       <footer><span>vibe.pheth.com</span><span>保持好奇，持续生长。 <span aria-hidden="true">↗</span></span></footer>
     </main>
   </div>
 <script src="/assets/views.js" data-page="home" defer></script>
+<script src="/assets/site.js" defer></script>
+<script src="assets/home.js" defer></script>
 </body>
 </html>
