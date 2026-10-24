@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#bfe6ff">
+<title>动物园进化大冒险</title>
+<style>
+:root{--ink:#3b2f4a;--sub:#7b6f8a;--card:#ffffff;--line:#eadff5;--pri:#ff7a59;--pri2:#ffb347;--grn:#3fc27a;--red:#f0565f;--blue:#4d9bff;--bg1:#bfe6ff;--bg2:#fff3d6}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;color:var(--ink);background:linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 100%) fixed;line-height:1.5;user-select:none;-webkit-user-select:none}
+button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
+.wrap{max-width:520px;margin:0 auto;padding:calc(12px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));min-height:100dvh}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.logo{font-weight:800;font-size:18px;letter-spacing:.5px}
+.chips{display:flex;gap:8px}
+.chip{background:#ffffffcc;border-radius:99px;padding:6px 12px;font-size:14px;font-weight:700;box-shadow:0 2px 0 #00000012}
+.scene{position:relative;border-radius:28px;overflow:hidden;background:linear-gradient(180deg,#9fd8ff 0%,#d6f1ff 62%,#b8ecb0 62%,#8fd98c 100%);box-shadow:0 6px 0 #00000014;padding:14px 12px 10px;text-align:center}
+.scene:before,.scene:after{content:"";position:absolute;background:#fff;border-radius:99px;opacity:.85;height:22px}
+.scene:before{width:80px;left:-20px;top:30px;animation:drift 18s linear infinite alternate}
+.scene:after{width:60px;right:-10px;top:60px;animation:drift 14s linear infinite alternate-reverse}
+.bubble{position:relative;z-index:2;display:inline-block;max-width:92%;background:#fff;border-radius:18px;padding:8px 14px;font-size:15px;font-weight:600;box-shadow:0 3px 0 #0000001a;min-height:38px}
+.bubble:after{content:"";position:absolute;left:50%;bottom:-8px;margin-left:-8px;border:8px solid transparent;border-top-color:#fff;border-bottom:0}
+.pet{position:relative;z-index:1;width:min(300px,78vw);margin:14px auto 0;cursor:pointer;touch-action:manipulation}
+.pet svg{width:100%;height:auto;display:block;overflow:visible;filter:drop-shadow(0 6px 0 #0000001a);animation:bob 3.2s ease-in-out infinite}
+.pet.shiny svg{filter:hue-rotate(150deg) saturate(1.25) drop-shadow(0 0 10px #ffe27a)}
+.pet.jump svg{animation:jump .5s ease}
+.pet.shake svg{animation:shake .5s ease}
+.pet .egg{animation:wob 2.6s ease-in-out infinite;transform-origin:50% 90%}
+.pet.hit .egg{animation:wobhit .35s ease}
+.shadow{width:46%;height:14px;background:#0000001f;border-radius:50%;margin:-6px auto 0}
+.blink{transform-box:fill-box;transform-origin:center;animation:blink 4.6s infinite}
+.spin{transform-box:fill-box;transform-origin:center;animation:spin 16s linear infinite}
+.tw{transform-box:fill-box;transform-origin:center;animation:tw 1.8s ease-in-out infinite}
+.name{font-size:22px;font-weight:800;margin-top:6px}
+.tag{display:inline-block;background:linear-gradient(90deg,var(--pri),var(--pri2));color:#fff;border-radius:99px;font-size:13px;padding:2px 12px;margin-left:6px;vertical-align:middle;font-weight:700}
+.bar{height:16px;background:#ffffffaa;border-radius:99px;overflow:hidden;margin:10px 6px 2px;box-shadow:inset 0 2px 0 #0000001a}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#7be08a,#3fc27a);border-radius:99px;transition:width .5s}
+.barinfo{font-size:13px;color:#4a5a4a;font-weight:600}
+.daily{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:18px;padding:10px 14px;margin:14px 0;box-shadow:0 3px 0 #0000000d;font-size:14px;font-weight:600}
+.daily .mini{flex:1;height:10px;background:#f1e8fb;border-radius:99px;overflow:hidden}
+.daily .mini i{display:block;height:100%;background:linear-gradient(90deg,var(--pri2),var(--pri))}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{display:block;width:100%;border-radius:20px;padding:14px 10px;font-weight:800;font-size:17px;color:#fff;box-shadow:0 5px 0 #0000002a;transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #0000002a}
+.btn small{display:block;font-size:12px;font-weight:600;opacity:.9}
+.b-en{background:linear-gradient(180deg,#5aa9ff,#3b86e8)}
+.b-math{background:linear-gradient(180deg,#ff9a6b,#f2693d)}
+.b-mix{grid-column:1/3;background:linear-gradient(180deg,#a97cff,#7f55e0)}
+.b-ok{background:linear-gradient(180deg,#52d68c,#2fb36d)}
+.b-ghost{background:#fff;color:var(--ink);box-shadow:0 4px 0 #0000001a}
+.links{display:flex;gap:12px;margin-top:14px}
+.links .btn{font-size:15px;padding:11px 8px}
+.h2{font-size:20px;font-weight:800;margin:6px 0 4px}
+.hint{color:var(--sub);font-size:14px;margin:0 0 12px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cell{background:var(--card);border-radius:20px;padding:8px 4px 8px;text-align:center;box-shadow:0 3px 0 #0000000f;border:3px solid transparent;position:relative}
+.cell.on{border-color:var(--pri);background:#fff8f2}
+.cell svg{width:100%;height:auto;display:block}
+.cell b{display:block;font-size:14px}
+.cell em{display:block;font-style:normal;font-size:11px;color:var(--sub)}
+.cell.lock svg{filter:brightness(0) opacity(.16)}
+.cell .star{position:absolute;right:6px;top:4px;font-size:11px}
+.sticky{position:sticky;bottom:calc(8px + env(safe-area-inset-bottom));margin-top:16px}
+.badges{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.bd{background:#fff;border-radius:16px;padding:8px 10px;font-size:13px;display:flex;gap:8px;align-items:center}
+.bd span{font-size:24px}.bd b{display:block;font-size:13px}.bd i{font-style:normal;color:var(--sub);font-size:11px}
+.bd.off{opacity:.45;filter:grayscale(1)}
+.qtop{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.x{width:38px;height:38px;border-radius:50%;background:#fff;font-size:18px;box-shadow:0 3px 0 #0000001a}
+.dots{flex:1;display:flex;gap:6px}
+.dots i{flex:1;height:10px;border-radius:99px;background:#ffffff99}
+.dots i.ok{background:var(--grn)}.dots i.bad{background:var(--red)}.dots i.now{background:var(--pri2)}
+.combo{font-weight:800;font-size:15px;min-width:52px;text-align:right}
+.qcard{background:#fff;border-radius:26px;padding:18px 16px;text-align:center;box-shadow:0 5px 0 #0000001a;animation:pop .3s ease}
+.qtag{display:inline-block;font-size:12px;font-weight:700;color:#fff;background:var(--blue);border-radius:99px;padding:1px 10px}
+.qtag.m{background:var(--pri)}
+.qemoji{font-size:64px;line-height:1.1;margin:6px 0}
+.qtext{font-size:24px;font-weight:800;margin:6px 0;line-height:1.4;word-break:break-word}
+.qtext.s{font-size:19px}
+.spell{letter-spacing:4px;font-size:32px}
+.spk{margin-top:6px;background:#eaf3ff;color:#2f6fd0;border-radius:99px;padding:8px 18px;font-weight:700}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.opts.three{grid-template-columns:1fr 1fr 1fr}
+.opt{background:#fff;border-radius:20px;padding:16px 8px;font-size:20px;font-weight:800;box-shadow:0 5px 0 #0000001a;border:3px solid transparent;transition:transform .08s}
+.opt:active{transform:translateY(3px)}
+.opt.ok{background:#dcf8e8;border-color:var(--grn)}.opt.bad{background:#ffe3e5;border-color:var(--red)}.opt:disabled{cursor:default}
+.inp{display:flex;gap:10px;margin-top:16px}
+.inp input{flex:1;min-width:0;border:3px solid var(--line);border-radius:18px;padding:12px;font:inherit;font-size:26px;font-weight:800;text-align:center;color:var(--ink);background:#fff;outline:none;user-select:text;-webkit-user-select:text}
+.inp input:focus{border-color:var(--blue)}
+.inp .btn{width:auto;padding:0 22px}
+.fb{margin-top:16px;border-radius:20px;padding:12px 14px;font-weight:700;animation:pop .25s ease}
+.fb.ok{background:#dcf8e8;color:#16743f}.fb.bad{background:#ffe3e5;color:#a8323a}
+.fb p{margin:2px 0 0;font-weight:600;font-size:14px}
+.qpet{width:110px;margin:14px auto 0}
+.qpet svg{width:100%;height:auto;display:block;overflow:visible}
+.qpet.shiny svg{filter:hue-rotate(150deg) saturate(1.25)}
+.res{text-align:center}
+.res .big{font-size:56px;margin:6px 0 0}
+.res .score{font-size:28px;font-weight:800}
+.rows{background:#fff;border-radius:20px;padding:10px 16px;margin:14px 0;text-align:left;box-shadow:0 3px 0 #0000000d}
+.rows div{display:flex;justify-content:space-between;padding:5px 0;font-weight:600}
+.rows b{color:var(--pri)}
+.overlay{position:fixed;inset:0;z-index:50;background:radial-gradient(circle at 50% 40%,#fff7c9,#ffd27a 55%,#ff9a6b);display:flex;align-items:center;justify-content:center;padding:20px;animation:fade .4s}
+.evo{text-align:center;max-width:420px;width:100%}
+.evo .t{font-size:26px;font-weight:900;color:#7a2d00}
+.evo .s{font-size:17px;font-weight:700;margin:6px 0 12px;color:#7a3d10}
+.evo .pet{width:min(280px,70vw);margin-top:0;cursor:default}
+.evo .legend{font-size:34px;font-weight:900;background:linear-gradient(90deg,#ff6b6b,#ffb347,#ffe14a,#4cd18a,#4d9bff,#a97cff);-webkit-background-clip:text;background-clip:text;color:transparent;margin:4px 0}
+.toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top));transform:translateX(-50%);z-index:80;background:#3b2f4a;color:#fff;padding:10px 18px;border-radius:99px;font-weight:700;font-size:15px;box-shadow:0 4px 12px #0003;animation:toast 3s ease forwards;white-space:nowrap}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:90;overflow:hidden}
+.confetti i{position:absolute;top:-30px;font-style:normal;animation:fall linear forwards}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.08)}}
+@keyframes jump{0%{transform:translateY(0) scale(1)}35%{transform:translateY(-28px) scale(1.05,.95)}70%{transform:translateY(0) scale(.96,1.05)}100%{transform:none}}
+@keyframes shake{0%,100%{transform:none}20%{transform:translateX(-10px) rotate(-4deg)}40%{transform:translateX(10px) rotate(4deg)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+@keyframes wob{0%,100%{transform:rotate(0)}8%{transform:rotate(-3deg)}16%{transform:rotate(3deg)}24%{transform:rotate(0)}}
+@keyframes wobhit{0%{transform:rotate(0) scale(1)}30%{transform:rotate(-9deg) scale(1.04)}60%{transform:rotate(8deg) scale(1.04)}100%{transform:rotate(0) scale(1)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes tw{0%,100%{transform:scale(.4);opacity:.4}50%{transform:scale(1.15);opacity:1}}
+@keyframes pop{0%{transform:scale(.92);opacity:.3}100%{transform:none;opacity:1}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes drift{from{transform:translateX(0)}to{transform:translateX(70px)}}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,-14px)}10%,85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+"use strict";
+/* =====================================================================
+   动物园进化大冒险 —— 30 种动物，做英语/数学任务，让宠物从蛋进化成传说神兽
+   ===================================================================== */
+
+/* ---------- 等级 ---------- */
+const LV = [0, 30, 120, 300, 600];            // 进入各阶段所需经验
+const STAGE = ["神秘蛋", "萌新幼崽", "活力少年", "闪耀成年", "传说神兽"];
+const stageOf = xp => LV.filter(t => xp >= t).length - 1;
+const progressOf = xp => {
+  const s = stageOf(xp);
+  if (s >= 4) return { stage: s, pct: 1, need: 0, next: null };
+  return { stage: s, pct: (xp - LV[s]) / (LV[s + 1] - LV[s]), need: LV[s + 1] - xp, next: STAGE[s + 1] };
+};
+
+/* ---------- 画动物 (SVG) ---------- */
+const INK = "#2b2118", LINE = "rgba(70,45,30,.22)";
+let uidN = 0;
+const shade = (hex, amt) => {
+  const n = parseInt(hex.slice(1), 16);
+  const f = v => Math.max(0, Math.min(255, Math.round(v + amt)));
+  return "#" + [n >> 16, (n >> 8) & 255, n & 255].map(v => f(v).toString(16).padStart(2, "0")).join("");
+};
+
+function earSVG(type, c, ic, side) {
+  const X = x => (side < 0 ? x : 200 - x);
+  const rot = (a, cx, cy) => `transform="rotate(${side < 0 ? a : -a} ${cx} ${cy})"`;
+  switch (type) {
+    case "round": return `<circle cx="${X(58)}" cy="58" r="16" fill="${c}" stroke="${LINE}" stroke-width="2"/><circle cx="${X(58)}" cy="58" r="9" fill="${ic}"/>`;
+    case "nub": return `<circle cx="${X(66)}" cy="56" r="11" fill="${c}" stroke="${LINE}" stroke-width="2"/><circle cx="${X(66)}" cy="56" r="5.5" fill="${ic}"/>`;
+    case "point": return `<path d="M${X(54)} 74 L${X(56)} 34 L${X(90)} 56 Z" fill="${c}" stroke="${c}" stroke-width="7" stroke-linejoin="round"/><path d="M${X(60)} 64 L${X(61)} 46 L${X(78)} 56 Z" fill="${ic}"/>`;
+    case "tall": return `<path d="M${X(54)} 76 L${X(48)} 18 L${X(92)} 54 Z" fill="${c}" stroke="${c}" stroke-width="7" stroke-linejoin="round"/><path d="M${X(58)} 66 L${X(55)} 36 L${X(80)} 56 Z" fill="${ic}"/>`;
+    case "long": return `<ellipse cx="${X(76)}" cy="30" rx="12" ry="36" fill="${c}" stroke="${LINE}" stroke-width="2" ${rot(-9, X(76), 62)}/><ellipse cx="${X(76)}" cy="34" rx="6" ry="25" fill="${ic}" ${rot(-9, X(76), 62)}/>`;
+    case "floppy": return `<ellipse cx="${X(50)}" cy="98" rx="14" ry="27" fill="${c}" stroke="${LINE}" stroke-width="2" ${rot(16, X(50), 80)}/>`;
+    case "big": return `<ellipse cx="${X(42)}" cy="98" rx="27" ry="35" fill="${c}" stroke="${LINE}" stroke-width="2"/><ellipse cx="${X(45)}" cy="100" rx="17" ry="25" fill="${ic}"/>`;
+    case "side": return `<circle cx="${X(50)}" cy="98" r="14" fill="${c}" stroke="${LINE}" stroke-width="2"/><circle cx="${X(50)}" cy="98" r="8" fill="${ic}"/>`;
+    case "small": return `<ellipse cx="${X(48)}" cy="76" rx="15" ry="8" fill="${c}" stroke="${LINE}" stroke-width="2" ${rot(-26, X(48), 76)}/><ellipse cx="${X(48)}" cy="76" rx="9" ry="4" fill="${ic}" ${rot(-26, X(48), 76)}/>`;
+    case "llama": return `<ellipse cx="${X(72)}" cy="36" rx="9" ry="26" fill="${c}" stroke="${LINE}" stroke-width="2" ${rot(-16, X(72), 62)}/><ellipse cx="${X(72)}" cy="40" rx="4.5" ry="17" fill="${ic}" ${rot(-16, X(72), 62)}/>`;
+    case "koala": return `<circle cx="${X(50)}" cy="64" r="24" fill="${c}" stroke="${LINE}" stroke-width="2"/><circle cx="${X(50)}" cy="64" r="14" fill="${ic}"/>`;
+    case "rhino": return `<ellipse cx="${X(60)}" cy="54" rx="10" ry="14" fill="${c}" stroke="${LINE}" stroke-width="2" ${rot(-22, X(60), 62)}/><ellipse cx="${X(60)}" cy="56" rx="5" ry="8" fill="${ic}" ${rot(-22, X(60), 62)}/>`;
+    case "camel": return `<circle cx="${X(62)}" cy="56" r="12" fill="${c}" stroke="${LINE}" stroke-width="2"/><circle cx="${X(62)}" cy="56" r="6" fill="${ic}"/>`;
+    case "deer": return `<ellipse cx="${X(50)}" cy="68" rx="23" ry="10" fill="${c}" stroke="${LINE}" stroke-width="2" ${rot(-26, X(50), 68)}/><ellipse cx="${X(50)}" cy="68" rx="14" ry="5" fill="${ic}" ${rot(-26, X(50), 68)}/>`;
+    default: return "";
+  }
+}
+
+function tailSVG(a) {
+  const [t, c, c2] = a.tail || ["none"];
+  const k = a.bigTail ? 1.35 : 1;
+  switch (t) {
+    case "puff": return `<circle cx="146" cy="176" r="11" fill="${c}" stroke="${LINE}" stroke-width="2"/>`;
+    case "bushy": return `<g transform="rotate(38 140 174)"><ellipse cx="146" cy="150" rx="${13 * k}" ry="${30 * k}" fill="${c}" stroke="${LINE}" stroke-width="2"/><ellipse cx="146" cy="${150 - 23 * k}" rx="${10.5 * k}" ry="${11 * k}" fill="${c2}"/></g>`;
+    case "ring": {
+      let b = "";
+      [150, 136, 122].forEach(y => (b += `<ellipse cx="146" cy="${y}" rx="12.5" ry="4.5" fill="${c2}"/>`));
+      return `<g transform="rotate(38 140 174)"><ellipse cx="146" cy="140" rx="14" ry="34" fill="${c}" stroke="${LINE}" stroke-width="2"/>${b}</g>`;
+    }
+    case "long": return `<path d="M140 174 Q182 180 172 142 Q168 124 154 130" stroke="${c}" stroke-width="10" fill="none" stroke-linecap="round"/>`;
+    case "lion": return `<path d="M142 176 Q178 172 172 142" stroke="${c}" stroke-width="7" fill="none" stroke-linecap="round"/><circle cx="172" cy="140" r="8" fill="${c2 || c}"/>`;
+    case "thick": return `<ellipse cx="156" cy="178" rx="30" ry="10" fill="${c}" stroke="${LINE}" stroke-width="2" transform="rotate(-24 156 178)"/>`;
+    case "feather": return `<ellipse cx="136" cy="188" rx="8" ry="28" fill="${c}" transform="rotate(-48 136 188)"/><ellipse cx="128" cy="190" rx="8" ry="28" fill="${c2}" transform="rotate(-22 128 190)"/>`;
+    default: return "";
+  }
+}
+
+function headSVG(a, st, id) {
+  const hc = a.hc || a.c, hw = a.hw || 48, hh = a.hh || 44, cy = 96;
+  const ny = a.ny || 108, ey = a.ey || 100;
+  const eyeR = st === 1 ? 8.5 : 7.5;
+  const [et, ec, ei] = a.ears || ["none"];
+  let s = "";
+  if (a.mane) {
+    for (let i = 0; i < 12; i++) {
+      const t = (i / 12) * Math.PI * 2;
+      s += `<circle cx="${(100 + Math.cos(t) * 50).toFixed(1)}" cy="${(cy + 4 + Math.sin(t) * 48).toFixed(1)}" r="17" fill="${a.mane}"/>`;
+    }
+    s += `<circle cx="100" cy="${cy + 4}" r="52" fill="${a.mane}"/>`;
+  }
+  if (et !== "none") s += earSVG(et, ec, ei, -1) + earSVG(et, ec, ei, 1);
+  s += `<clipPath id="h${id}"><ellipse cx="100" cy="${cy}" rx="${hw}" ry="${hh}"/></clipPath>`;
+  s += `<ellipse cx="100" cy="${cy}" rx="${hw}" ry="${hh}" fill="${hc}" stroke="${LINE}" stroke-width="2.5"/>`;
+  s += `<g clip-path="url(#h${id})">`;
+  if (a.lower) s += `<path d="M50 100 Q56 142 100 142 Q144 142 150 100 Q126 116 100 114 Q74 116 50 100Z" fill="${a.lower}"/>`;
+  if (a.stripes) {
+    const [kind, sc] = a.stripes;
+    if (kind === "tiger") s += `<g stroke="${sc}" stroke-width="5" stroke-linecap="round" fill="none"><path d="M100 50 V68 M86 52 L89 66 M114 52 L111 66"/><path d="M50 96 L64 98 M50 108 L64 106 M150 96 L136 98 M150 108 L136 106"/></g>`;
+    else s += `<g stroke="${sc}" stroke-width="6" stroke-linecap="round" fill="none"><path d="M100 48 V70 M84 50 L88 74 M116 50 L112 74 M68 58 L76 80 M132 58 L124 80 M52 80 L64 94 M148 80 L136 94"/></g>`;
+  }
+  if (a.cap) s += `<path d="M46 92 Q48 46 100 46 Q152 46 154 92 Q136 74 118 86 Q100 66 82 86 Q64 74 46 92Z" fill="${a.cap}"/>`;
+  if (a.spotsHead) s += `<g fill="${a.spotsHead}"><circle cx="68" cy="70" r="7"/><circle cx="130" cy="66" r="8"/><circle cx="108" cy="58" r="5"/></g>`;
+  s += `</g>`;
+  if (a.face) {
+    const [kind, fc] = a.face;
+    if (kind === "heart") s += `<path d="M100 82 Q86 68 70 80 Q52 96 68 118 Q84 134 100 138 Q116 134 132 118 Q148 96 130 80 Q114 68 100 82Z" fill="${fc}"/>`;
+    else s += `<ellipse cx="100" cy="112" rx="34" ry="26" fill="${fc}"/><circle cx="78" cy="98" r="19" fill="${fc}"/><circle cx="122" cy="98" r="19" fill="${fc}"/>`;
+  }
+  if (a.muz) s += `<ellipse cx="100" cy="${a.muz[3]}" rx="${a.muz[1]}" ry="${a.muz[2]}" fill="${a.muz[0]}"/>`;
+  if (a.patch) [76, 124].forEach((x, i) => (s += `<ellipse cx="${x}" cy="${ey - 2}" rx="13" ry="16" fill="${a.patch}" transform="rotate(${i ? -25 : 25} ${x} ${ey})"/>`));
+  if (a.mask) s += `<path d="M50 92 Q76 80 100 92 Q124 80 150 92 Q148 114 124 114 Q108 112 100 102 Q92 112 76 114 Q52 114 50 92Z" fill="${a.mask}"/><path d="M62 82 Q76 74 90 82 M110 82 Q124 74 138 82" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+  const eye = x => a.eyes === "owl"
+    ? `<g class="blink"><circle cx="${x}" cy="${ey}" r="17" fill="#fff" stroke="${shade(a.c, -60)}" stroke-width="3"/><circle cx="${x}" cy="${ey}" r="9" fill="${INK}"/><circle cx="${x + 3}" cy="${ey - 4}" r="3.2" fill="#fff"/></g>`
+    : `<g class="blink"><ellipse cx="${x}" cy="${ey}" rx="${eyeR}" ry="${eyeR + 1.5}" fill="${INK}"/><circle cx="${x + 2.6}" cy="${ey - 3.5}" r="2.9" fill="#fff"/><circle cx="${x - 2.2}" cy="${ey + 3.6}" r="1.4" fill="#fff"/></g>`;
+  s += eye(75) + eye(125);
+  if (a.beak) {
+    const [bk, bc] = a.beak;
+    if (bk === "small") s += `<path d="M90 ${ny} Q100 ${ny - 6} 110 ${ny} Q106 ${ny + 14} 100 ${ny + 16} Q94 ${ny + 14} 90 ${ny}Z" fill="${bc}" stroke="${shade(bc, -40)}" stroke-width="1.5"/>`;
+    else if (bk === "hook") s += `<path d="M84 ${ny - 8} Q100 ${ny - 18} 116 ${ny - 8} Q120 ${ny + 14} 106 ${ny + 22} Q104 ${ny + 10} 98 ${ny + 4} Q86 ${ny + 2} 84 ${ny - 8}Z" fill="${bc}" stroke="${shade(bc, -50)}" stroke-width="2"/>`;
+    else s += `<path d="M82 ${ny - 2} Q100 ${ny - 10} 118 ${ny - 2} Q118 ${ny + 20} 100 ${ny + 26} Q82 ${ny + 20} 82 ${ny - 2}Z" fill="${bc}" stroke="${LINE}" stroke-width="2"/><path d="M90 ${ny + 16} Q100 ${ny + 30} 110 ${ny + 16} Q108 ${ny + 28} 100 ${ny + 34} Q92 ${ny + 28} 90 ${ny + 16}Z" fill="#2d2d36"/>`;
+  } else if (!a.trunk) {
+    const nc = a.nose || INK;
+    if (a.nk === "big") s += `<ellipse cx="100" cy="${ny}" rx="11" ry="8" fill="${nc}"/><ellipse cx="97" cy="${ny - 2}" rx="3" ry="2" fill="#ffffff88"/>`;
+    else if (a.nk === "nostril") s += `<circle cx="86" cy="${ny - 4}" r="3.6" fill="${shade(a.c, -70)}"/><circle cx="114" cy="${ny - 4}" r="3.6" fill="${shade(a.c, -70)}"/>`;
+    else s += `<ellipse cx="100" cy="${ny}" rx="6.5" ry="4.5" fill="${nc}"/><ellipse cx="98" cy="${ny - 1.5}" rx="2" ry="1.2" fill="#ffffff88"/>`;
+    const my = a.nk === "big" ? ny + 8 : ny + 4;
+    s += `<path d="M100 ${my} V${my + 4} M100 ${my + 4} Q92 ${my + 11} 86 ${my + 5} M100 ${my + 4} Q108 ${my + 11} 114 ${my + 5}" stroke="#5a3a2a" stroke-width="2.3" fill="none" stroke-linecap="round"/>`;
+    if (a.teeth) s += `<rect x="95" y="${my + 6}" width="5" height="8" rx="1.5" fill="#fff" stroke="${LINE}"/><rect x="100" y="${my + 6}" width="5" height="8" rx="1.5" fill="#fff" stroke="${LINE}"/>`;
+  }
+  if (a.whisk) s += `<g stroke="${shade(a.c, -70)}" stroke-width="1.8" stroke-linecap="round" fill="none"><path d="M64 ${ny + 2} L40 ${ny - 4} M64 ${ny + 8} L40 ${ny + 10} M136 ${ny + 2} L160 ${ny - 4} M136 ${ny + 8} L160 ${ny + 10}"/></g>`;
+  s += `<ellipse cx="58" cy="${ny + 8}" rx="9" ry="5.5" fill="#ff8fa3" opacity=".5"/><ellipse cx="142" cy="${ny + 8}" rx="9" ry="5.5" fill="#ff8fa3" opacity=".5"/>`;
+  if (a.trunk) s += `<path d="M89 100 Q86 148 96 160 Q106 168 112 156 Q106 154 108 100Z" fill="${a.c}" stroke="${LINE}" stroke-width="2"/><path d="M92 124 H106 M92 138 H105" stroke="${shade(a.c, -35)}" stroke-width="2" stroke-linecap="round"/>`;
+  if (a.horn) s += `<path d="M91 102 L100 66 L109 102Z" fill="#efe3cc" stroke="#b8a584" stroke-width="2" stroke-linejoin="round"/>`;
+  if (a.ossi) [-1, 1].forEach(sd => (s += `<line x1="${100 + sd * 18}" y1="58" x2="${100 + sd * 22}" y2="34" stroke="${a.c}" stroke-width="6" stroke-linecap="round"/><circle cx="${100 + sd * 22}" cy="32" r="7" fill="${a.ossi}"/>`));
+  if (a.antlers) [-1, 1].forEach(sd => { const X = x => 100 + sd * x; s += `<path d="M${X(22)} 58 L${X(30)} 24 M${X(26)} 40 L${X(40)} 32 M${X(30)} 26 L${X(26)} 12" stroke="${a.antlers}" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`; });
+  if (a.crest) s += `<ellipse cx="100" cy="46" rx="7" ry="18" fill="${a.crest}" transform="rotate(-18 100 56)"/><ellipse cx="100" cy="42" rx="7" ry="20" fill="${a.crest}"/><ellipse cx="100" cy="46" rx="7" ry="18" fill="${a.crest}" transform="rotate(18 100 56)"/>`;
+  if (a.fluff) s += `<circle cx="100" cy="54" r="15" fill="${a.fluff}"/><circle cx="84" cy="59" r="12" fill="${a.fluff}"/><circle cx="116" cy="59" r="12" fill="${a.fluff}"/>`;
+  return s;
+}
+
+function bodySVG(a, id) {
+  const bc = a.bc || a.c, belly = a.belly || bc;
+  let s = "";
+  if (a.shell) s += `<ellipse cx="100" cy="150" rx="56" ry="42" fill="${a.shell}" stroke="${LINE}" stroke-width="2.5"/><path d="M100 118 L122 130 V154 L100 166 L78 154 V130Z M78 130 L58 122 M122 130 L142 122 M78 154 L60 166 M122 154 L140 166 M100 166 V184" fill="none" stroke="${shade(a.shell, -45)}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>`;
+  else {
+    s += `<clipPath id="b${id}"><ellipse cx="100" cy="150" rx="46" ry="38"/></clipPath>`;
+    s += `<ellipse cx="100" cy="150" rx="46" ry="38" fill="${bc}" stroke="${LINE}" stroke-width="2.5"/>`;
+    s += `<ellipse cx="100" cy="${a.bellyBig ? 152 : 158}" rx="${a.bellyBig ? 34 : 30}" ry="${a.bellyBig ? 33 : 26}" fill="${belly}"/>`;
+    s += `<g clip-path="url(#b${id})">`;
+    if (a.stripes) {
+      const [kind, sc] = a.stripes;
+      const p = kind === "tiger" ? "M54 126 Q68 130 72 142 M52 144 Q66 146 70 156 M56 162 Q68 164 72 174" : "M52 122 L74 130 M50 136 L72 144 M50 150 L72 158 M52 164 L74 172";
+      s += `<g stroke="${sc}" stroke-width="6" fill="none" stroke-linecap="round"><path d="${p}"/><g transform="translate(200 0) scale(-1 1)"><path d="${p}"/></g></g>`;
+    }
+    if (a.spots) s += `<g fill="${a.spots}"><circle cx="76" cy="136" r="8"/><circle cx="124" cy="146" r="9"/><circle cx="96" cy="168" r="7"/><circle cx="130" cy="124" r="6"/><circle cx="66" cy="160" r="6"/></g>`;
+    if (a.spotsBody) s += `<g fill="${a.spotsBody}"><circle cx="76" cy="132" r="4.5"/><circle cx="124" cy="138" r="4.5"/><circle cx="90" cy="168" r="4"/><circle cx="116" cy="170" r="4"/><circle cx="64" cy="152" r="4"/><circle cx="138" cy="156" r="4"/></g>`;
+    if (a.chev) s += `<path d="M82 140 l6 6 l6 -6 M100 140 l6 6 l6 -6 M88 156 l6 6 l6 -6 M106 156 l6 6 l6 -6 M96 170 l6 6 l6 -6" stroke="${a.chev}" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    s += `</g>`;
+  }
+  if (a.neck) {
+    const [ns, nw] = a.neck;
+    s += `<rect x="${100 - nw / 2}" y="${100 - ns}" width="${nw}" height="${ns + 56}" rx="${nw / 2}" fill="${a.c}" stroke="${LINE}" stroke-width="2"/>`;
+    if (a.spots) s += `<g fill="${a.spots}"><circle cx="94" cy="${112 - ns / 2}" r="6"/><circle cx="108" cy="${100 - ns / 4}" r="5"/><circle cx="96" cy="${126 - ns / 6}" r="5"/></g>`;
+  }
+  const fc = a.feetc || a.c, ac = a.armc || a.c, fr = a.bigFeet ? 23 : 17;
+  s += `<ellipse cx="72" cy="185" rx="${fr}" ry="${a.bigFeet ? 11 : 10}" fill="${fc}" stroke="${LINE}" stroke-width="2"/><ellipse cx="128" cy="185" rx="${fr}" ry="${a.bigFeet ? 11 : 10}" fill="${fc}" stroke="${LINE}" stroke-width="2"/>`;
+  if (a.bird) [-1, 1].forEach(sd => { const X = x => (sd < 0 ? x : 200 - x); s += `<path d="M${X(58)} 128 Q${X(26)} 150 ${X(44)} 178 Q${X(62)} 170 ${X(64)} 142Z" fill="${a.bird}" stroke="${LINE}" stroke-width="2"/>`; });
+  else [-1, 1].forEach(sd => (s += `<ellipse cx="${100 + sd * 44}" cy="152" rx="11" ry="17" fill="${ac}" stroke="${LINE}" stroke-width="2" transform="rotate(${sd * -18} ${100 + sd * 44} 152)"/>`));
+  return s;
+}
+
+function backSVG(a) {
+  let s = tailSVG(a);
+  if (a.hump) s += `<circle cx="62" cy="116" r="22" fill="${a.hump}" stroke="${LINE}" stroke-width="2"/><circle cx="138" cy="116" r="22" fill="${a.hump}" stroke="${LINE}" stroke-width="2"/>`;
+  if (a.spikes) {
+    for (let d = 170; d <= 370; d += 9) {
+      const t = (d * Math.PI) / 180, c = Math.cos(t), si = Math.sin(t);
+      s += `<line x1="${(100 + c * 42).toFixed(1)}" y1="${(116 + si * 40).toFixed(1)}" x2="${(100 + c * 68).toFixed(1)}" y2="${(116 + si * 64).toFixed(1)}" stroke="${a.spikes}" stroke-width="9" stroke-linecap="round"/>`;
+    }
+  }
+  return s;
+}
+
+const star4 = (x, y, r, d, col) => `<path class="tw" style="animation-delay:${d}s" d="M${x} ${y - r} Q${x} ${y} ${x + r} ${y} Q${x} ${y} ${x} ${y + r} Q${x} ${y} ${x - r} ${y} Q${x} ${y} ${x} ${y - r}Z" fill="${col}"/>`;
+
+function eggSVG(a, o) {
+  const i = o.idx || 0, pct = o.pct || 0;
+  const h = n => `hsl(${(i * 47 + n * 83) % 360} 75% 72%)`;
+  const id = "e" + ++uidN;
+  const base = o.shiny ? ["#fff3b0", "#ffd24a"] : ["#fffaf0", "#f5e3c8"];
+  let s = `<svg viewBox="0 0 200 200" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${base[0]}"/><stop offset="1" stop-color="${base[1]}"/></linearGradient><clipPath id="c${id}"><path d="M100 26 C144 26 162 98 162 134 C162 172 136 194 100 194 C64 194 38 172 38 134 C38 98 56 26 100 26Z"/></clipPath></defs>`;
+  s += `<g class="egg"><path d="M100 26 C144 26 162 98 162 134 C162 172 136 194 100 194 C64 194 38 172 38 134 C38 98 56 26 100 26Z" fill="url(#${id})" stroke="${LINE}" stroke-width="3"/>`;
+  s += `<g clip-path="url(#c${id})"><circle cx="72" cy="86" r="16" fill="${h(1)}" opacity=".8"/><circle cx="128" cy="112" r="20" fill="${h(2)}" opacity=".8"/><circle cx="84" cy="150" r="22" fill="${h(3)}" opacity=".8"/><circle cx="132" cy="168" r="14" fill="${h(4)}" opacity=".8"/><circle cx="108" cy="58" r="9" fill="${h(5)}" opacity=".8"/>`;
+  s += `<path d="M40 128 Q70 112 100 128 T160 128" stroke="#fff" stroke-width="5" fill="none" opacity=".7"/></g>`;
+  s += `<ellipse cx="78" cy="64" rx="8" ry="14" fill="#fff" opacity=".6" transform="rotate(24 78 64)"/>`;
+  s += `<text x="100" y="146" text-anchor="middle" font-size="40" font-weight="900" fill="#ffffffcc" stroke="${LINE}" stroke-width="1.5">?</text>`;
+  if (pct > 0.55) s += `<path d="M96 28 L88 52 L102 66 L92 86" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/>`;
+  if (pct > 0.85) s += `<path d="M130 52 L118 72 L132 90 L120 110 M60 120 L74 132 L66 150" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/>`;
+  if (o.shiny) s += star4(150, 56, 12, 0, "#ffe14a") + star4(52, 100, 9, .6, "#fff") + star4(144, 160, 8, 1.1, "#ffe14a");
+  return s + `</g></svg>`;
+}
+
+function drawAnimal(a, stage, o = {}) {
+  if (stage === 0) return eggSVG(a, o);
+  const id = "a" + ++uidN;
+  const sc = [0, 0.74, 0.84, 0.93, 1][stage];
+  const [ns, nw] = a.neck || [0, 0];
+  let s = `<svg viewBox="0 0 200 200" aria-hidden="true">`;
+  if (stage === 4) {
+    s += `<defs><linearGradient id="wg${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ffe38a"/></linearGradient><radialGradient id="au${id}"><stop offset="0" stop-color="#fff6c8" stop-opacity=".95"/><stop offset=".7" stop-color="#ffd86b" stop-opacity=".45"/><stop offset="1" stop-color="#ffd86b" stop-opacity="0"/></radialGradient><linearGradient id="rb${id}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff6b6b"/><stop offset=".25" stop-color="#ffd24a"/><stop offset=".5" stop-color="#4cd18a"/><stop offset=".75" stop-color="#4d9bff"/><stop offset="1" stop-color="#a97cff"/></linearGradient></defs>`;
+    s += `<circle cx="100" cy="108" r="98" fill="url(#au${id})"/><circle class="spin" cx="100" cy="108" r="92" fill="none" stroke="url(#rb${id})" stroke-width="3.5" stroke-dasharray="3 9" stroke-linecap="round"/>`;
+  }
+  s += `<g transform="translate(100 196) scale(${sc}) translate(-100 -196)">`;
+  if (stage === 4) [-1, 1].forEach(sd => { const X = x => (sd < 0 ? x : 200 - x); s += `<path d="M${X(70)} 134 Q${X(4)} 116 ${X(2)} 44 Q${X(32)} 62 ${X(46)} 86 Q${X(30)} 36 ${X(56)} 8 Q${X(82)} 46 ${X(86)} 100Z" fill="url(#wg${id})" stroke="#e8b83a" stroke-width="2.5" stroke-linejoin="round"/><path d="M${X(46)} 86 Q${X(52)} 108 ${X(74)} 120 M${X(56)} 8 Q${X(62)} 60 ${X(74)} 100" stroke="#e8b83a" stroke-width="2" fill="none" stroke-linecap="round" opacity=".7"/>`; });
+  s += backSVG(a) + bodySVG(a, id);
+  s += `<g transform="translate(0 ${-ns})">${headSVG(a, stage, id)}`;
+  if (stage >= 2) {
+    const col = ["", "", "#ff6b81", "#4da3ff", "#ffc83d"][stage];
+    s += `<path d="M64 134 Q100 156 136 134 L134 148 Q100 168 66 148Z" fill="${col}" stroke="${LINE}" stroke-width="2"/><path d="M118 152 L124 172 L134 164 L130 148Z" fill="${shade(col, -25)}"/>`;
+  }
+  if (stage >= 3) {
+    const top = Math.max(10, 50 - ns - 10);
+    s += `<ellipse cx="100" cy="${top}" rx="27" ry="7" fill="none" stroke="#ffd54a" stroke-width="5"/><ellipse cx="100" cy="${top}" rx="27" ry="7" fill="none" stroke="#fff3a8" stroke-width="1.8"/>`;
+  }
+  if (stage === 4) s += `<path d="M100 54 L109 68 L100 82 L91 68Z" fill="#ffd54a" stroke="#fff" stroke-width="2" transform="translate(0 -2)"/>`;
+  s += `</g>`;
+  s += `</g>`;
+  if (stage >= 3) s += star4(24, 40, 9, 0, "#ffe14a") + star4(178, 70, 8, .7, "#fff");
+  if (stage === 4) s += star4(40, 120, 8, .3, "#fff") + star4(168, 130, 10, 1, "#ffe14a") + star4(100, 8, 8, 1.3, "#fff") + star4(150, 24, 7, .9, "#ffe14a");
+  return s + `</svg>`;
+}
+
+/* ---------- 30 种动物 ---------- */
+const A = (id, n, legend, p) => ({ id, n, legend, ...p });
+const ANIMALS = [
+  A("panda", "熊猫", "太极神熊", { c: "#ffffff", belly: "#f6f6f9", ears: ["round", "#33333b", "#33333b"], patch: "#33333b", armc: "#33333b", feetc: "#33333b", nose: "#33333b", muz: ["#f1f1f5", 20, 14, 112], tail: ["puff", "#ffffff"] }),
+  A("elephant", "小象", "瑞象麒麟", { c: "#a9bbd9", belly: "#d3def0", ears: ["big", "#a9bbd9", "#f5b9c9"], trunk: 1, hw: 46, tail: ["puff", "#a9bbd9"] }),
+  A("giraffe", "长颈鹿", "云麒麟", { c: "#ffd36b", belly: "#fff0c2", ears: ["small", "#ffd36b", "#ffb86b"], ossi: "#a8692c", spots: "#c98a3c", spotsHead: "#c98a3c", neck: [34, 32], hh: 40, hw: 44, muz: ["#fff0c2", 22, 15, 114], nose: "#a0662a", tail: ["lion", "#ffd36b", "#a8692c"] }),
+  A("monkey", "猴子", "齐天大圣", { c: "#b97a4b", belly: "#f1d3a6", ears: ["side", "#b97a4b", "#f6d7b0"], face: ["monkey", "#f6d7b0"], nose: "#6b3f2a", tail: ["long", "#b97a4b"] }),
+  A("penguin", "企鹅", "冰凤凰", { c: "#34406a", belly: "#ffffff", bellyBig: 1, face: ["heart", "#ffffff"], beak: ["small", "#ffa53a"], bird: "#34406a", feetc: "#ffa53a", hw: 46, hh: 42 }),
+  A("lion", "狮子", "金翅狻猊", { c: "#f2b84b", belly: "#fde3a8", mane: "#c9792b", ears: ["round", "#f2b84b", "#fbd9a0"], muz: ["#fde3a8", 24, 17, 114], nose: "#8a4b2a", whisk: 1, tail: ["lion", "#f2b84b", "#c9792b"] }),
+  A("tiger", "老虎", "白虎神君", { c: "#ff9f3d", belly: "#fff1dc", stripes: ["tiger", "#3a2a22"], ears: ["round", "#ff9f3d", "#fff1dc"], muz: ["#fff6e8", 24, 16, 114], nose: "#ff7a8a", whisk: 1, tail: ["lion", "#ff9f3d", "#3a2a22"] }),
+  A("zebra", "斑马", "天马", { c: "#ffffff", belly: "#f4f4f8", stripes: ["zebra", "#33333b"], ears: ["point", "#ffffff", "#33333b"], muz: ["#8a8a96", 24, 16, 116], nose: "#33333b", fluff: "#33333b", tail: ["lion", "#ffffff", "#33333b"] }),
+  A("hippo", "河马", "水神河伯", { c: "#a99bd6", belly: "#d9d1f2", ears: ["nub", "#a99bd6", "#f0b8d0"], muz: ["#c7bce9", 34, 22, 116], nk: "nostril", ey: 86, tail: ["puff", "#a99bd6"] }),
+  A("rhino", "犀牛", "独角兽", { c: "#9fa8b8", belly: "#d0d6e0", ears: ["rhino", "#9fa8b8", "#f0b8c8"], horn: 1, muz: ["#bcc3d0", 26, 17, 116], nose: "#5a6070", tail: ["lion", "#9fa8b8", "#5a6070"] }),
+  A("kangaroo", "袋鼠", "月宫跃兽", { c: "#d99058", belly: "#f6d6ae", ears: ["tall", "#d99058", "#f8c8b0"], muz: ["#f6d6ae", 22, 16, 114], nose: "#6b3a2a", bigFeet: 1, tail: ["thick", "#d99058"] }),
+  A("koala", "考拉", "梦貘仙", { c: "#b9bdca", belly: "#eef0f5", ears: ["koala", "#b9bdca", "#f3e8ee"], nose: "#3a3a44", nk: "big", ny: 106 }),
+  A("fox", "狐狸", "九尾天狐", { c: "#ff8a3d", belly: "#fff4e6", lower: "#ffffff", ears: ["tall", "#ff8a3d", "#3a2a22"], nose: "#3a2a22", tail: ["bushy", "#ff8a3d", "#ffffff"] }),
+  A("wolf", "狼", "天狼星君", { c: "#8c97aa", belly: "#e8ecf3", lower: "#e8ecf3", ears: ["tall", "#8c97aa", "#d9a3b3"], nose: "#33333b", tail: ["bushy", "#8c97aa", "#e8ecf3"] }),
+  A("rabbit", "兔子", "月兔玉仙", { c: "#ffffff", belly: "#fff5f8", ears: ["long", "#ffffff", "#ffb3c7"], nose: "#ff8fa3", teeth: 1, tail: ["puff", "#ffffff"] }),
+  A("squirrel", "松鼠", "风暴松灵", { c: "#c9803f", belly: "#f6dcb3", ears: ["point", "#c9803f", "#f6dcb3"], muz: ["#f6dcb3", 20, 14, 114], nose: "#3a2a22", teeth: 1, bigTail: 1, tail: ["bushy", "#c9803f", "#e8b070"] }),
+  A("polar", "北极熊", "极光冰熊", { c: "#eef5fb", belly: "#ffffff", ears: ["round", "#eef5fb", "#cfe0ee"], muz: ["#ffffff", 22, 15, 114], nose: "#33333b", tail: ["puff", "#eef5fb"] }),
+  A("bear", "棕熊", "山岳熊王", { c: "#9a6a45", belly: "#c9a07a", ears: ["round", "#9a6a45", "#c9a07a"], muz: ["#d9b48c", 22, 15, 114], nose: "#33333b", tail: ["puff", "#9a6a45"] }),
+  A("camel", "骆驼", "沙漠神驼", { c: "#d9aa6a", belly: "#f0d9ae", hump: "#d9aa6a", ears: ["camel", "#d9aa6a", "#f0c8a0"], muz: ["#f0d9ae", 26, 18, 116], nose: "#6b4a2a", neck: [12, 34], tail: ["lion", "#d9aa6a", "#a8783a"] }),
+  A("alpaca", "羊驼", "云朵羊神", { c: "#f6efe4", belly: "#fffaf0", ears: ["llama", "#f6efe4", "#f8c8c8"], fluff: "#fffaf0", muz: ["#e9dcc8", 22, 16, 114], nose: "#6b4a3a", neck: [16, 30], tail: ["puff", "#f6efe4"] }),
+  A("deer", "梅花鹿", "九色鹿", { c: "#c98e55", belly: "#f4dcb8", spotsBody: "#ffffff", spotsHead: "#ffffff", antlers: "#8a5a34", ears: ["deer", "#c98e55", "#f4dcb8"], muz: ["#f4dcb8", 22, 15, 114], nose: "#3a2a22", tail: ["puff", "#ffffff"] }),
+  A("redpanda", "小熊猫", "赤焰火狐", { c: "#d9582c", belly: "#5a2e28", lower: "#ffffff", ears: ["round", "#d9582c", "#ffffff"], nose: "#33333b", tail: ["ring", "#d9582c", "#7a3a24"] }),
+  A("orangutan", "猩猩", "山海狌狌", { c: "#d9702f", belly: "#e8924a", ears: ["side", "#d9702f", "#f1b98a"], face: ["monkey", "#f1b98a"], nose: "#6b3f2a", fluff: "#d9702f" }),
+  A("otter", "水獭", "水镜獭仙", { c: "#8a6a50", belly: "#cdb59a", lower: "#eadcc8", ears: ["nub", "#8a6a50", "#cdb59a"], nose: "#33333b", whisk: 1, tail: ["thick", "#8a6a50"] }),
+  A("raccoon", "浣熊", "星夜怪盗", { c: "#8d93a0", belly: "#d3d7e0", lower: "#ffffff", mask: "#3a3a44", ears: ["round", "#8d93a0", "#3a3a44"], nose: "#33333b", tail: ["ring", "#8d93a0", "#3a3a44"] }),
+  A("hedgehog", "刺猬", "针甲仙", { c: "#8a6a4f", hc: "#f3d9b8", belly: "#f3d9b8", spikes: "#5a4332", cap: "#8a6a4f", ears: ["nub", "#f3d9b8", "#e8b8a0"], nose: "#33333b", hw: 46, hh: 42 }),
+  A("owl", "猫头鹰", "智慧鸮神", { c: "#9b7a5a", belly: "#f2e3c6", chev: "#c9a87e", face: ["heart", "#f6e9cf"], eyes: "owl", ears: ["point", "#9b7a5a", "#f2e3c6"], beak: ["small", "#ffa53a"], bird: "#7a5a3a", feetc: "#ffa53a" }),
+  A("parrot", "鹦鹉", "彩虹鸾鸟", { c: "#3fbf6a", belly: "#8be09f", crest: "#ff4f5e", beak: ["hook", "#ffb23f"], bird: "#3b82f6", feetc: "#ffb23f", tail: ["feather", "#ff4f5e", "#3b82f6"] }),
+  A("flamingo", "火烈鸟", "朱雀", { c: "#ff8fb0", belly: "#ffc0d3", beak: ["flam", "#fff2f4"], bird: "#ff6f9c", feetc: "#ff6f9c", neck: [20, 22] }),
+  A("turtle", "乌龟", "玄武", { c: "#4ba360", hc: "#a8d86e", shell: "#3f9b55", armc: "#a8d86e", feetc: "#a8d86e", nose: "#33333b", hw: 44, hh: 40 }),
+];
+const AMAP = Object.fromEntries(ANIMALS.map(a => [a.id, a]));
+
+/* ---------- 题库：数学 ---------- */
+const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const shuffle = arr => { const r = [...arr]; for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; } return r; };
+
+function numOpts(ans) {
+  const offs = ans < 20 ? [1, -1, 2, -2, 3, -3, 4, 5, -4] : ans < 200 ? [1, -1, 2, -2, 10, -10, 5, -5, 11, -11] : [1, -1, 10, -10, 100, -100, 2, -2, 20, -20];
+  const set = new Set([ans]);
+  for (const o of shuffle(offs)) { if (set.size >= 4) break; if (ans + o >= 0) set.add(ans + o); }
+  for (let k = 1; set.size < 4; k++) set.add(ans + 20 + k);
+  return shuffle([...set]).map(String);
+}
+const ANIM_ZH = ["猴子", "小象", "企鹅", "熊猫", "兔子", "长颈鹿", "斑马", "松鼠"];
+
+const MG = {
+  add(t) {
+    const [a, b] = t === 1 ? (() => { const x = ri(12, 60); return [x, ri(8, 99 - x)]; })()
+      : t === 2 ? (() => { const x = ri(100, 700); return [x, ri(50, 999 - x)]; })()
+      : (() => { const x = ri(1200, 7800); return [x, ri(300, 9999 - x)]; })();
+    return { prompt: `${a} + ${b} = ?`, ans: a + b };
+  },
+  sub(t) {
+    const a = t === 1 ? ri(30, 99) : t === 2 ? ri(200, 999) : ri(1500, 9999);
+    const b = t === 1 ? ri(8, a - 1) : t === 2 ? ri(50, a - 10) : ri(300, a - 100);
+    return { prompt: `${a} − ${b} = ?`, ans: a - b };
+  },
+  mul(t) {
+    const [a, b] = t === 1 ? [pick([2, 3, 4, 5, 10]), ri(2, 9)] : t === 2 ? [ri(2, 9), ri(2, 9)] : [ri(12, 49), ri(3, 9)];
+    return { prompt: `${a} × ${b} = ?`, ans: a * b };
+  },
+  div(t) {
+    const b = t === 1 ? pick([2, 3, 4, 5]) : t === 2 ? ri(2, 9) : ri(3, 9);
+    const q = t === 3 ? ri(11, 19) : ri(2, 9);
+    return { prompt: `${b * q} ÷ ${b} = ?`, ans: q };
+  },
+  rem() {
+    const d = ri(3, 9), q = ri(4, 12), r = ri(1, d - 1);
+    return { prompt: `${d * q + r} ÷ ${d} = ${q} …… ?（余几）`, ans: r };
+  },
+  missing(t) {
+    const k = ri(0, 2);
+    if (k === 0) { const a = t === 1 ? ri(10, 40) : ri(100, 400), x = t === 1 ? ri(10, 50) : ri(100, 500); return { prompt: `□ + ${a} = ${a + x}，□ = ?`, ans: x }; }
+    if (k === 1) { const a = ri(2, 9), x = ri(2, t === 1 ? 5 : 9); return { prompt: `${a} × □ = ${a * x}，□ = ?`, ans: x }; }
+    const b = t === 1 ? ri(10, 40) : ri(100, 400), x = t === 1 ? ri(10, 50) : ri(100, 500);
+    return { prompt: `${b + x} − □ = ${b}，□ = ?`, ans: x };
+  },
+  word(t) {
+    const x = pick(ANIM_ZH), k = ri(0, 3);
+    if (k === 0) { const a = t === 1 ? ri(12, 50) : ri(120, 600), b = t === 1 ? ri(8, 40) : ri(50, 300); return { prompt: `动物园里有 ${a} 只${x}，又来了 ${b} 只，现在一共有多少只？`, ans: a + b, small: 1 }; }
+    if (k === 1) { const a = t === 1 ? ri(30, 90) : ri(300, 900), b = t === 1 ? ri(5, 29) : ri(50, 290); return { prompt: `饲养员准备了 ${a} 根胡萝卜，${x}吃掉了 ${b} 根，还剩多少根？`, ans: a - b, small: 1 }; }
+    if (k === 2) { const a = ri(3, 9), b = ri(3, 9); return { prompt: `每个笼子里住着 ${a} 只${x}，${b} 个笼子一共住着多少只？`, ans: a * b, small: 1 }; }
+    const b = ri(3, 9), q = ri(3, 9); return { prompt: `${b * q} 个苹果平均分给 ${b} 只${x}，每只分到几个？`, ans: q, small: 1 };
+  },
+  fraction() {
+    const d = pick([2, 4, 5]), q = ri(2, 12);
+    return { prompt: `${d * q} 的 1/${d} 是多少？`, ans: q };
+  },
+  perimeter() {
+    const l = ri(6, 30), w = ri(3, l - 1);
+    return { prompt: `长方形的长是 ${l} 厘米，宽是 ${w} 厘米，周长是多少厘米？`, ans: 2 * (l + w), small: 1 };
+  },
+};
+function compareQ() {
+  const a = ri(3, 9), b = ri(3, 9), l = a * b, diff = pick([-6, -3, -1, 0, 0, 1, 3, 6]);
+  const r = l + diff;
+  return { cat: "math", kind: "choice", tag: "数学·比大小", prompt: `${a} × ${b}  ◯  ${r}`, opts: ["<", "=", ">"], ans: l < r ? "<" : l > r ? ">" : "=", explain: `${a} × ${b} = ${l}`, three: 1 };
+}
+function mathQ(t) {
+  const pool = t === 1 ? ["add", "sub", "mul", "div", "missing", "word"]
+    : t === 2 ? ["add", "sub", "mul", "div", "missing", "word", "fraction", "rem", "compare"]
+    : ["add", "sub", "mul", "div", "missing", "word", "fraction", "rem", "perimeter", "compare", "mul", "add"];
+  const g = pick(pool);
+  if (g === "compare") return compareQ();
+  const q = MG[g](t);
+  const input = t >= 2 && Math.random() < 0.4;
+  return { cat: "math", kind: input ? "input" : "choice", tag: "数学", prompt: q.prompt, small: q.small, opts: input ? null : numOpts(q.ans), ans: String(q.ans), explain: `${q.prompt.replace(/[?？].*$/, "").trim()} ${q.prompt.includes("□") ? "" : "= " + q.ans}`.trim() };
+}
+
+/* ---------- 题库：英语 ---------- */
+const WORDS_RAW = {
+  1: ["cat|猫|🐱", "dog|狗|🐶", "bird|小鸟|🐦", "fish|鱼|🐟", "apple|苹果|🍎", "banana|香蕉|🍌", "milk|牛奶|🥛", "bread|面包|🍞", "egg|鸡蛋|🥚", "water|水|💧", "red|红色|🔴", "blue|蓝色|🔵", "green|绿色|🟢", "yellow|黄色|🟡", "book|书|📖", "pen|钢笔|🖊️", "bag|书包|🎒", "desk|书桌|", "chair|椅子|🪑", "door|门|🚪", "sun|太阳|☀️", "moon|月亮|🌙", "star|星星|⭐", "tree|树|🌳", "flower|花|🌸", "car|小汽车|🚗", "bus|公共汽车|🚌", "ball|球|⚽", "hand|手|✋", "eye|眼睛|👁️", "nose|鼻子|👃", "mouth|嘴巴|👄", "ear|耳朵|👂", "happy|快乐的|😀", "sad|难过的|😢", "big|大的|", "small|小的|", "hot|热的|🔥", "cold|冷的|🥶", "mother|妈妈|👩", "father|爸爸|👨", "friend|朋友|🤝", "teacher|老师|", "school|学校|🏫", "house|房子|🏠", "rain|雨|🌧️", "snow|雪|❄️", "cake|蛋糕|🍰", "rice|米饭|🍚"],
+  2: ["elephant|大象|🐘", "monkey|猴子|🐒", "tiger|老虎|🐯", "lion|狮子|🦁", "panda|熊猫|🐼", "rabbit|兔子|🐰", "giraffe|长颈鹿|🦒", "zebra|斑马|🦓", "penguin|企鹅|🐧", "turtle|乌龟|🐢", "window|窗户|", "kitchen|厨房|🍳", "bedroom|卧室|🛏️", "garden|花园|🌷", "library|图书馆|📚", "hospital|医院|🏥", "park|公园|🏞️", "breakfast|早餐|🥣", "lunch|午餐|🍱", "dinner|晚餐|🍽️", "orange|橙子|🍊", "grape|葡萄|🍇", "strawberry|草莓|🍓", "watermelon|西瓜|🍉", "potato|土豆|🥔", "tomato|西红柿|🍅", "carrot|胡萝卜|🥕", "Monday|星期一|", "Sunday|星期天|", "spring|春天|🌱", "autumn|秋天|🍂", "winter|冬天|⛄", "bicycle|自行车|🚲", "airplane|飞机|✈️", "train|火车|🚆", "ship|轮船|🚢", "doctor|医生|🧑‍⚕️", "farmer|农民|🧑‍🌾", "driver|司机|", "student|学生|🧑‍🎓", "sister|姐妹|👧", "brother|兄弟|👦", "clock|钟|🕐", "umbrella|雨伞|☂️", "mountain|山|⛰️", "river|河流|", "music|音乐|🎵", "pencil|铅笔|✏️", "sweater|毛衣|🧥"],
+  3: ["beautiful|美丽的|", "dangerous|危险的|⚠️", "delicious|美味的|😋", "important|重要的|", "difficult|困难的|", "favourite|最喜爱的|💖", "different|不同的|", "together|一起|", "tomorrow|明天|", "yesterday|昨天|", "weather|天气|🌤️", "holiday|假期|🏖️", "birthday|生日|🎂", "museum|博物馆|🏛️", "supermarket|超市|🛒", "computer|电脑|💻", "telephone|电话|☎️", "photograph|照片|📷", "dictionary|词典|📕", "vegetable|蔬菜|🥦", "kangaroo|袋鼠|🦘", "crocodile|鳄鱼|🐊", "dolphin|海豚|🐬", "butterfly|蝴蝶|🦋", "rainbow|彩虹|🌈", "volcano|火山|🌋", "planet|行星|🪐", "adventure|冒险|🧭", "energy|能量|⚡", "courage|勇气|", "healthy|健康的|💪", "careful|小心的|", "quickly|快速地|", "borrow|借（入）|", "explore|探索|🔍", "discover|发现|", "invite|邀请|💌", "practise|练习|", "remember|记得|", "forget|忘记|", "clever|聪明的|🧠", "brave|勇敢的|🦸", "friendly|友好的|", "strong|强壮的|", "hungry|饥饿的|", "thirsty|口渴的|"],
+};
+const WORDS = Object.fromEntries(Object.entries(WORDS_RAW).map(([k, v]) => [k, v.map(s => { const [w, zh, e] = s.split("|"); return { w, zh, e: e || "", t: +k }; })]));
+const wordPool = t => [1, 2, 3].filter(x => x <= t).flatMap(x => WORDS[x]);
+
+const SENT = [
+  [1, "I ___ milk every morning.", "drink", ["eat", "jump", "sing"], "我每天早上喝牛奶。"],
+  [1, "The bird can ___ in the sky.", "fly", ["swim", "dig", "cook"], "小鸟能在天空中飞。"],
+  [1, "She is ___ a book.", "reading", ["eating", "singing", "swimming"], "她正在读书。"],
+  [1, "I'm hungry. I want some ___.", "bread", ["books", "shoes", "stars"], "我饿了，想吃点面包。"],
+  [1, "The baby panda is very ___. Everyone loves it.", "cute", ["angry", "heavy", "dirty"], "熊猫宝宝非常可爱。"],
+  [1, "There ___ three monkeys in the zoo.", "are", ["is", "am", "be"], "动物园里有三只猴子。"],
+  [1, "She is my mother. ___ is a doctor.", "She", ["He", "It", "They"], "她是我妈妈。她是医生。"],
+  [1, "How ___ are you? I'm nine.", "old", ["many", "much", "long"], "你几岁？我九岁。"],
+  [2, "My brother ___ playing football now.", "is", ["are", "am", "be"], "我哥哥正在踢足球。"],
+  [2, "I ___ breakfast at seven o'clock.", "have", ["has", "am", "are"], "我七点吃早饭。"],
+  [2, "He ___ TV every evening.", "watches", ["watch", "watching", "to watch"], "他每晚看电视。"],
+  [2, "___ you like pandas? Yes, I do.", "Do", ["Does", "Is", "Are"], "你喜欢熊猫吗？是的。"],
+  [2, "It's cold. Put on your ___.", "coat", ["sandals", "sunglasses", "ice cream"], "天冷了，穿上外套。"],
+  [2, "Which season is hot? ___.", "Summer", ["Winter", "Snow", "Spring"], "哪个季节热？夏天。"],
+  [2, "Please ___ the door. It's cold.", "close", ["open", "draw", "wash"], "请关门，太冷了。"],
+  [2, "I brush my ___ every morning.", "teeth", ["tooth", "tooths", "toothes"], "我每天早上刷牙。"],
+  [2, "The elephant is ___ than the dog.", "bigger", ["big", "biggest", "more big"], "大象比狗大。"],
+  [2, "She can ___ English songs.", "sing", ["sings", "singing", "to sing"], "她会唱英文歌。"],
+  [3, "Yesterday I ___ to the zoo.", "went", ["go", "goes", "going"], "昨天我去了动物园。"],
+  [3, "Tom is the ___ boy in our class.", "tallest", ["tall", "taller", "more tall"], "汤姆是班里最高的男孩。"],
+  [3, "How much is the bag? It's ___ yuan.", "twenty", ["twenties", "second", "twentieth"], "这个包多少钱？二十元。"],
+  [3, "Look at the ___! It's so colourful.", "rainbow", ["desk", "pencil", "spoon"], "看那彩虹！真多彩。"],
+  [3, "Be ___! The road is wet.", "careful", ["carefully", "care", "careless"], "小心！路是湿的。"],
+  [3, "We will ___ the forest tomorrow.", "explore", ["explores", "explored", "exploring"], "我们明天去探索森林。"],
+];
+
+function distinctWords(pool, w, key, n = 3) {
+  return shuffle(pool.filter(x => x.w !== w.w && x[key] !== w[key])).slice(0, n);
+}
+const canSpeak = () => typeof speechSynthesis !== "undefined" && typeof SpeechSynthesisUtterance !== "undefined";
+
+function enQ(t) {
+  const pool = wordPool(t);
+  const w = Math.random() < 0.6 ? pick(WORDS[t]) : pick(pool);
+  const kinds = ["en2zh", "zh2en", "listen", "spell", "cloze", "zh2en", "en2zh"];
+  let k = pick(kinds);
+  if (k === "listen" && !canSpeak()) k = "en2zh";
+  const sents = SENT.filter(s => s[0] <= t);
+  if (k === "cloze" && !sents.length) k = "en2zh";
+  if (k === "en2zh") {
+    return { cat: "en", kind: "choice", tag: "英语·认单词", emoji: w.e, prompt: w.w, speak: w.w, opts: shuffle([w.zh, ...distinctWords(pool, w, "zh").map(x => x.zh)]), ans: w.zh, explain: `${w.w} = ${w.zh}` };
+  }
+  if (k === "zh2en") {
+    return { cat: "en", kind: "choice", tag: "英语·选单词", emoji: w.e, prompt: w.zh, opts: shuffle([w.w, ...distinctWords(pool, w, "w").map(x => x.w)]), ans: w.w, explain: `${w.zh} = ${w.w}`, speakAfter: w.w };
+  }
+  if (k === "listen") {
+    return { cat: "en", kind: "choice", tag: "英语·听音选词", emoji: "🎧", prompt: "听一听，选出你听到的单词", speak: w.w, auto: 1, opts: shuffle([w.w, ...distinctWords(pool, w, "w").map(x => x.w)]), ans: w.w, explain: `${w.w} = ${w.zh}` };
+  }
+  if (k === "spell") {
+    const word = w.w.toLowerCase(), len = word.length;
+    const idx = ri(1, len - 1), miss = word[idx];
+    const vowel = "aeiou".includes(miss);
+    const src = (vowel ? "aeiou" : "bcdfghjklmnpqrstvwxyz").split("").filter(c => c !== miss);
+    const lett = shuffle(src).slice(0, 3);
+    const shown = w.w.split("").map((c, i) => (i === idx ? "_" : c)).join(" ");
+    return { cat: "en", kind: "choice", tag: "英语·补全单词", emoji: w.e, prompt: shown, spell: 1, hint: w.zh, opts: shuffle([miss, ...lett]), ans: miss, explain: `${w.zh} = ${w.w}`, speakAfter: w.w };
+  }
+  const s = pick(sents);
+  return { cat: "en", kind: "choice", tag: "英语·句子填空", emoji: "✏️", prompt: s[1].replace("___", "＿＿＿"), small: 1, hint: s[4], opts: shuffle([s[2], ...s[3]]), ans: s[2], explain: s[1].replace("___", s[2]) };
+}
+const makeQ = (cat, t) => (cat === "en" ? enQ(t) : cat === "math" ? mathQ(t) : Math.random() < 0.5 ? enQ(t) : mathQ(t));
+
+/* ---------- 徽章 ---------- */
+const BADGES = [
+  { id: "shiny", e: "🌟", n: "闪光彩蛋", d: "连点神秘蛋 7 下", ok: s => s.stats.shiny > 0 },
+  { id: "poke", e: "👆", n: "戳戳达人", d: "戳小动物 10 下", ok: s => s.stats.pokes >= 10 },
+  { id: "c50", e: "📚", n: "小学霸", d: "累计答对 50 题", ok: s => s.stats.correct >= 50 },
+  { id: "c200", e: "🎓", n: "大学霸", d: "累计答对 200 题", ok: s => s.stats.correct >= 200 },
+  { id: "combo", e: "🔥", n: "连击高手", d: "连续答对 8 题", ok: s => s.stats.best >= 8 },
+  { id: "en30", e: "🔤", n: "英语达人", d: "答对 30 道英语题", ok: s => s.stats.en >= 30 },
+  { id: "m30", e: "🔢", n: "数学达人", d: "答对 30 道数学题", ok: s => s.stats.math >= 30 },
+  { id: "daily", e: "📅", n: "每日打卡", d: "完成一次每日任务", ok: s => s.stats.dailyDone > 0 },
+  { id: "col5", e: "🐾", n: "小小饲养员", d: "领养 5 种动物", ok: s => Object.keys(s.pets).length >= 5 },
+  { id: "legend", e: "👑", n: "神兽觉醒", d: "让一只动物进化成神兽", ok: s => Object.values(s.pets).some(p => stageOf(p.xp) >= 4) },
+  { id: "col30", e: "🏆", n: "动物园园长", d: "领养全部 30 种动物", ok: s => Object.keys(s.pets).length >= 30 },
+];
+
+/* ---------- 存档 ---------- */
+const KEY = "zooEvolve.v1";
+const defaults = () => ({ cur: null, pets: {}, stats: { correct: 0, total: 0, en: 0, math: 0, best: 0, pokes: 0, shiny: 0, dailyDone: 0 }, badges: [], mute: false, daily: { d: "", n: 0, done: false } });
+const today = () => { const d = new Date(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; };
+function load() {
+  const base = defaults();
+  try {
+    const r = JSON.parse(localStorage.getItem(KEY));
+    if (!r || typeof r !== "object") return base;
+    const s = { ...base, ...r, stats: { ...base.stats, ...r.stats }, daily: { ...base.daily, ...r.daily } };
+    return s.daily.d === today() ? s : { ...s, daily: { d: today(), n: 0, done: false } };
+  } catch (e) { return base; }
+}
+let S = typeof localStorage !== "undefined" ? load() : defaults();
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* 隐私模式下无法存档，游戏仍可继续 */ } };
+const setS = patch => { S = { ...S, ...patch }; save(); };
+const setPet = (id, patch) => setS({ pets: { ...S.pets, [id]: { ...S.pets[id], ...patch } } });
+const addStats = patch => setS({ stats: Object.entries(patch).reduce((acc, [k, v]) => ({ ...acc, [k]: acc[k] + v }), S.stats) });
+
+/* ---------- 声音 / 特效 ---------- */
+let actx = null;
+function tone(f, at, dur, type = "sine", vol = 0.14) {
+  if (S.mute) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator(), g = actx.createGain(), t0 = actx.currentTime + at;
+    o.type = type; o.frequency.value = f;
+    g.gain.setValueAtTime(vol, t0); g.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+    o.connect(g); g.connect(actx.destination); o.start(t0); o.stop(t0 + dur);
+  } catch (e) { /* 浏览器不支持音频时静默 */ }
+}
+const sfx = {
+  ok() { tone(660, 0, 0.12); tone(880, 0.1, 0.2); },
+  bad() { tone(220, 0, 0.18, "square", 0.07); tone(170, 0.14, 0.25, "square", 0.07); },
+  up() { [523, 659, 784, 1047, 1319, 1568].forEach((f, i) => tone(f, i * 0.12, 0.3, "triangle", 0.16)); },
+  tap() { tone(420 + Math.random() * 300, 0, 0.09, "triangle", 0.12); },
+};
+function speak(text) {
+  if (S.mute || !canSpeak()) return;
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-US"; u.rate = 0.85;
+    speechSynthesis.speak(u);
+  } catch (e) { /* 忽略 */ }
+}
+function confetti(n = 60) {
+  const w = document.createElement("div");
+  w.className = "confetti";
+  const bits = ["🎉", "⭐", "✨", "🌟", "💖", "🎊"];
+  for (let i = 0; i < n; i++) {
+    const e = document.createElement("i");
+    e.textContent = pick(bits);
+    e.style.cssText = `left:${Math.random() * 100}%;font-size:${14 + Math.random() * 18}px;animation-duration:${2 + Math.random() * 2}s;animation-delay:${Math.random() * 0.8}s`;
+    w.appendChild(e);
+  }
+  document.body.appendChild(w);
+  setTimeout(() => w.remove(), 4800);
+}
+function toast(msg) {
+  const t = document.createElement("div");
+  t.className = "toast"; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3100);
+}
+
+/* ---------- 界面 ---------- */
+const esc = s => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const ui = { screen: "home", sel: null, quiz: null, evo: null, say: "", eggTaps: 0 };
+
+const LINES = {
+  idle: ["今天也要一起变强哦！", "我肚子里装满了知识～", "来做个任务吧！", "你好呀，小主人！", "我会越来越厉害的！"],
+  poke: ["哈哈，好痒！", "嘿嘿～再来一下！", "我在这里！", "抱抱我！", "咕噜咕噜～"],
+  ok: ["太棒啦！", "答对了，好厉害！", "你真聪明！", "耶！继续冲！"],
+  bad: ["没关系，下次一定行！", "看看正确答案，记住它！", "加油，我相信你！"],
+  egg: ["蛋里面好像有动静……", "咚咚咚，里面有谁在敲门？", "蛋蛋在轻轻抖动～", "它好像很想出来！"],
+};
+
+function petBlock(a, p, big) {
+  const st = stageOf(p.xp), pr = progressOf(p.xp);
+  return `<div class="pet ${p.shiny ? "shiny" : ""}" data-act="poke" role="button" aria-label="点一点小动物">${drawAnimal(a, st, { idx: ANIMALS.indexOf(a), pct: pr.pct, shiny: p.shiny })}</div><div class="shadow"></div>`;
+}
+function topBar(extra = "") {
+  return `<div class="top"><div class="logo">🦁 动物园进化</div><div class="chips">${extra}<button class="chip" data-act="mute" aria-label="声音开关">${S.mute ? "🔇" : "🔊"}</button></div></div>`;
+}
+
+function homeView() {
+  const a = AMAP[S.cur], p = S.pets[S.cur], pr = progressOf(p.xp);
+  const st = pr.stage;
+  const title = st === 0 ? "神秘的蛋" : st === 4 ? `${a.legend}` : a.n;
+  const tag = st === 0 ? STAGE[0] : `Lv.${st} ${STAGE[st]}`;
+  const info = st >= 4 ? "已进化到最高级，你是动物园传说！" : `${st === 0 ? "孵化" : "进化为「" + pr.next + "」"}还差 ${pr.need} 经验`;
+  const say = ui.say || (st === 0 ? "（蛋蛋静静地躺着……多戳戳它试试？）" : pick(LINES.idle));
+  const d = S.daily;
+  return `<div class="wrap">${topBar(`<span class="chip">⭐ ${p.xp}</span>`)}
+<div class="scene"><div class="bubble">${esc(say)}</div>${petBlock(a, p)}
+<div class="name">${esc(title)}<span class="tag">${tag}</span></div>
+<div class="bar"><i style="width:${Math.round(pr.pct * 100)}%"></i></div><div class="barinfo">${info}</div></div>
+<div class="daily">📅 今日任务：答对 10 题 <div class="mini"><i style="width:${Math.min(100, d.n * 10)}%"></i></div> ${d.done ? "✅" : `${Math.min(d.n, 10)}/10`}</div>
+<div class="acts"><button class="btn b-en" data-act="start" data-cat="en">🔤 英语任务<small>单词 · 听力 · 句子</small></button>
+<button class="btn b-math" data-act="start" data-cat="math">🔢 数学任务<small>计算 · 应用题</small></button>
+<button class="btn b-mix" data-act="start" data-cat="mix">🎲 混合挑战<small>英语和数学一起来</small></button></div>
+<div class="links"><button class="btn b-ghost" data-act="pickpage">🐾 领养新伙伴</button><button class="btn b-ghost" data-act="dex">📖 图鉴与徽章</button></div></div>`;
+}
+
+function pickView() {
+  const sel = ui.sel, a = sel && AMAP[sel];
+  const cells = ANIMALS.map(x => `<button class="cell ${sel === x.id ? "on" : ""}" data-act="sel" data-id="${x.id}">${S.pets[x.id] ? '<span class="star">✅</span>' : ""}${drawAnimal(x, 1)}<b>${x.n}</b></button>`).join("");
+  const owned = a && S.pets[a.id];
+  return `<div class="wrap">${topBar(S.cur ? `<button class="chip" data-act="home">← 返回</button>` : "")}
+<div class="h2">选一只小动物吧！</div><p class="hint">共 30 种。它现在还是一颗神秘的蛋，做任务就能孵化、进化，最后变成传说神兽。</p>
+<div class="grid">${cells}</div>
+<div class="sticky"><button class="btn b-ok" data-act="adopt" ${a ? "" : "disabled"} style="${a ? "" : "opacity:.5"}">${a ? (owned ? `去找${a.n}玩` : `领养${a.n}！`) : "先点一只喜欢的动物"}</button></div></div>`;
+}
+
+function dexView() {
+  const cells = ANIMALS.map(x => {
+    const p = S.pets[x.id];
+    if (!p) return `<button class="cell lock" data-act="sel2" data-id="${x.id}">${drawAnimal(x, 1)}<b>？？？</b><em>未领养</em></button>`;
+    const st = stageOf(p.xp);
+    return `<button class="cell ${S.cur === x.id ? "on" : ""}" data-act="switch" data-id="${x.id}"><span class="star">${"★".repeat(st)}</span><div class="${p.shiny ? "shinyc" : ""}" style="${p.shiny ? "filter:hue-rotate(150deg) saturate(1.25)" : ""}">${drawAnimal(x, st, { idx: ANIMALS.indexOf(x), pct: 0, shiny: p.shiny })}</div><b>${st === 0 ? "神秘蛋" : st === 4 ? x.legend : x.n}</b><em>${STAGE[st]}</em></button>`;
+  }).join("");
+  const bs = BADGES.map(b => `<div class="bd ${S.badges.includes(b.id) ? "" : "off"}"><span>${b.e}</span><div><b>${b.n}</b><i>${b.d}</i></div></div>`).join("");
+  const n = Object.keys(S.pets).length, legends = Object.values(S.pets).filter(p => stageOf(p.xp) >= 4).length;
+  return `<div class="wrap">${topBar(`<button class="chip" data-act="home">← 返回</button>`)}
+<div class="h2">📖 动物图鉴</div><p class="hint">已领养 ${n}/30 · 传说神兽 ${legends} 只 · 累计答对 ${S.stats.correct} 题</p>
+<div class="grid">${cells}</div><div class="h2" style="margin-top:20px">🏅 徽章</div><div class="badges">${bs}</div></div>`;
+}
+
+function quizView() {
+  const q = ui.quiz, Q = q.q, a = AMAP[S.cur], p = S.pets[S.cur];
+  const dots = Array.from({ length: q.total }, (_, i) => `<i class="${q.res[i] === 1 ? "ok" : q.res[i] === 0 ? "bad" : i === q.i ? "now" : ""}"></i>`).join("");
+  const spk = Q.speak ? `<button class="spk" data-act="speak" data-w="${esc(Q.speak)}">🔊 听发音</button>` : "";
+  const body = Q.spell ? `<div class="qtext spell">${esc(Q.prompt)}</div>` : `<div class="qtext ${Q.small ? "s" : ""}">${esc(Q.prompt)}</div>`;
+  const hint = Q.hint ? `<div class="hint" style="margin:4px 0 0">${esc(Q.hint)}</div>` : "";
+  let inputs;
+  if (Q.kind === "input") inputs = `<div class="inp"><input id="ans" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="输入答案" ${q.answered ? "disabled" : ""} value="${esc(q.picked ?? "")}"><button class="btn b-ok" data-act="submit" ${q.answered ? "disabled" : ""}>确定</button></div>`;
+  else inputs = `<div class="opts ${Q.three ? "three" : ""}">${Q.opts.map(o => {
+    const cls = q.answered ? (o === Q.ans ? "ok" : o === q.picked ? "bad" : "") : "";
+    return `<button class="opt ${cls}" data-act="pick" data-v="${esc(o)}" ${q.answered ? "disabled" : ""}>${esc(o)}</button>`;
+  }).join("")}</div>`;
+  let fb = "";
+  if (q.answered) {
+    fb = q.lastOk
+      ? `<div class="fb ok">✅ ${pick(LINES.ok)} +${q.lastGain} 经验<p>${esc(Q.explain)}</p></div>`
+      : `<div class="fb bad">💡 ${pick(LINES.bad)}<p>正确答案：<b>${esc(Q.ans)}</b>　${esc(Q.explain)}</p></div>`;
+    fb += `<button class="btn b-mix" style="margin-top:12px" data-act="next">${q.i + 1 >= q.total ? "看成绩 🎉" : "下一题 →"}</button>`;
+  }
+  const react = q.answered ? (q.lastOk ? "jump" : "shake") : "";
+  return `<div class="wrap"><div class="qtop"><button class="x" data-act="quit" aria-label="退出">✕</button><div class="dots">${dots}</div><div class="combo">${q.combo >= 2 ? "🔥×" + q.combo : ""}</div></div>
+<div class="qcard"><span class="qtag ${Q.cat === "math" ? "m" : ""}">${Q.tag}</span>${Q.emoji ? `<div class="qemoji">${Q.emoji}</div>` : ""}${body}${hint}${spk}</div>
+${inputs}${fb}<div class="qpet ${p.shiny ? "shiny" : ""} ${react}"><div class="pet ${react}" style="width:100%;margin:0" data-act="poke2">${drawAnimal(a, stageOf(p.xp), { idx: ANIMALS.indexOf(a), pct: progressOf(p.xp).pct, shiny: p.shiny })}</div></div></div>`;
+}
+
+function resultView() {
+  const r = ui.result;
+  const stars = r.correct >= 5 ? "⭐⭐⭐" : r.correct >= 3 ? "⭐⭐" : r.correct >= 1 ? "⭐" : "💪";
+  return `<div class="wrap res"><div class="big">${stars}</div><div class="score">答对 ${r.correct} / ${r.total}</div>
+<div class="rows"><div>答题经验<b>+${r.xp}</b></div><div>完成奖励${r.correct >= 3 ? "" : "（答对 3 题以上才有）"}<b>+${r.bonus}</b></div>${r.dailyBonus ? `<div>📅 每日任务达成<b>+${r.dailyBonus}</b></div>` : ""}<div>最高连击<b>${r.best}</b></div></div>
+<div class="acts"><button class="btn b-ok" data-act="start" data-cat="${r.cat}">再来一轮</button><button class="btn b-ghost" data-act="home">回到小窝</button></div></div>`;
+}
+
+function evoView() {
+  const e = ui.evo, a = AMAP[e.id], p = S.pets[e.id];
+  const legend = e.to === 4;
+  const sub = e.to === 1 ? `${a.n}宝宝破壳而出啦！` : e.to === 2 ? "进化成了活力少年！" : e.to === 3 ? "进化成了闪耀的成年形态！" : `觉醒为传说神兽！`;
+  return `<div class="overlay"><div class="evo"><div class="t">${e.to === 1 ? "🥚 蛋裂开啦！" : "✨ 进化成功！"}</div>
+<div class="pet ${p.shiny ? "shiny" : ""}" style="margin-bottom:0">${drawAnimal(a, e.to, { idx: ANIMALS.indexOf(a), shiny: p.shiny })}</div><div class="shadow"></div>
+${legend ? `<div class="legend">${a.legend}</div>` : `<div class="t" style="margin-top:8px">${a.n}</div>`}
+<div class="s">${sub}${e.shiny ? "<br>🌟 哇！它是闪光色的，特别稀有！" : ""}${legend ? "<br>你太了不起了，传说中的神兽就是你养大的！" : ""}</div>
+<button class="btn b-ok" data-act="evoclose">太棒了！</button></div></div>`;
+}
+
+function render() {
+  const views = { home: homeView, pick: pickView, dex: dexView, quiz: quizView, result: resultView };
+  document.getElementById("app").innerHTML = views[ui.screen]() + (ui.evo ? evoView() : "");
+  if (ui.screen === "quiz") {
+    const q = ui.quiz;
+    const inp = document.getElementById("ans");
+    if (inp && !q.answered) inp.focus();
+    if (q.q.auto && !q.answered && !q.spoken) { q.spoken = true; setTimeout(() => speak(q.q.speak), 250); }
+  }
+}
+
+/* ---------- 逻辑 ---------- */
+function checkBadges() {
+  BADGES.filter(b => !S.badges.includes(b.id) && b.ok(S)).forEach(b => {
+    setS({ badges: [...S.badges, b.id] });
+    toast(`${b.e} 获得徽章：${b.n}`);
+  });
+}
+function openEvo(id, from, to, shiny) {
+  ui.evo = { id, from, to, shiny: !!shiny };
+  sfx.up(); confetti(to === 4 ? 120 : 70);
+}
+function startQuiz(cat) {
+  if (!S.cur) return;
+  const t = Math.max(1, stageOf(S.pets[S.cur].xp));
+  ui.quiz = { cat, tier: t, i: 0, total: 5, res: [], correct: 0, xp: 0, combo: 0, best: 0, q: makeQ(cat, t), answered: false, picked: null, startXp: S.pets[S.cur].xp, dailyBonus: 0 };
+  ui.screen = "quiz"; render();
+}
+function choose(v) {
+  const q = ui.quiz;
+  if (!q || q.answered) return;
+  const ok = String(v).trim() === q.q.ans;
+  const combo = ok ? q.combo + 1 : 0;
+  const gain = ok ? 10 + (combo >= 3 && combo % 3 === 0 ? 5 : 0) : 0;
+  const pet = S.pets[S.cur];
+  addStats({ total: 1, correct: ok ? 1 : 0, en: ok && q.q.cat === "en" ? 1 : 0, math: ok && q.q.cat === "math" ? 1 : 0, best: Math.max(0, combo - S.stats.best) });
+  if (ok) {
+    setPet(S.cur, { xp: pet.xp + gain });
+    const d = { ...S.daily, n: S.daily.n + 1 };
+    if (d.n >= 10 && !d.done) { d.done = true; q.dailyBonus = 30; setPet(S.cur, { xp: S.pets[S.cur].xp + 30 }); addStats({ dailyDone: 1 }); toast("📅 每日任务完成！奖励 30 经验"); }
+    setS({ daily: d });
+  } else setS({ daily: { ...S.daily, d: today() } });
+  sfx[ok ? "ok" : "bad"]();
+  if (q.q.speakAfter) setTimeout(() => speak(q.q.speakAfter), 300);
+  ui.quiz = { ...q, answered: true, picked: v, lastOk: ok, lastGain: gain, combo, best: Math.max(q.best, combo), correct: q.correct + (ok ? 1 : 0), xp: q.xp + gain, res: [...q.res, ok ? 1 : 0] };
+  checkBadges();
+  render();
+}
+function nextQ() {
+  const q = ui.quiz;
+  if (q.i + 1 >= q.total) return finishQuiz();
+  ui.quiz = { ...q, i: q.i + 1, q: makeQ(q.cat, q.tier), answered: false, picked: null, spoken: false };
+  render();
+}
+function finishQuiz() {
+  const q = ui.quiz, id = S.cur;
+  const bonus = q.correct >= 3 ? 10 : 0;
+  if (bonus) setPet(id, { xp: S.pets[id].xp + bonus });
+  ui.result = { cat: q.cat, correct: q.correct, total: q.total, xp: q.xp, bonus, dailyBonus: q.dailyBonus, best: q.best };
+  const from = stageOf(q.startXp), to = stageOf(S.pets[id].xp);
+  ui.screen = "result"; ui.say = "";
+  if (to > from) openEvo(id, from, to, false);
+  checkBadges(); render();
+}
+function poke() {
+  const id = S.cur, p = S.pets[id], st = stageOf(p.xp);
+  const el = document.querySelector(".scene .pet");
+  const bub = document.querySelector(".bubble");
+  sfx.tap();
+  if (st === 0) {
+    ui.eggTaps += 1;
+    if (el) { el.classList.remove("hit"); void el.offsetWidth; el.classList.add("hit"); }
+    if (ui.eggTaps >= 7) {
+      ui.eggTaps = 0;
+      addStats({ shiny: 1 });
+      setPet(id, { xp: Math.max(p.xp, LV[1]), shiny: true });
+      openEvo(id, 0, 1, true); checkBadges(); render(); return;
+    }
+    if (bub) bub.textContent = ui.eggTaps >= 4 ? "咔……咔嚓？好像要出来了！" : pick(LINES.egg);
+    return;
+  }
+  addStats({ pokes: 1 });
+  if (el) { el.classList.remove("jump"); void el.offsetWidth; el.classList.add("jump"); }
+  if (S.stats.pokes === 10) { confetti(50); if (bub) bub.textContent = "🎉 你发现了隐藏彩蛋：戳戳达人！"; checkBadges(); return; }
+  if (bub) bub.textContent = pick(LINES.poke);
+}
+
+const H = {
+  mute() { setS({ mute: !S.mute }); render(); },
+  home() { ui.screen = "home"; ui.say = ""; render(); },
+  pickpage() { ui.screen = "pick"; ui.sel = null; render(); },
+  dex() { ui.screen = "dex"; render(); },
+  sel(d) { ui.sel = d.id; render(); },
+  sel2(d) { ui.screen = "pick"; ui.sel = d.id; render(); },
+  adopt() {
+    const id = ui.sel; if (!id) return;
+    if (!S.pets[id]) { setS({ pets: { ...S.pets, [id]: { xp: 0, shiny: false } } }); toast("🥚 你得到了一颗神秘的蛋！"); }
+    setS({ cur: id }); ui.eggTaps = 0; ui.screen = "home"; ui.say = ""; checkBadges(); sfx.ok(); render();
+  },
+  switch(d) { setS({ cur: d.id }); ui.screen = "home"; ui.say = ""; ui.eggTaps = 0; render(); },
+  start(d) { startQuiz(d.cat); },
+  pick(d) { choose(d.v); },
+  submit() { const i = document.getElementById("ans"); if (i && i.value.trim() !== "") choose(i.value); },
+  next() { nextQ(); },
+  speak(d) { speak(d.w); },
+  quit() { if (ui.quiz && ui.quiz.res.length && !confirm("现在退出，这一轮的成绩不会算奖励哦，确定吗？")) return; ui.screen = "home"; render(); },
+  evoclose() { ui.evo = null; render(); },
+  poke() { poke(); },
+  poke2() { sfx.tap(); },
+};
+
+function init() {
+  const app = document.getElementById("app");
+  app.addEventListener("click", e => {
+    const t = e.target.closest("[data-act]");
+    if (!t || !app.contains(t)) return;
+    const f = H[t.dataset.act];
+    if (f && !t.disabled) f(t.dataset, t);
+  });
+  app.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.id === "ans") H.submit(); });
+  ui.screen = S.cur && S.pets[S.cur] ? "home" : "pick";
+  render();
+}
+
+if (typeof globalThis !== "undefined") globalThis.Zoo = { ANIMALS, AMAP, drawAnimal, mathQ, enQ, makeQ, WORDS, SENT, stageOf, progressOf, LV };
+if (typeof document !== "undefined" && document.getElementById("app")) init();
+</script>
+</body>
+</html>
