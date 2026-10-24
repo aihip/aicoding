@@ -69,10 +69,11 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
 .bd.off{opacity:.45;filter:grayscale(1)}
 .qtop{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .x{width:38px;height:38px;border-radius:50%;background:#fff;font-size:18px;box-shadow:0 3px 0 #0000001a}
-.dots{flex:1;display:flex;gap:6px}
+.dots{flex:1;display:flex;gap:3px}
 .dots i{flex:1;height:10px;border-radius:99px;background:#ffffff99}
 .dots i.ok{background:var(--grn)}.dots i.bad{background:var(--red)}.dots i.now{background:var(--pri2)}
-.combo{font-weight:800;font-size:15px;min-width:52px;text-align:right}
+.combo{font-weight:800;font-size:14px;min-width:56px;text-align:right;line-height:1.2}
+.combo small{display:block;font-size:12px;color:var(--sub);font-weight:700}
 .qcard{background:#fff;border-radius:26px;padding:18px 16px;text-align:center;box-shadow:0 5px 0 #0000001a;animation:pop .3s ease}
 .qtag{display:inline-block;font-size:12px;font-weight:700;color:#fff;background:var(--blue);border-radius:99px;padding:1px 10px}
 .qtag.m{background:var(--pri)}
@@ -136,12 +137,17 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
    ===================================================================== */
 
 /* ---------- 等级 ---------- */
-const LV = [0, 30, 120, 300, 600];            // 进入各阶段所需经验
-const STAGE = ["神秘蛋", "萌新幼崽", "活力少年", "闪耀成年", "传说神兽"];
+const QN = 20, DAILY = 30, PASS = 12;           // 每轮题数、每日任务题数、拿完成奖励所需答对数
+const LV = [0, 60, 160, 320, 540, 830, 1200, 1650, 2200];   // 9 个级别：进入各级所需经验            // 进入各阶段所需经验
+const STAGE = ["神秘蛋", "萌新幼崽", "活力少年", "机灵青年", "闪耀成年", "精英勇士", "无敌王者", "远古圣兽", "传说神兽"];
+const MAXLV = LV.length - 1;
+const VIS = [0, 1, 1, 2, 2, 3, 3, 3, 4];                       // 级别 → 外形（蛋/幼崽/少年/成年/神兽）
+const SIZE = [0, 0.70, 0.75, 0.80, 0.85, 0.89, 0.93, 0.96, 1]; // 级别越高体型越大
+const BASE_T = [1, 1, 1, 2, 2, 3, 3, 4, 4];                    // 级别 → 题目基础难度
 const stageOf = xp => LV.filter(t => xp >= t).length - 1;
 const progressOf = xp => {
   const s = stageOf(xp);
-  if (s >= 4) return { stage: s, pct: 1, need: 0, next: null };
+  if (s >= MAXLV) return { stage: s, pct: 1, need: 0, next: null };
   return { stage: s, pct: (xp - LV[s]) / (LV[s + 1] - LV[s]), need: LV[s + 1] - xp, next: STAGE[s + 1] };
 };
 
@@ -320,10 +326,11 @@ function eggSVG(a, o) {
   return s + `</g></svg>`;
 }
 
-function drawAnimal(a, stage, o = {}) {
-  if (stage === 0) return eggSVG(a, o);
+function drawAnimal(a, lv, o = {}) {
+  if (lv === 0) return eggSVG(a, o);
+  const stage = VIS[lv];
   const id = "a" + ++uidN;
-  const sc = [0, 0.74, 0.84, 0.93, 1][stage];
+  const sc = SIZE[lv];
   const [ns, nw] = a.neck || [0, 0];
   let s = `<svg viewBox="0 0 200 200" aria-hidden="true">`;
   if (stage === 4) {
@@ -342,9 +349,11 @@ function drawAnimal(a, stage, o = {}) {
     const top = Math.max(10, 50 - ns - 10);
     s += `<ellipse cx="100" cy="${top}" rx="27" ry="7" fill="none" stroke="#ffd54a" stroke-width="5"/><ellipse cx="100" cy="${top}" rx="27" ry="7" fill="none" stroke="#fff3a8" stroke-width="1.8"/>`;
   }
+  if (lv >= 7 && stage === 3) s += `<path d="M100 56 L107 67 L100 78 L93 67Z" fill="#bfe6ff" stroke="#fff" stroke-width="2"/>`;
   if (stage === 4) s += `<path d="M100 54 L109 68 L100 82 L91 68Z" fill="#ffd54a" stroke="#fff" stroke-width="2" transform="translate(0 -2)"/>`;
   s += `</g>`;
   s += `</g>`;
+  if (lv >= 6 && stage === 3) s += star4(36, 110, 8, .4, "#fff") + star4(166, 120, 8, .9, "#ffe14a");
   if (stage >= 3) s += star4(24, 40, 9, 0, "#ffe14a") + star4(178, 70, 8, .7, "#fff");
   if (stage === 4) s += star4(40, 120, 8, .3, "#fff") + star4(168, 130, 10, 1, "#ffe14a") + star4(100, 8, 8, 1.3, "#fff") + star4(150, 24, 7, .9, "#ffe14a");
   return s + `</svg>`;
@@ -392,7 +401,7 @@ const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 const shuffle = arr => { const r = [...arr]; for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; } return r; };
 
 function numOpts(ans) {
-  const offs = ans < 20 ? [1, -1, 2, -2, 3, -3, 4, 5, -4] : ans < 200 ? [1, -1, 2, -2, 10, -10, 5, -5, 11, -11] : [1, -1, 10, -10, 100, -100, 2, -2, 20, -20];
+  const offs = ans >= 2000 ? [10, -10, 100, -100, 1000, -1000, 1, -1, 20, -20] : ans < 20 ? [1, -1, 2, -2, 3, -3, 4, 5, -4] : ans < 200 ? [1, -1, 2, -2, 10, -10, 5, -5, 11, -11] : [1, -1, 10, -10, 100, -100, 2, -2, 20, -20];
   const set = new Set([ans]);
   for (const o of shuffle(offs)) { if (set.size >= 4) break; if (ans + o >= 0) set.add(ans + o); }
   for (let k = 1; set.size < 4; k++) set.add(ans + 20 + k);
@@ -400,68 +409,103 @@ function numOpts(ans) {
 }
 const ANIM_ZH = ["猴子", "小象", "企鹅", "熊猫", "兔子", "长颈鹿", "斑马", "松鼠"];
 
+
 const MG = {
   add(t) {
-    const [a, b] = t === 1 ? (() => { const x = ri(12, 60); return [x, ri(8, 99 - x)]; })()
-      : t === 2 ? (() => { const x = ri(100, 700); return [x, ri(50, 999 - x)]; })()
-      : (() => { const x = ri(1200, 7800); return [x, ri(300, 9999 - x)]; })();
-    return { prompt: `${a} + ${b} = ?`, ans: a + b };
+    const [a, b] = t === 1 ? (() => { const x = ri(25, 69); return [x, ri(15, 99 - x)]; })()
+      : t === 2 ? [ri(200, 800), ri(150, 999)]
+      : t === 3 ? (() => { const x = ri(1200, 7800); return [x, ri(300, 9999 - x)]; })()
+      : (() => { const x = ri(2500, 7900); return [x, ri(1500, 9999 - x)]; })();
+    return { prompt: `${a} + ${b} = ?`, ans: a + b, ex: `${a} + ${b} = ${a + b}` };
   },
   sub(t) {
-    const a = t === 1 ? ri(30, 99) : t === 2 ? ri(200, 999) : ri(1500, 9999);
-    const b = t === 1 ? ri(8, a - 1) : t === 2 ? ri(50, a - 10) : ri(300, a - 100);
-    return { prompt: `${a} − ${b} = ?`, ans: a - b };
+    const a = t === 1 ? ri(40, 99) : t === 2 ? ri(300, 999) : t === 3 ? ri(2000, 9999) : ri(5000, 9999);
+    const b = t === 1 ? ri(15, a - 1) : t === 2 ? ri(120, a - 10) : t === 3 ? ri(500, a - 100) : ri(1500, a - 500);
+    return { prompt: `${a} − ${b} = ?`, ans: a - b, ex: `${a} − ${b} = ${a - b}` };
   },
   mul(t) {
-    const [a, b] = t === 1 ? [pick([2, 3, 4, 5, 10]), ri(2, 9)] : t === 2 ? [ri(2, 9), ri(2, 9)] : [ri(12, 49), ri(3, 9)];
-    return { prompt: `${a} × ${b} = ?`, ans: a * b };
+    const [a, b] = t === 1 ? [ri(2, 6), ri(3, 9)]
+      : t === 2 ? (Math.random() < 0.5 ? [ri(6, 9), ri(6, 9)] : [ri(11, 19), ri(2, 5)])
+      : t === 3 ? [ri(12, 49), ri(3, 9)]
+      : (Math.random() < 0.5 ? [ri(11, 30), ri(11, 25)] : [ri(100, 400), ri(3, 9)]);
+    return { prompt: `${a} × ${b} = ?`, ans: a * b, ex: `${a} × ${b} = ${a * b}` };
   },
   div(t) {
-    const b = t === 1 ? pick([2, 3, 4, 5]) : t === 2 ? ri(2, 9) : ri(3, 9);
-    const q = t === 3 ? ri(11, 19) : ri(2, 9);
-    return { prompt: `${b * q} ÷ ${b} = ?`, ans: q };
+    const b = t === 1 ? ri(2, 6) : t === 2 ? ri(3, 9) : t === 3 ? ri(3, 9) : ri(4, 9);
+    const q = t === 1 ? ri(3, 9) : t === 2 ? ri(6, 12) : t === 3 ? ri(11, 29) : ri(25, 99);
+    return { prompt: `${b * q} ÷ ${b} = ?`, ans: q, ex: `${b * q} ÷ ${b} = ${q}` };
   },
-  rem() {
-    const d = ri(3, 9), q = ri(4, 12), r = ri(1, d - 1);
-    return { prompt: `${d * q + r} ÷ ${d} = ${q} …… ?（余几）`, ans: r };
+  rem(t) {
+    const d = ri(3, 9), q = t >= 4 ? ri(12, 60) : ri(4, 12), r = ri(1, d - 1);
+    return { prompt: `${d * q + r} ÷ ${d} = ${q} …… ?（余几）`, ans: r, ex: `${d} × ${q} = ${d * q}，${d * q + r} − ${d * q} = ${r}` };
   },
   missing(t) {
-    const k = ri(0, 2);
-    if (k === 0) { const a = t === 1 ? ri(10, 40) : ri(100, 400), x = t === 1 ? ri(10, 50) : ri(100, 500); return { prompt: `□ + ${a} = ${a + x}，□ = ?`, ans: x }; }
-    if (k === 1) { const a = ri(2, 9), x = ri(2, t === 1 ? 5 : 9); return { prompt: `${a} × □ = ${a * x}，□ = ?`, ans: x }; }
-    const b = t === 1 ? ri(10, 40) : ri(100, 400), x = t === 1 ? ri(10, 50) : ri(100, 500);
-    return { prompt: `${b + x} − □ = ${b}，□ = ?`, ans: x };
+    const big = t >= 3, k = ri(0, 2);
+    if (k === 0) { const a = big ? ri(300, 1500) : t === 1 ? ri(10, 40) : ri(100, 400), x = big ? ri(300, 1500) : t === 1 ? ri(10, 50) : ri(100, 500); return { prompt: `□ + ${a} = ${a + x}，□ = ?`, ans: x, ex: `□ = ${a + x} − ${a} = ${x}` }; }
+    if (k === 1) { const a = ri(t >= 3 ? 6 : 2, 9), x = ri(t >= 3 ? 6 : 2, t === 1 ? 5 : 9); return { prompt: `${a} × □ = ${a * x}，□ = ?`, ans: x, ex: `□ = ${a * x} ÷ ${a} = ${x}` }; }
+    const b = big ? ri(300, 1500) : t === 1 ? ri(10, 40) : ri(100, 400), x = big ? ri(300, 1500) : t === 1 ? ri(10, 50) : ri(100, 500);
+    return { prompt: `${b + x} − □ = ${b}，□ = ?`, ans: x, ex: `□ = ${b + x} − ${b} = ${x}` };
   },
   word(t) {
-    const x = pick(ANIM_ZH), k = ri(0, 3);
-    if (k === 0) { const a = t === 1 ? ri(12, 50) : ri(120, 600), b = t === 1 ? ri(8, 40) : ri(50, 300); return { prompt: `动物园里有 ${a} 只${x}，又来了 ${b} 只，现在一共有多少只？`, ans: a + b, small: 1 }; }
-    if (k === 1) { const a = t === 1 ? ri(30, 90) : ri(300, 900), b = t === 1 ? ri(5, 29) : ri(50, 290); return { prompt: `饲养员准备了 ${a} 根胡萝卜，${x}吃掉了 ${b} 根，还剩多少根？`, ans: a - b, small: 1 }; }
-    if (k === 2) { const a = ri(3, 9), b = ri(3, 9); return { prompt: `每个笼子里住着 ${a} 只${x}，${b} 个笼子一共住着多少只？`, ans: a * b, small: 1 }; }
-    const b = ri(3, 9), q = ri(3, 9); return { prompt: `${b * q} 个苹果平均分给 ${b} 只${x}，每只分到几个？`, ans: q, small: 1 };
+    const x = pick(ANIM_ZH), k = ri(0, 3), lo = t === 1;
+    if (k === 0) { const a = lo ? ri(12, 50) : ri(120, 900), b = lo ? ri(8, 40) : ri(50, 600); return { prompt: `动物园里有 ${a} 只${x}，又来了 ${b} 只，现在一共有多少只？`, ans: a + b, small: 1, ex: `${a} + ${b} = ${a + b}` }; }
+    if (k === 1) { const a = lo ? ri(30, 90) : ri(300, 990), b = lo ? ri(5, 29) : ri(50, 290); return { prompt: `饲养员准备了 ${a} 根胡萝卜，${x}吃掉了 ${b} 根，还剩多少根？`, ans: a - b, small: 1, ex: `${a} − ${b} = ${a - b}` }; }
+    if (k === 2) { const a = lo ? ri(3, 9) : ri(12, 48), b = ri(3, 9); return { prompt: `每个笼子里住着 ${a} 只${x}，${b} 个笼子一共住着多少只？`, ans: a * b, small: 1, ex: `${a} × ${b} = ${a * b}` }; }
+    const b = ri(3, 9), q = lo ? ri(3, 9) : ri(12, 40); return { prompt: `${b * q} 个苹果平均分给 ${b} 只${x}，每只分到几个？`, ans: q, small: 1, ex: `${b * q} ÷ ${b} = ${q}` };
   },
-  fraction() {
+  word2() {
+    const k = ri(0, 2);
+    if (k === 0) { const a = ri(12, 45), b = ri(3, 8), c = Math.ceil((a * b + 1) / 50) * 50; return { prompt: `动物园门票每张 ${a} 元，买 ${b} 张，付了 ${c} 元，应找回多少元？`, ans: c - a * b, small: 1, ex: `${a} × ${b} = ${a * b}，${c} − ${a * b} = ${c - a * b}` }; }
+    if (k === 1) { const a = ri(12, 30), b = ri(4, 9), c = ri(20, 90); return { prompt: `大象每天吃 ${a} 千克草，吃了 ${b} 天，饲养员又额外喂了 ${c} 千克，一共用了多少千克草？`, ans: a * b + c, small: 1, ex: `${a} × ${b} + ${c} = ${a * b + c}` }; }
+    const g = ri(3, 5), b = ri(3, 7), a = b * g + ri(4, 20);
+    return { prompt: `校车载着 ${a} 个学生到动物园，下车时每组 ${g} 人，已经下了 ${b} 组，车上还剩多少人？`, ans: a - b * g, small: 1, ex: `${b} × ${g} = ${b * g}，${a} − ${b * g} = ${a - b * g}` };
+  },
+  fraction(t) {
+    if (t >= 3) { const d = pick([4, 5, 8, 10]), n = ri(2, d - 1), q = ri(2, 9); return { prompt: `${d * q} 的 ${n}/${d} 是多少？`, ans: q * n, ex: `${d * q} ÷ ${d} = ${q}，${q} × ${n} = ${q * n}` }; }
     const d = pick([2, 4, 5]), q = ri(2, 12);
-    return { prompt: `${d * q} 的 1/${d} 是多少？`, ans: q };
+    return { prompt: `${d * q} 的 1/${d} 是多少？`, ans: q, ex: `${d * q} ÷ ${d} = ${q}` };
   },
   perimeter() {
     const l = ri(6, 30), w = ri(3, l - 1);
-    return { prompt: `长方形的长是 ${l} 厘米，宽是 ${w} 厘米，周长是多少厘米？`, ans: 2 * (l + w), small: 1 };
+    return { prompt: `长方形的长是 ${l} 厘米，宽是 ${w} 厘米，周长是多少厘米？`, ans: 2 * (l + w), small: 1, ex: `(${l} + ${w}) × 2 = ${2 * (l + w)}` };
+  },
+  area() {
+    const l = ri(5, 25), w = ri(3, 16);
+    return { prompt: `长方形草地长 ${l} 米，宽 ${w} 米，面积是多少平方米？`, ans: l * w, small: 1, ex: `${l} × ${w} = ${l * w}` };
+  },
+  expr(t) {
+    const k = ri(0, t >= 4 ? 4 : 2);
+    const a = ri(5, 60), b = ri(2, 9), c = ri(2, 9);
+    if (k === 0) return { prompt: `${a} + ${b} × ${c} = ?`, ans: a + b * c, ex: `先乘后加：${b} × ${c} = ${b * c}，${a} + ${b * c} = ${a + b * c}` };
+    if (k === 1) return { prompt: `(${a} + ${b}) × ${c} = ?`, ans: (a + b) * c, ex: `先算括号：${a + b}，再 × ${c} = ${(a + b) * c}` };
+    if (k === 2) { const m = ri(8, 40) * 2; return { prompt: `${m} ÷ 2 + ${a} = ?`, ans: m / 2 + a, ex: `先除后加：${m / 2} + ${a} = ${m / 2 + a}` }; }
+    if (k === 3) { const d = ri(2, 9); return { prompt: `${a} × ${b} + ${c} × ${d} = ?`, ans: a * b + c * d, ex: `${a * b} + ${c * d} = ${a * b + c * d}` }; }
+    const d = ri(3, 9), q = ri(6, 20); return { prompt: `(${d * q + a}− ${a}) ÷ ${d} + ${b} = ?`.replace("− ", " − "), ans: q + b, ex: `括号里是 ${d * q}，÷ ${d} = ${q}，再 + ${b} = ${q + b}` };
+  },
+  seq(t) {
+    if (t >= 4 && Math.random() < 0.5) { const a = ri(1, 4), r = pick([2, 3]), v = [a, a * r, a * r * r, a * r ** 3]; return { prompt: `找规律：${v.join("，")}，？`, ans: a * r ** 4, ex: `每个数都是前一个的 ${r} 倍` }; }
+    const a = ri(2, 30), d = ri(3, 12);
+    return { prompt: `找规律：${[0, 1, 2, 3].map(i => a + d * i).join("，")}，？`, ans: a + d * 4, ex: `每次增加 ${d}` };
   },
 };
-function compareQ() {
-  const a = ri(3, 9), b = ri(3, 9), l = a * b, diff = pick([-6, -3, -1, 0, 0, 1, 3, 6]);
-  const r = l + diff;
+function compareQ(t) {
+  if (t >= 3) {
+    const a = ri(4, 12), b = ri(4, 12), c = ri(4, 12), d = ri(4, 12), l = a * b, r = c * d;
+    return { cat: "math", kind: "choice", tag: "数学·比大小", prompt: `${a} × ${b}  ◯  ${c} × ${d}`, opts: ["<", "=", ">"], ans: l < r ? "<" : l > r ? ">" : "=", explain: `${a} × ${b} = ${l}，${c} × ${d} = ${r}`, three: 1 };
+  }
+  const a = ri(3, 9), b = ri(3, 9), l = a * b, r = l + pick([-6, -3, -1, 0, 0, 1, 3, 6]);
   return { cat: "math", kind: "choice", tag: "数学·比大小", prompt: `${a} × ${b}  ◯  ${r}`, opts: ["<", "=", ">"], ans: l < r ? "<" : l > r ? ">" : "=", explain: `${a} × ${b} = ${l}`, three: 1 };
 }
 function mathQ(t) {
   const pool = t === 1 ? ["add", "sub", "mul", "div", "missing", "word"]
-    : t === 2 ? ["add", "sub", "mul", "div", "missing", "word", "fraction", "rem", "compare"]
-    : ["add", "sub", "mul", "div", "missing", "word", "fraction", "rem", "perimeter", "compare", "mul", "add"];
+    : t === 2 ? ["add", "sub", "mul", "div", "missing", "word", "fraction", "rem", "compare", "area"]
+    : t === 3 ? ["add", "sub", "mul", "div", "missing", "word", "fraction", "rem", "perimeter", "compare", "expr", "seq", "word2", "area"]
+    : ["add", "sub", "mul", "mul", "div", "div", "missing", "fraction", "rem", "expr", "expr", "seq", "word2", "word2", "area", "perimeter", "compare"];
   const g = pick(pool);
-  if (g === "compare") return compareQ();
+  if (g === "compare") return compareQ(t);
   const q = MG[g](t);
-  const input = t >= 2 && Math.random() < 0.4;
-  return { cat: "math", kind: input ? "input" : "choice", tag: "数学", prompt: q.prompt, small: q.small, opts: input ? null : numOpts(q.ans), ans: String(q.ans), explain: `${q.prompt.replace(/[?？].*$/, "").trim()} ${q.prompt.includes("□") ? "" : "= " + q.ans}`.trim() };
+  const input = t >= 2 && Math.random() < (t >= 3 ? 0.6 : 0.5);
+  return { cat: "math", kind: input ? "input" : "choice", tag: "数学", prompt: q.prompt, small: q.small || q.prompt.length > 14, opts: input ? null : numOpts(q.ans), ans: String(q.ans), explain: q.ex };
 }
 
 /* ---------- 题库：英语 ---------- */
@@ -469,9 +513,10 @@ const WORDS_RAW = {
   1: ["cat|猫|🐱", "dog|狗|🐶", "bird|小鸟|🐦", "fish|鱼|🐟", "apple|苹果|🍎", "banana|香蕉|🍌", "milk|牛奶|🥛", "bread|面包|🍞", "egg|鸡蛋|🥚", "water|水|💧", "red|红色|🔴", "blue|蓝色|🔵", "green|绿色|🟢", "yellow|黄色|🟡", "book|书|📖", "pen|钢笔|🖊️", "bag|书包|🎒", "desk|书桌|", "chair|椅子|🪑", "door|门|🚪", "sun|太阳|☀️", "moon|月亮|🌙", "star|星星|⭐", "tree|树|🌳", "flower|花|🌸", "car|小汽车|🚗", "bus|公共汽车|🚌", "ball|球|⚽", "hand|手|✋", "eye|眼睛|👁️", "nose|鼻子|👃", "mouth|嘴巴|👄", "ear|耳朵|👂", "happy|快乐的|😀", "sad|难过的|😢", "big|大的|", "small|小的|", "hot|热的|🔥", "cold|冷的|🥶", "mother|妈妈|👩", "father|爸爸|👨", "friend|朋友|🤝", "teacher|老师|", "school|学校|🏫", "house|房子|🏠", "rain|雨|🌧️", "snow|雪|❄️", "cake|蛋糕|🍰", "rice|米饭|🍚"],
   2: ["elephant|大象|🐘", "monkey|猴子|🐒", "tiger|老虎|🐯", "lion|狮子|🦁", "panda|熊猫|🐼", "rabbit|兔子|🐰", "giraffe|长颈鹿|🦒", "zebra|斑马|🦓", "penguin|企鹅|🐧", "turtle|乌龟|🐢", "window|窗户|", "kitchen|厨房|🍳", "bedroom|卧室|🛏️", "garden|花园|🌷", "library|图书馆|📚", "hospital|医院|🏥", "park|公园|🏞️", "breakfast|早餐|🥣", "lunch|午餐|🍱", "dinner|晚餐|🍽️", "orange|橙子|🍊", "grape|葡萄|🍇", "strawberry|草莓|🍓", "watermelon|西瓜|🍉", "potato|土豆|🥔", "tomato|西红柿|🍅", "carrot|胡萝卜|🥕", "Monday|星期一|", "Sunday|星期天|", "spring|春天|🌱", "autumn|秋天|🍂", "winter|冬天|⛄", "bicycle|自行车|🚲", "airplane|飞机|✈️", "train|火车|🚆", "ship|轮船|🚢", "doctor|医生|🧑‍⚕️", "farmer|农民|🧑‍🌾", "driver|司机|", "student|学生|🧑‍🎓", "sister|姐妹|👧", "brother|兄弟|👦", "clock|钟|🕐", "umbrella|雨伞|☂️", "mountain|山|⛰️", "river|河流|", "music|音乐|🎵", "pencil|铅笔|✏️", "sweater|毛衣|🧥"],
   3: ["beautiful|美丽的|", "dangerous|危险的|⚠️", "delicious|美味的|😋", "important|重要的|", "difficult|困难的|", "favourite|最喜爱的|💖", "different|不同的|", "together|一起|", "tomorrow|明天|", "yesterday|昨天|", "weather|天气|🌤️", "holiday|假期|🏖️", "birthday|生日|🎂", "museum|博物馆|🏛️", "supermarket|超市|🛒", "computer|电脑|💻", "telephone|电话|☎️", "photograph|照片|📷", "dictionary|词典|📕", "vegetable|蔬菜|🥦", "kangaroo|袋鼠|🦘", "crocodile|鳄鱼|🐊", "dolphin|海豚|🐬", "butterfly|蝴蝶|🦋", "rainbow|彩虹|🌈", "volcano|火山|🌋", "planet|行星|🪐", "adventure|冒险|🧭", "energy|能量|⚡", "courage|勇气|", "healthy|健康的|💪", "careful|小心的|", "quickly|快速地|", "borrow|借（入）|", "explore|探索|🔍", "discover|发现|", "invite|邀请|💌", "practise|练习|", "remember|记得|", "forget|忘记|", "clever|聪明的|🧠", "brave|勇敢的|🦸", "friendly|友好的|", "strong|强壮的|", "hungry|饥饿的|", "thirsty|口渴的|"],
+  4: ["environment|环境|🌍", "temperature|温度|🌡️", "protect|保护|🛡️", "endangered|濒危的|", "habitat|栖息地|", "imagine|想象|💭", "decide|决定|", "receive|收到|📬", "believe|相信|", "probably|可能|", "usually|通常|", "suddenly|突然|", "especially|尤其|", "knowledge|知识|📚", "culture|文化|", "popular|受欢迎的|", "polite|有礼貌的|", "curious|好奇的|🧐", "honest|诚实的|", "patient|有耐心的|", "generous|慷慨的|", "mystery|谜|🕵️", "treasure|宝藏|💎", "ancient|古老的|🏺", "universe|宇宙|🌌", "telescope|望远镜|🔭", "scientist|科学家|🧑‍🔬", "inventor|发明家|💡", "exercise|锻炼|🏃", "medicine|药|💊", "ambulance|救护车|🚑", "passport|护照|🛂", "luggage|行李|🧳", "journey|旅程|", "scenery|风景|🏞️", "passenger|乘客|", "announce|宣布|📢", "compare|比较|", "improve|提高|📈", "challenge|挑战|"],
 };
 const WORDS = Object.fromEntries(Object.entries(WORDS_RAW).map(([k, v]) => [k, v.map(s => { const [w, zh, e] = s.split("|"); return { w, zh, e: e || "", t: +k }; })]));
-const wordPool = t => [1, 2, 3].filter(x => x <= t).flatMap(x => WORDS[x]);
+const wordPool = t => [1, 2, 3, 4].filter(x => x <= t).flatMap(x => WORDS[x]);
 
 const SENT = [
   [1, "I ___ milk every morning.", "drink", ["eat", "jump", "sing"], "我每天早上喝牛奶。"],
@@ -498,7 +543,27 @@ const SENT = [
   [3, "Look at the ___! It's so colourful.", "rainbow", ["desk", "pencil", "spoon"], "看那彩虹！真多彩。"],
   [3, "Be ___! The road is wet.", "careful", ["carefully", "care", "careless"], "小心！路是湿的。"],
   [3, "We will ___ the forest tomorrow.", "explore", ["explores", "explored", "exploring"], "我们明天去探索森林。"],
+  [3, "If it ___ tomorrow, we will stay at home.", "rains", ["rain", "rained", "raining"], "如果明天下雨，我们就待在家里。"],
+  [3, "She has ___ finished her homework.", "already", ["yesterday", "tomorrow", "ago"], "她已经做完作业了。"],
+  [3, "This is the ___ film I have ever seen.", "best", ["good", "better", "well"], "这是我看过的最好的电影。"],
+  [3, "I have lived here ___ 2020.", "since", ["for", "in", "at"], "我从 2020 年起就住在这里。"],
+  [3, "We have studied English ___ three years.", "for", ["since", "at", "in"], "我们学英语三年了。"],
+  [3, "The window was ___ by the boy.", "broken", ["break", "broke", "breaking"], "窗户被那个男孩打破了。"],
+  [4, "He asked me where I ___.", "lived", ["live", "lives", "living"], "他问我住在哪里。"],
+  [4, "If I ___ a bird, I would fly to you.", "were", ["am", "was", "be"], "如果我是一只鸟，我会飞向你。"],
+  [4, "The book ___ by Lu Xun is very famous.", "written", ["write", "wrote", "writing"], "鲁迅写的这本书很有名。"],
+  [4, "You ___ eat too much candy. It's bad for your teeth.", "shouldn't", ["should", "can", "must"], "你不该吃太多糖，对牙齿不好。"],
+  [4, "Neither Tom nor his sisters ___ at home.", "are", ["is", "am", "was"], "汤姆和他的姐妹们都不在家。"],
+  [4, "She is good ___ drawing.", "at", ["in", "on", "with"], "她擅长画画。"],
+  [4, "The zoo is ___ from the school, so we go there by bus.", "far", ["near", "nearly", "fast"], "动物园离学校很远，所以我们坐公交去。"],
+  [4, "By the time we arrived, the film ___ already started.", "had", ["has", "have", "was"], "我们到的时候电影已经开始了。"],
 ];
+
+const ANT = [
+  [2, "hot", "cold"], [2, "big", "small"], [2, "happy", "sad"], [2, "fast", "slow"], [2, "open", "close"], [2, "day", "night"], [2, "old", "young"], [2, "long", "short"], [2, "full", "empty"], [2, "clean", "dirty"],
+  [3, "easy", "difficult"], [3, "strong", "weak"], [3, "early", "late"], [3, "rich", "poor"], [3, "wet", "dry"], [3, "thick", "thin"], [3, "dangerous", "safe"], [3, "noisy", "quiet"], [3, "wide", "narrow"], [3, "right", "wrong"],
+];
+
 
 function distinctWords(pool, w, key, n = 3) {
   return shuffle(pool.filter(x => x.w !== w.w && x[key] !== w[key])).slice(0, n);
@@ -509,10 +574,12 @@ function enQ(t) {
   const pool = wordPool(t);
   const w = Math.random() < 0.6 ? pick(WORDS[t]) : pick(pool);
   const kinds = ["en2zh", "zh2en", "listen", "spell", "cloze", "zh2en", "en2zh"];
+  if (t >= 2) kinds.push("anto", "trans", "cloze");
+  if (t >= 3) kinds.push("typing", "typing", "trans", "cloze");
   let k = pick(kinds);
-  if (k === "listen" && !canSpeak()) k = "en2zh";
+  if ((k === "listen" || k === "trans") && !canSpeak() && k === "listen") k = "en2zh";
   const sents = SENT.filter(s => s[0] <= t);
-  if (k === "cloze" && !sents.length) k = "en2zh";
+  const hardS = sents.filter(s => s[0] >= t - 1);
   if (k === "en2zh") {
     return { cat: "en", kind: "choice", tag: "英语·认单词", emoji: w.e, prompt: w.w, speak: w.w, opts: shuffle([w.zh, ...distinctWords(pool, w, "zh").map(x => x.zh)]), ans: w.zh, explain: `${w.w} = ${w.zh}` };
   }
@@ -531,10 +598,33 @@ function enQ(t) {
     const shown = w.w.split("").map((c, i) => (i === idx ? "_" : c)).join(" ");
     return { cat: "en", kind: "choice", tag: "英语·补全单词", emoji: w.e, prompt: shown, spell: 1, hint: w.zh, opts: shuffle([miss, ...lett]), ans: miss, explain: `${w.zh} = ${w.w}`, speakAfter: w.w };
   }
-  const s = pick(sents);
+  if (k === "typing") {
+    const word = w.w.toLowerCase();
+    return { cat: "en", kind: "input", text: 1, tag: "英语·拼写单词", emoji: w.e, prompt: `${w.zh}`, hint: `首字母 ${word[0]}，共 ${word.length} 个字母`, ans: word, explain: `${w.zh} = ${w.w}`, speakAfter: w.w };
+  }
+  if (k === "anto") {
+    const ps = ANT.filter(x => x[0] <= t), pr = pick(ps), flip = Math.random() < 0.5;
+    const [q, a] = flip ? [pr[2], pr[1]] : [pr[1], pr[2]];
+    const others = shuffle(ANT.flatMap(x => [x[1], x[2]]).filter(x => x !== q && x !== a)).slice(0, 3);
+    return { cat: "en", kind: "choice", tag: "英语·反义词", emoji: "↔️", prompt: `${q} 的反义词是？`, opts: shuffle([a, ...others]), ans: a, explain: `${q} ↔ ${a}`, speak: q };
+  }
+  if (k === "trans") {
+    const s = pick(hardS.length ? hardS : sents), full = s[1].replace("___", s[2]);
+    const others = shuffle(sents.filter(x => x[4] !== s[4])).slice(0, 3).map(x => x[4]);
+    return { cat: "en", kind: "choice", tag: "英语·句子理解", emoji: "📖", prompt: full, small: 1, speak: full, opts: shuffle([s[4], ...others]), ans: s[4], explain: s[4] };
+  }
+  const s = pick(hardS.length ? hardS : sents);
   return { cat: "en", kind: "choice", tag: "英语·句子填空", emoji: "✏️", prompt: s[1].replace("___", "＿＿＿"), small: 1, hint: s[4], opts: shuffle([s[2], ...s[3]]), ans: s[2], explain: s[1].replace("___", s[2]) };
 }
-const makeQ = (cat, t) => (cat === "en" ? enQ(t) : cat === "math" ? mathQ(t) : Math.random() < 0.5 ? enQ(t) : mathQ(t));
+const makeQ = (cat, t, seen = []) => {
+  let q;
+  for (let i = 0; i < 12; i++) {
+    q = cat === "en" ? enQ(t) : cat === "math" ? mathQ(t) : Math.random() < 0.5 ? enQ(t) : mathQ(t);
+    if (!seen.includes(q.prompt)) break;
+  }
+  return q;
+};
+const tierFor = (base, i) => Math.min(4, base + (i >= 7 ? 1 : 0) + (i >= 14 ? 1 : 0));   // 一轮内由易到难
 
 /* ---------- 徽章 ---------- */
 const BADGES = [
@@ -547,7 +637,7 @@ const BADGES = [
   { id: "m30", e: "🔢", n: "数学达人", d: "答对 30 道数学题", ok: s => s.stats.math >= 30 },
   { id: "daily", e: "📅", n: "每日打卡", d: "完成一次每日任务", ok: s => s.stats.dailyDone > 0 },
   { id: "col5", e: "🐾", n: "小小饲养员", d: "领养 5 种动物", ok: s => Object.keys(s.pets).length >= 5 },
-  { id: "legend", e: "👑", n: "神兽觉醒", d: "让一只动物进化成神兽", ok: s => Object.values(s.pets).some(p => stageOf(p.xp) >= 4) },
+  { id: "legend", e: "👑", n: "神兽觉醒", d: "让一只动物进化成神兽", ok: s => Object.values(s.pets).some(p => stageOf(p.xp) >= MAXLV) },
   { id: "col30", e: "🏆", n: "动物园园长", d: "领养全部 30 种动物", ok: s => Object.keys(s.pets).length >= 30 },
 ];
 
@@ -640,16 +730,16 @@ function topBar(extra = "") {
 function homeView() {
   const a = AMAP[S.cur], p = S.pets[S.cur], pr = progressOf(p.xp);
   const st = pr.stage;
-  const title = st === 0 ? "神秘的蛋" : st === 4 ? `${a.legend}` : a.n;
-  const tag = st === 0 ? STAGE[0] : `Lv.${st} ${STAGE[st]}`;
-  const info = st >= 4 ? "已进化到最高级，你是动物园传说！" : `${st === 0 ? "孵化" : "进化为「" + pr.next + "」"}还差 ${pr.need} 经验`;
+  const title = st === 0 ? "神秘的蛋" : st >= MAXLV ? `${a.legend}` : a.n;
+  const tag = `Lv.${st + 1} ${STAGE[st]}`;
+  const info = st >= MAXLV ? "已进化到最高级 Lv.9，你是动物园传说！" : `${st === 0 ? "孵化" : "进化为「" + pr.next + "」"}还差 ${pr.need} 经验`;
   const say = ui.say || (st === 0 ? "（蛋蛋静静地躺着……多戳戳它试试？）" : pick(LINES.idle));
   const d = S.daily;
   return `<div class="wrap">${topBar(`<span class="chip">⭐ ${p.xp}</span>`)}
 <div class="scene"><div class="bubble">${esc(say)}</div>${petBlock(a, p)}
 <div class="name">${esc(title)}<span class="tag">${tag}</span></div>
 <div class="bar"><i style="width:${Math.round(pr.pct * 100)}%"></i></div><div class="barinfo">${info}</div></div>
-<div class="daily">📅 今日任务：答对 10 题 <div class="mini"><i style="width:${Math.min(100, d.n * 10)}%"></i></div> ${d.done ? "✅" : `${Math.min(d.n, 10)}/10`}</div>
+<div class="daily">📅 今日任务：答对 ${DAILY} 题 <div class="mini"><i style="width:${Math.min(100, d.n * 100 / DAILY)}%"></i></div> ${d.done ? "✅" : `${Math.min(d.n, DAILY)}/${DAILY}`}</div>
 <div class="acts"><button class="btn b-en" data-act="start" data-cat="en">🔤 英语任务<small>单词 · 听力 · 句子</small></button>
 <button class="btn b-math" data-act="start" data-cat="math">🔢 数学任务<small>计算 · 应用题</small></button>
 <button class="btn b-mix" data-act="start" data-cat="mix">🎲 混合挑战<small>英语和数学一起来</small></button></div>
@@ -661,7 +751,7 @@ function pickView() {
   const cells = ANIMALS.map(x => `<button class="cell ${sel === x.id ? "on" : ""}" data-act="sel" data-id="${x.id}">${S.pets[x.id] ? '<span class="star">✅</span>' : ""}${drawAnimal(x, 1)}<b>${x.n}</b></button>`).join("");
   const owned = a && S.pets[a.id];
   return `<div class="wrap">${topBar(S.cur ? `<button class="chip" data-act="home">← 返回</button>` : "")}
-<div class="h2">选一只小动物吧！</div><p class="hint">共 30 种。它现在还是一颗神秘的蛋，做任务就能孵化、进化，最后变成传说神兽。</p>
+<div class="h2">选一只小动物吧！</div><p class="hint">共 30 种。它现在还是一颗神秘的蛋，做任务就能孵化、升级，一路升到 Lv.9 传说神兽。每轮 20 题，越往后越难！</p>
 <div class="grid">${cells}</div>
 <div class="sticky"><button class="btn b-ok" data-act="adopt" ${a ? "" : "disabled"} style="${a ? "" : "opacity:.5"}">${a ? (owned ? `去找${a.n}玩` : `领养${a.n}！`) : "先点一只喜欢的动物"}</button></div></div>`;
 }
@@ -671,10 +761,10 @@ function dexView() {
     const p = S.pets[x.id];
     if (!p) return `<button class="cell lock" data-act="sel2" data-id="${x.id}">${drawAnimal(x, 1)}<b>？？？</b><em>未领养</em></button>`;
     const st = stageOf(p.xp);
-    return `<button class="cell ${S.cur === x.id ? "on" : ""}" data-act="switch" data-id="${x.id}"><span class="star">${"★".repeat(st)}</span><div class="${p.shiny ? "shinyc" : ""}" style="${p.shiny ? "filter:hue-rotate(150deg) saturate(1.25)" : ""}">${drawAnimal(x, st, { idx: ANIMALS.indexOf(x), pct: 0, shiny: p.shiny })}</div><b>${st === 0 ? "神秘蛋" : st === 4 ? x.legend : x.n}</b><em>${STAGE[st]}</em></button>`;
+    return `<button class="cell ${S.cur === x.id ? "on" : ""}" data-act="switch" data-id="${x.id}"><span class="star">Lv.${st + 1}</span><div class="${p.shiny ? "shinyc" : ""}" style="${p.shiny ? "filter:hue-rotate(150deg) saturate(1.25)" : ""}">${drawAnimal(x, st, { idx: ANIMALS.indexOf(x), pct: 0, shiny: p.shiny })}</div><b>${st === 0 ? "神秘蛋" : st >= MAXLV ? x.legend : x.n}</b><em>${STAGE[st]}</em></button>`;
   }).join("");
   const bs = BADGES.map(b => `<div class="bd ${S.badges.includes(b.id) ? "" : "off"}"><span>${b.e}</span><div><b>${b.n}</b><i>${b.d}</i></div></div>`).join("");
-  const n = Object.keys(S.pets).length, legends = Object.values(S.pets).filter(p => stageOf(p.xp) >= 4).length;
+  const n = Object.keys(S.pets).length, legends = Object.values(S.pets).filter(p => stageOf(p.xp) >= MAXLV).length;
   return `<div class="wrap">${topBar(`<button class="chip" data-act="home">← 返回</button>`)}
 <div class="h2">📖 动物图鉴</div><p class="hint">已领养 ${n}/30 · 传说神兽 ${legends} 只 · 累计答对 ${S.stats.correct} 题</p>
 <div class="grid">${cells}</div><div class="h2" style="margin-top:20px">🏅 徽章</div><div class="badges">${bs}</div></div>`;
@@ -687,7 +777,7 @@ function quizView() {
   const body = Q.spell ? `<div class="qtext spell">${esc(Q.prompt)}</div>` : `<div class="qtext ${Q.small ? "s" : ""}">${esc(Q.prompt)}</div>`;
   const hint = Q.hint ? `<div class="hint" style="margin:4px 0 0">${esc(Q.hint)}</div>` : "";
   let inputs;
-  if (Q.kind === "input") inputs = `<div class="inp"><input id="ans" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="输入答案" ${q.answered ? "disabled" : ""} value="${esc(q.picked ?? "")}"><button class="btn b-ok" data-act="submit" ${q.answered ? "disabled" : ""}>确定</button></div>`;
+  if (Q.kind === "input") inputs = `<div class="inp"><input id="ans" type="text" ${Q.text ? 'inputmode="text" autocapitalize="off" spellcheck="false" placeholder="输入英文单词"' : 'inputmode="numeric" pattern="[0-9]*" placeholder="输入答案"'} autocomplete="off" ${q.answered ? "disabled" : ""} value="${esc(q.picked ?? "")}"><button class="btn b-ok" data-act="submit" ${q.answered ? "disabled" : ""}>确定</button></div>`;
   else inputs = `<div class="opts ${Q.three ? "three" : ""}">${Q.opts.map(o => {
     const cls = q.answered ? (o === Q.ans ? "ok" : o === q.picked ? "bad" : "") : "";
     return `<button class="opt ${cls}" data-act="pick" data-v="${esc(o)}" ${q.answered ? "disabled" : ""}>${esc(o)}</button>`;
@@ -700,23 +790,23 @@ function quizView() {
     fb += `<button class="btn b-mix" style="margin-top:12px" data-act="next">${q.i + 1 >= q.total ? "看成绩 🎉" : "下一题 →"}</button>`;
   }
   const react = q.answered ? (q.lastOk ? "jump" : "shake") : "";
-  return `<div class="wrap"><div class="qtop"><button class="x" data-act="quit" aria-label="退出">✕</button><div class="dots">${dots}</div><div class="combo">${q.combo >= 2 ? "🔥×" + q.combo : ""}</div></div>
+  return `<div class="wrap"><div class="qtop"><button class="x" data-act="quit" aria-label="退出">✕</button><div class="dots">${dots}</div><div class="combo">${q.i + 1}/${q.total}<small>${q.combo >= 2 ? "🔥×" + q.combo : "&nbsp;"}</small></div></div>
 <div class="qcard"><span class="qtag ${Q.cat === "math" ? "m" : ""}">${Q.tag}</span>${Q.emoji ? `<div class="qemoji">${Q.emoji}</div>` : ""}${body}${hint}${spk}</div>
 ${inputs}${fb}<div class="qpet ${p.shiny ? "shiny" : ""} ${react}"><div class="pet ${react}" style="width:100%;margin:0" data-act="poke2">${drawAnimal(a, stageOf(p.xp), { idx: ANIMALS.indexOf(a), pct: progressOf(p.xp).pct, shiny: p.shiny })}</div></div></div>`;
 }
 
 function resultView() {
   const r = ui.result;
-  const stars = r.correct >= 5 ? "⭐⭐⭐" : r.correct >= 3 ? "⭐⭐" : r.correct >= 1 ? "⭐" : "💪";
+  const stars = r.correct >= 18 ? "⭐⭐⭐" : r.correct >= PASS ? "⭐⭐" : r.correct >= 1 ? "⭐" : "💪";
   return `<div class="wrap res"><div class="big">${stars}</div><div class="score">答对 ${r.correct} / ${r.total}</div>
-<div class="rows"><div>答题经验<b>+${r.xp}</b></div><div>完成奖励${r.correct >= 3 ? "" : "（答对 3 题以上才有）"}<b>+${r.bonus}</b></div>${r.dailyBonus ? `<div>📅 每日任务达成<b>+${r.dailyBonus}</b></div>` : ""}<div>最高连击<b>${r.best}</b></div></div>
+<div class="rows"><div>答题经验<b>+${r.xp}</b></div><div>完成奖励${r.correct >= PASS ? "" : `（答对 ${PASS} 题以上才有）`}<b>+${r.bonus}</b></div>${r.dailyBonus ? `<div>📅 每日任务达成<b>+${r.dailyBonus}</b></div>` : ""}<div>最高连击<b>${r.best}</b></div></div>
 <div class="acts"><button class="btn b-ok" data-act="start" data-cat="${r.cat}">再来一轮</button><button class="btn b-ghost" data-act="home">回到小窝</button></div></div>`;
 }
 
 function evoView() {
   const e = ui.evo, a = AMAP[e.id], p = S.pets[e.id];
-  const legend = e.to === 4;
-  const sub = e.to === 1 ? `${a.n}宝宝破壳而出啦！` : e.to === 2 ? "进化成了活力少年！" : e.to === 3 ? "进化成了闪耀的成年形态！" : `觉醒为传说神兽！`;
+  const legend = e.to === MAXLV;
+  const sub = e.to === 1 ? `${a.n}宝宝破壳而出啦！` : legend ? "觉醒为传说神兽！" : `升到了 Lv.${e.to + 1}「${STAGE[e.to]}」！`;
   return `<div class="overlay"><div class="evo"><div class="t">${e.to === 1 ? "🥚 蛋裂开啦！" : "✨ 进化成功！"}</div>
 <div class="pet ${p.shiny ? "shiny" : ""}" style="margin-bottom:0">${drawAnimal(a, e.to, { idx: ANIMALS.indexOf(a), shiny: p.shiny })}</div><div class="shadow"></div>
 ${legend ? `<div class="legend">${a.legend}</div>` : `<div class="t" style="margin-top:8px">${a.n}</div>`}
@@ -744,18 +834,18 @@ function checkBadges() {
 }
 function openEvo(id, from, to, shiny) {
   ui.evo = { id, from, to, shiny: !!shiny };
-  sfx.up(); confetti(to === 4 ? 120 : 70);
+  sfx.up(); confetti(to >= MAXLV ? 120 : 70);
 }
 function startQuiz(cat) {
   if (!S.cur) return;
-  const t = Math.max(1, stageOf(S.pets[S.cur].xp));
-  ui.quiz = { cat, tier: t, i: 0, total: 5, res: [], correct: 0, xp: 0, combo: 0, best: 0, q: makeQ(cat, t), answered: false, picked: null, startXp: S.pets[S.cur].xp, dailyBonus: 0 };
+  const base = BASE_T[stageOf(S.pets[S.cur].xp)];
+  ui.quiz = { cat, base, i: 0, total: QN, res: [], correct: 0, xp: 0, combo: 0, best: 0, seen: [], q: makeQ(cat, tierFor(base, 0)), answered: false, picked: null, startXp: S.pets[S.cur].xp, dailyBonus: 0 };
   ui.screen = "quiz"; render();
 }
 function choose(v) {
   const q = ui.quiz;
   if (!q || q.answered) return;
-  const ok = String(v).trim() === q.q.ans;
+  const ok = String(v).trim().toLowerCase() === q.q.ans.toLowerCase();
   const combo = ok ? q.combo + 1 : 0;
   const gain = ok ? 10 + (combo >= 3 && combo % 3 === 0 ? 5 : 0) : 0;
   const pet = S.pets[S.cur];
@@ -763,7 +853,7 @@ function choose(v) {
   if (ok) {
     setPet(S.cur, { xp: pet.xp + gain });
     const d = { ...S.daily, n: S.daily.n + 1 };
-    if (d.n >= 10 && !d.done) { d.done = true; q.dailyBonus = 30; setPet(S.cur, { xp: S.pets[S.cur].xp + 30 }); addStats({ dailyDone: 1 }); toast("📅 每日任务完成！奖励 30 经验"); }
+    if (d.n >= DAILY && !d.done) { d.done = true; q.dailyBonus = 60; setPet(S.cur, { xp: S.pets[S.cur].xp + 60 }); addStats({ dailyDone: 1 }); toast("📅 每日任务完成！奖励 60 经验"); }
     setS({ daily: d });
   } else setS({ daily: { ...S.daily, d: today() } });
   sfx[ok ? "ok" : "bad"]();
@@ -775,12 +865,13 @@ function choose(v) {
 function nextQ() {
   const q = ui.quiz;
   if (q.i + 1 >= q.total) return finishQuiz();
-  ui.quiz = { ...q, i: q.i + 1, q: makeQ(q.cat, q.tier), answered: false, picked: null, spoken: false };
+  const seen = [...q.seen, q.q.prompt];
+  ui.quiz = { ...q, i: q.i + 1, seen, q: makeQ(q.cat, tierFor(q.base, q.i + 1), seen), answered: false, picked: null, spoken: false };
   render();
 }
 function finishQuiz() {
   const q = ui.quiz, id = S.cur;
-  const bonus = q.correct >= 3 ? 10 : 0;
+  const bonus = q.correct >= PASS ? 40 : 0;
   if (bonus) setPet(id, { xp: S.pets[id].xp + bonus });
   ui.result = { cat: q.cat, correct: q.correct, total: q.total, xp: q.xp, bonus, dailyBonus: q.dailyBonus, best: q.best };
   const from = stageOf(q.startXp), to = stageOf(S.pets[id].xp);
@@ -848,7 +939,7 @@ function init() {
   render();
 }
 
-if (typeof globalThis !== "undefined") globalThis.Zoo = { ANIMALS, AMAP, drawAnimal, mathQ, enQ, makeQ, WORDS, SENT, stageOf, progressOf, LV };
+if (typeof globalThis !== "undefined") globalThis.Zoo = { ANIMALS, AMAP, drawAnimal, mathQ, enQ, makeQ, tierFor, QN, WORDS, SENT, stageOf, progressOf, LV, MAXLV, BASE_T };
 if (typeof document !== "undefined" && document.getElementById("app")) init();
 </script>
 </body>
