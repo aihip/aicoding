@@ -121,6 +121,15 @@
       "mark": "🦁",
       "slug": "zoo-evolution",
       "order": 5
+    },
+    "动物园进化大冒险玩法说明.html": {
+      "title": "进化大冒险玩法说明",
+      "description": "九级成长、30 种动物和题目难度一览，给家长和孩子的游戏说明。",
+      "category": "learn",
+      "label": "游戏说明",
+      "mark": "📖",
+      "slug": "zoo-evolution-guide",
+      "order": 6
     }
   }
 }
